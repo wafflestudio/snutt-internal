@@ -1,3 +1,3 @@
 export type MessengerClient = {
-  send: (message: string) => Promise<unknown>;
+  sendThread: (message: string, threadMessages: string[]) => Promise<unknown>;
 };

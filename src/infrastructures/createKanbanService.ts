@@ -11,7 +11,9 @@ export const createKanbanService = ({
 }): KanbanService => {
   return {
     sendAbnormalCardStatuses: async () => {
-      await messengerClient.send('hello');
+      const cards = await kanbanRepository.listCards();
+      console.log(cards);
+      await messengerClient.sendThread('hello', ['hi', 'bye']);
     },
   };
 };
