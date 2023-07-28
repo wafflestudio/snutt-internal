@@ -1,0 +1,9 @@
+{
+  "name": "snutt-team-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/wafflestudio/snutt-team-bot",
+  "author": "woohm402 <woohm404@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
