@@ -1,7 +1,7 @@
 import express from 'express';
 import { createKanbanService } from './infrastructures/createKanbanService';
 import { createKanbanRepository } from './infrastructures/createKanbanRepository';
-import { createNotioKanbanClient } from './infrastructures/createNotionKanbanClient';
+import { createNotionKanbanClient } from './infrastructures/createNotionKanbanClient';
 import dotenv from 'dotenv';
 import { createSlackMessengerClient } from './infrastructures/createSlackMessengerClient';
 
@@ -23,7 +23,7 @@ const port = 3000;
 const kanbanService = createKanbanService({
   repositories: [
     createKanbanRepository({
-      clients: [createNotioKanbanClient({ databaseId: NOTION_KANBAN_DATABASE_ID, notionToken: NOTION_TOKEN })],
+      clients: [createNotionKanbanClient({ databaseId: NOTION_KANBAN_DATABASE_ID, notionToken: NOTION_TOKEN })],
     }),
   ],
   clients: [createSlackMessengerClient({ slackToken: SLACK_TOKEN, slackChannel: SLACK_CHANNEL })],

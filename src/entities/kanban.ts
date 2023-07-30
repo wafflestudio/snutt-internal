@@ -1,3 +1,10 @@
+import { Member } from './member';
+
 export type Card = {
-  status: 'backlog' | 'todo' | 'in progress' | 'in review' | 'done' | 'archived' | 'completed';
+  id: string;
+  url: string;
+  assignee: Member[];
+  status: 'Backlog' | 'To Do' | 'In Progress' | 'In Review' | 'Archived' | 'Done' | 'Completed';
+  title: string;
+  due: Date | [Date, Date] | null;
 };
