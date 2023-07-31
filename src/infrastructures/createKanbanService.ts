@@ -1,6 +1,6 @@
 import { MessengerClient } from '../clients/messengerClient';
 import { Card } from '../entities/kanban';
-import { Member } from '../entities/member';
+import { Group, Member } from '../entities/member';
 import { KanbanRepository } from '../repositories/kanbanRepository';
 import { KanbanService } from '../services/kanbanService';
 
@@ -37,13 +37,18 @@ export const createKanbanService = ({
         return acc;
       }, []);
 
+      console.log(abnormalCards);
+
       await messengerClient.sendThread(
         '칸반 이슈',
         abnormalCards.map((card) => {
-          const assignees = card.assignee.map((a) => `<@${MEMBER_SLACK_ID_MAP[a]}>`).join(' ');
+          const mention =
+            card.assignee.length === 0
+              ? `<!subteam^${card.group !== null ? GROUP_SLACK_ID_MAP[card.group] : GROUP_SLACK_ID_MAP['ALL']}>`
+              : card.assignee.map((a) => `<@${MEMBER_SLACK_ID_MAP[a]}>`).join(' ');
           const title = `<${card.url}|${card.title}>`;
           const reason = REASON_MESSAGE_MAP[card.reason];
-          return `${assignees} ${title}\n\n${reason}`;
+          return `${mention} ${title}\n\n${reason}`;
         }),
       );
     },
@@ -70,11 +75,29 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.EUXXNIA]: 'U04F0NCC9L4',
 };
 
+const GROUP_SLACK_ID_MAP: Record<Group, string> = {
+  [Group.ALL]: 'S032EFLT1FT',
+  [Group.FRONTEND]: 'S0435V69VCG',
+  [Group.ANDROID]: 'S0496KFE3RP',
+  [Group.IOS]: 'S048U19HQTU',
+  [Group.SERVER]: 'S048TT15J9H',
+  [Group.DESIGN]: 'S04URBVFHJN',
+};
+
 const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
   if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Completed' && card.due !== null) {
     const today = new Date().getTime();
     const dueDate = Array.isArray(card.due) ? card.due[1].getTime() : card.due.getTime();
     if (today > dueDate) return { abnormal: true, reason: KanbanAbnormalReason.DUE_DATE_PASSED };
+  }
+
+  if (
+    card.status !== 'Done' &&
+    card.status !== 'Archived' &&
+    card.status !== 'Completed' &&
+    card.status !== 'Backlog'
+  ) {
+    if (card.assignee.length === 0) return { abnormal: true, reason: KanbanAbnormalReason.NO_ASSIGNEE };
   }
 
   return { abnormal: false };
