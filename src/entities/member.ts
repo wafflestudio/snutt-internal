@@ -11,3 +11,12 @@ export enum Member {
   CHAEMIN2001 = 'CHAEMIN2001',
   EUXXNIA = 'EUXXNIA',
 }
+
+export enum Group {
+  ALL = 'ALL',
+  FRONTEND = 'FRONTEND',
+  ANDROID = 'ANDROID',
+  IOS = 'IOS',
+  SERVER = 'SERVER',
+  DESIGN = 'DESIGN',
+}

@@ -1,7 +1,8 @@
-import { Member } from './member';
+import { Group, Member } from './member';
 
 export type Card = {
   id: string;
+  group: Group | null;
   url: string;
   assignee: Member[];
   status: 'Backlog' | 'To Do' | 'In Progress' | 'In Review' | 'Archived' | 'Done' | 'Completed';

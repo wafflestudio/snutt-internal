@@ -1,7 +1,7 @@
 import { KanbanClient } from '../clients/kanbanClient';
 import { Client } from '@notionhq/client';
 import { Card } from '../entities/kanban';
-import { Member } from '../entities/member';
+import { Group, Member } from '../entities/member';
 
 export const createNotionKanbanClient = ({
   notionToken,
@@ -30,6 +30,7 @@ export const createNotionKanbanClient = ({
             'Due Date': { date: { start: string; end: string | null } | null };
             Assignee: { people: { id: string; name: string }[] };
             Name: { title: { plain_text: string }[] };
+            Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' } | null };
           };
         }[];
       };
@@ -46,6 +47,7 @@ export const createNotionKanbanClient = ({
             : c.properties['Due Date'].date.end
             ? [new Date(c.properties['Due Date'].date.start), new Date(c.properties['Due Date'].date.end)]
             : new Date(c.properties['Due Date'].date.start),
+        group: c.properties.Group.select ? GROUP_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
     },
   };
@@ -63,4 +65,12 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   'a8186318-c9d9-42d7-9b2b-303f15ab8367': Member.PENG_U_0807,
   '5f018d07-d2d8-4845-b4f1-e7dbdb49015e': Member.CHAEMIN2001,
   'e3c4232e-41ce-4189-90f4-121c7cda69f8': Member.EUXXNIA,
+};
+
+const GROUP_NOTION_ID_MAP = {
+  iOS: Group.IOS,
+  Android: Group.ANDROID,
+  Server: Group.SERVER,
+  Frontend: Group.FRONTEND,
+  Design: Group.DESIGN,
 };
