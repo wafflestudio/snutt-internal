@@ -13,8 +13,15 @@ export const createNotionKanbanClient = ({
   const notion = new Client({ auth: notionToken });
 
   return {
-    listCards: async () => {
-      const { results } = (await notion.databases.query({ database_id: databaseId })) as unknown as {
+    listCards: async ({ status }) => {
+      const { results } = (await notion.databases.query({
+        database_id: databaseId,
+        filter: {
+          or: Object.entries(status ?? {})
+            .filter(([status, selected]) => selected)
+            .map(([status]) => ({ property: 'Status', status: { equals: status } })),
+        },
+      })) as unknown as {
         results: {
           id: string;
           url: string;

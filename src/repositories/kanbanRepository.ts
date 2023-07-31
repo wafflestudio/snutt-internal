@@ -1,5 +1,5 @@
 import { Card } from '../entities/kanban';
 
 export type KanbanRepository = {
-  listCards: () => Promise<Card[]>;
+  listCards: (args: { status?: Record<Card['status'], boolean> }) => Promise<Card[]>;
 };

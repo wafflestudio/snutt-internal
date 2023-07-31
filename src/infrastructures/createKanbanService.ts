@@ -6,6 +6,7 @@ import { KanbanService } from '../services/kanbanService';
 
 enum KanbanAbnormalReason {
   DUE_DATE_PASSED = 'DUE_DATE_PASSED',
+  NO_ASSIGNEE = 'NO_ASSIGNEE',
 }
 
 export const createKanbanService = ({
@@ -15,23 +16,25 @@ export const createKanbanService = ({
   repositories: [KanbanRepository];
   clients: [MessengerClient];
 }): KanbanService => {
-  const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
-    if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Completed' && card.due !== null) {
-      const today = new Date().getTime();
-      const dueDate = Array.isArray(card.due) ? card.due[1].getTime() : card.due.getTime();
-      if (today > dueDate) return { abnormal: true, reason: KanbanAbnormalReason.DUE_DATE_PASSED };
-    }
-
-    return { abnormal: false };
-  };
-
   return {
     sendAbnormalCardStatuses: async () => {
-      const cards = await kanbanRepository.listCards();
+      const cards = await kanbanRepository.listCards({
+        status: {
+          'To Do': true,
+          'In Progress': true,
+          'In Review': true,
+          Archived: false,
+          Backlog: true,
+          Completed: false,
+          Done: false,
+        },
+      });
       const abnormalCards = cards.reduce<(Card & { reason: KanbanAbnormalReason })[]>((acc, card) => {
         const result = checkKanbanAbnormal(card);
-        if (!result.abnormal) return acc;
-        return [...acc, { ...card, reason: result.reason }];
+
+        if (result.abnormal) return [...acc, { ...card, reason: result.reason }];
+
+        return acc;
       }, []);
 
       await messengerClient.sendThread(
@@ -49,6 +52,7 @@ export const createKanbanService = ({
 
 const REASON_MESSAGE_MAP: Record<KanbanAbnormalReason, string> = {
   [KanbanAbnormalReason.DUE_DATE_PASSED]: '설정된 due date 가 지났습니다. due를 변경하거나 상태를 업데이트해 주세요.',
+  [KanbanAbnormalReason.NO_ASSIGNEE]: '담당자가 없습니다. 담당자를 지정해 주세요.',
 };
 
 // TODO: 적절한 곳으로 옮기기. 근데 템플릿이 여깄어서 되려나..
@@ -64,4 +68,14 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.PENG_U_0807]: 'U03171C4MFT',
   [Member.CHAEMIN2001]: 'U030WM38PM2',
   [Member.EUXXNIA]: 'U04F0NCC9L4',
+};
+
+const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
+  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Completed' && card.due !== null) {
+    const today = new Date().getTime();
+    const dueDate = Array.isArray(card.due) ? card.due[1].getTime() : card.due.getTime();
+    if (today > dueDate) return { abnormal: true, reason: KanbanAbnormalReason.DUE_DATE_PASSED };
+  }
+
+  return { abnormal: false };
 };
