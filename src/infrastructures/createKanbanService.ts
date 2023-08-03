@@ -25,7 +25,7 @@ export const createKanbanService = ({
           'In Review': true,
           Archived: false,
           Backlog: true,
-          Completed: false,
+          Released: false,
           Done: false,
         },
       });
@@ -85,18 +85,13 @@ const GROUP_SLACK_ID_MAP: Record<Group, string> = {
 };
 
 const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
-  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Completed' && card.due !== null) {
+  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Released' && card.due !== null) {
     const today = new Date().getTime();
     const dueDate = Array.isArray(card.due) ? card.due[1].getTime() : card.due.getTime();
     if (today > dueDate) return { abnormal: true, reason: KanbanAbnormalReason.DUE_DATE_PASSED };
   }
 
-  if (
-    card.status !== 'Done' &&
-    card.status !== 'Archived' &&
-    card.status !== 'Completed' &&
-    card.status !== 'Backlog'
-  ) {
+  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Released' && card.status !== 'Backlog') {
     if (card.assignee.length === 0) return { abnormal: true, reason: KanbanAbnormalReason.NO_ASSIGNEE };
   }
 
