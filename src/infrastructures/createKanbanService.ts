@@ -7,6 +7,7 @@ import { KanbanService } from '../services/kanbanService';
 enum KanbanAbnormalReason {
   DUE_DATE_PASSED = 'DUE_DATE_PASSED',
   NO_ASSIGNEE = 'NO_ASSIGNEE',
+  NO_DUE_DATE = 'NO_DUE_DATE',
 }
 
 export const createKanbanService = ({
@@ -58,6 +59,7 @@ export const createKanbanService = ({
 const REASON_MESSAGE_MAP: Record<KanbanAbnormalReason, string> = {
   [KanbanAbnormalReason.DUE_DATE_PASSED]: '설정된 due date 가 지났습니다. due를 변경하거나 상태를 업데이트해 주세요.',
   [KanbanAbnormalReason.NO_ASSIGNEE]: '담당자가 없습니다. 담당자를 지정해 주세요.',
+  [KanbanAbnormalReason.NO_DUE_DATE]: 'due date 가 없습니다. due를 설정하거나 상태를 Backlog로 변경해 주세요.',
 };
 
 // TODO: 적절한 곳으로 옮기기. 근데 템플릿이 여깄어서 되려나..
@@ -85,6 +87,10 @@ const GROUP_SLACK_ID_MAP: Record<Group, string> = {
 };
 
 const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
+  if ((card.status === 'To Do' || card.status === 'In Progress' || card.status === 'In Review') && card.due === null) {
+    return { abnormal: true, reason: KanbanAbnormalReason.NO_DUE_DATE };
+  }
+
   if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Released' && card.due !== null) {
     const today = new Date().getTime();
     const dueDate = Array.isArray(card.due) ? card.due[1].getTime() : card.due.getTime();
