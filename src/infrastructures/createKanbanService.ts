@@ -38,7 +38,6 @@ export const createKanbanService = ({
         return acc;
       }, []);
 
-      console.log(abnormalCards);
 
       await messengerClient.sendThread(
         '칸반 이슈',
