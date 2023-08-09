@@ -18,7 +18,7 @@ export const createNotionKanbanClient = ({
         database_id: databaseId,
         filter: {
           or: Object.entries(status ?? {})
-            .filter(([status, selected]) => selected)
+            .filter(([, selected]) => selected)
             .map(([status]) => ({ property: 'Status', status: { equals: status } })),
         },
       })) as unknown as {
@@ -27,7 +27,7 @@ export const createNotionKanbanClient = ({
           url: string;
           properties: {
             Status: { status: { name: Card['status'] } };
-            'Due Date': { date: { start: string; end: string | null } | null };
+            Schedule: { date: { start: string; end: string | null } | null };
             Assignee: { people: { id: string; name: string }[] };
             Name: { title: { plain_text: string }[] };
             Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' } | null };
@@ -41,22 +41,19 @@ export const createNotionKanbanClient = ({
         assignee: c.properties.Assignee.people.map((p) => MEMBER_NOTION_ID_MAP[p.id]).filter((m): m is Member => !!m),
         status: c.properties.Status.status.name,
         title: c.properties.Name.title.map((t) => t.plain_text).join(''),
-        due: (() => {
+        schedule: (() => {
           const toEndDate = (date: Date) => {
             if (date.getUTCHours() === 0 && date.getMinutes() === 0)
               return new Date(date.getTime() + 24 * 60 * 60 * 1000 - 1); // 시간을 지정하지 않았다면 당일 23시 59분 59초로 설정
             return date;
           };
 
-          if (c.properties['Due Date'].date === null) return null;
+          if (c.properties.Schedule.date === null) return null;
 
-          if (c.properties['Due Date'].date.end === null)
-            return toEndDate(new Date(c.properties['Due Date'].date.start));
+          if (c.properties.Schedule.date.end === null)
+            return [null, toEndDate(new Date(c.properties.Schedule.date.start))];
 
-          return [
-            new Date(c.properties['Due Date'].date.start),
-            toEndDate(new Date(c.properties['Due Date'].date.end)),
-          ];
+          return [new Date(c.properties.Schedule.date.start), toEndDate(new Date(c.properties.Schedule.date.end))];
         })(),
         group: c.properties.Group.select ? GROUP_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
