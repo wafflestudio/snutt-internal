@@ -41,12 +41,23 @@ export const createNotionKanbanClient = ({
         assignee: c.properties.Assignee.people.map((p) => MEMBER_NOTION_ID_MAP[p.id]).filter((m): m is Member => !!m),
         status: c.properties.Status.status.name,
         title: c.properties.Name.title.map((t) => t.plain_text).join(''),
-        due:
-          c.properties['Due Date'].date === null
-            ? null
-            : c.properties['Due Date'].date.end
-            ? [new Date(c.properties['Due Date'].date.start), new Date(c.properties['Due Date'].date.end)]
-            : new Date(c.properties['Due Date'].date.start),
+        due: (() => {
+          const toEndDate = (date: Date) => {
+            if (date.getUTCHours() === 0 && date.getMinutes() === 0)
+              return new Date(date.getTime() + 24 * 60 * 60 * 1000 - 1); // 시간을 지정하지 않았다면 당일 23시 59분 59초로 설정
+            return date;
+          };
+
+          if (c.properties['Due Date'].date === null) return null;
+
+          if (c.properties['Due Date'].date.end === null)
+            return toEndDate(new Date(c.properties['Due Date'].date.start));
+
+          return [
+            new Date(c.properties['Due Date'].date.start),
+            toEndDate(new Date(c.properties['Due Date'].date.end)),
+          ];
+        })(),
         group: c.properties.Group.select ? GROUP_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
     },
