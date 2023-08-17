@@ -3,7 +3,6 @@ name: send-kanban-check-script
 on:
   schedule:
     - cron: "20 1 * * 3,6" # 수, 토 한국시간 오전 10시 20분
-    - cron: "0/10 * * * *" # 테스트: 아침 8시 20분
 
 jobs:
   cron:
