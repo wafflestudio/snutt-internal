@@ -1,5 +1,6 @@
-import { KanbanClient } from '../clients/kanbanClient';
 import { Client } from '@notionhq/client';
+
+import { KanbanClient } from '../clients/kanbanClient';
 import { Card } from '../entities/kanban';
 import { Group, Member } from '../entities/member';
 
