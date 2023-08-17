@@ -2,6 +2,7 @@
   "name": "snutt-internal",
   "private": true,
   "license": "MIT",
+  "author": "woohm402 <woohm404@gmail.com>",
   "scripts": {
     "lint": "turbo run lint"
   },
