@@ -1,5 +1,6 @@
+import { LogLevel, WebClient } from '@slack/web-api';
+
 import { MessengerClient } from '../clients/messengerClient';
-import { WebClient, LogLevel } from '@slack/web-api';
 
 export const createSlackMessengerClient = ({
   slackToken,

@@ -1,8 +1,9 @@
-import express from 'express';
-import { createKanbanService } from './infrastructures/createKanbanService';
-import { createKanbanRepository } from './infrastructures/createKanbanRepository';
-import { createNotionKanbanClient } from './infrastructures/createNotionKanbanClient';
 import dotenv from 'dotenv';
+import express from 'express';
+
+import { createKanbanRepository } from './infrastructures/createKanbanRepository';
+import { createKanbanService } from './infrastructures/createKanbanService';
+import { createNotionKanbanClient } from './infrastructures/createNotionKanbanClient';
 import { createSlackMessengerClient } from './infrastructures/createSlackMessengerClient';
 
 dotenv.config({ path: './.env.local' });
