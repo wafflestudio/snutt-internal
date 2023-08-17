@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import express from 'express';
 
 import { createKanbanRepository } from './infrastructures/createKanbanRepository';
 import { createKanbanService } from './infrastructures/createKanbanService';
@@ -18,9 +17,6 @@ if (!NOTION_TOKEN) throw new Error();
 if (!SLACK_TOKEN) throw new Error();
 if (!SLACK_CHANNEL) throw new Error();
 
-const app = express();
-const port = 3000;
-
 const kanbanService = createKanbanService({
   repositories: [
     createKanbanRepository({
@@ -30,11 +26,4 @@ const kanbanService = createKanbanService({
   clients: [createSlackMessengerClient({ slackToken: SLACK_TOKEN, slackChannel: SLACK_CHANNEL })],
 });
 
-app.use('/health-check', (req, res) => res.sendStatus(200));
-
-app.use('/check-kanban', async (req, res) => {
-  await kanbanService.sendAbnormalCardStatuses();
-  res.sendStatus(200);
-});
-
-app.listen(port, () => `Server is running on port ${port}`);
+kanbanService.sendAbnormalCardStatuses();
