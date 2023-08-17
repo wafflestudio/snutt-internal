@@ -3,15 +3,7 @@ name: send-kanban-check-script
 on:
   schedule:
     # - cron: "20 1 * * 3,6" # 수, 토 한국시간 오전 10시 20분
-    - cron: "5 16 * * *"
-    - cron: "10 17 * * *"
-    - cron: "15 18 * * *"
-    - cron: "0 19 * * *"
-    - cron: "20 20 * * *"
-    - cron: "25 21 * * *"
-    - cron: "30 22 * * *"
-    - cron: "35 23 * * *"
-    - cron: "20 1 * * *"
+    - cron: "* * * * *"
 
 jobs:
   cron:
@@ -21,12 +13,16 @@ jobs:
         node-version: [18.x]
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.1.0
+      - name: Check out code
+        uses: actions/checkout@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
 
       # cron job을 실행합니다.
       - name: run script
