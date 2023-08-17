@@ -2,7 +2,7 @@ name: cron
 
 on:
   schedule:
-    - cron: "50 3 * * *" # 수, 토 한국시간 오전 10시
+    - cron: "52 15 * * *" # 수, 토 한국시간 오전 10시
 
 jobs:
   cron:
