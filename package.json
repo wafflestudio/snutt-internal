@@ -1,5 +1,6 @@
 {
   "name": "snutt-internal",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "lint": "turbo run lint"
