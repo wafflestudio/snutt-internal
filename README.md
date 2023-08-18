@@ -20,3 +20,7 @@ snutt internal 용도의 것들을 위한 모노레포
   - snutt-frontend-cicd IAM 의 secret access key
 - `AWS_REGION`
   - snutt-frontend-cicd IAM 의 region
+- `AWS_ADMIN_WEB_S3_BUCKET_DEV`
+  - snutt-admin-web dev 버킷
+- `AWS_ADMIN_WEB_CLOUDFRONT_DISTRIBUTION_ID_DEV`
+  - snutt-admin-web dev 클라우드프론트
