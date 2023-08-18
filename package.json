@@ -4,7 +4,8 @@
   "license": "MIT",
   "author": "woohm402 <woohm404@gmail.com>",
   "scripts": {
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "deploy:snutt-admin-web:dev": "scripts/deploy.sh snutt-admin-web dev"
   },
   "dependencies": {
     "turbo": "^1.10.12"
