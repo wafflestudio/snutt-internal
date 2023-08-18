@@ -24,3 +24,5 @@ snutt internal 용도의 것들을 위한 모노레포
   - snutt-admin-web dev 버킷
 - `AWS_ADMIN_WEB_CLOUDFRONT_DISTRIBUTION_ID_DEV`
   - snutt-admin-web dev 클라우드프론트
+- `SNUTT_API_KEY`
+  - snutt 서버 apiKey
