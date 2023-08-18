@@ -2,7 +2,8 @@
   import { createQuery } from "@tanstack/svelte-query";
   import Paper from "../../components/Paper.svelte";
   import { getServiceContext } from "../../contexts/ServiceContext";
-  import type { OS } from "../../../entities/nativeClient";
+  import { link } from "svelte-routing";
+  import type { OS } from "../../../entities/NativeClient";
 
   const { configService } = getServiceContext();
 
@@ -50,11 +51,14 @@
         </div>
       </div>
     </div>
-    {#if $query.isSuccess}{#each Object.entries($query.data) as config}<h3>
-          {config[0]}
-        </h3>
-        <p>{JSON.stringify(config[1])}</p>
-        <br />{/each}{/if}</Paper
+    {#if $query.isSuccess}{#each Object.entries($query.data) as [key, value]}<a
+          use:link
+          href={`/config/${key}`}
+          ><h3>
+            {key}
+          </h3>
+          <p>{JSON.stringify(value)}</p>
+        </a>{/each}{/if}</Paper
   >
 </div>
 
@@ -88,6 +92,16 @@
             width: 30px;
           }
         }
+      }
+    }
+
+    & > a {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      transition: 0.1s background-color;
+      &:hover {
+        background-color: var(--color-gray-30);
       }
     }
   }

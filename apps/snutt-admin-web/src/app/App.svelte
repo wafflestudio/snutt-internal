@@ -5,6 +5,7 @@
   import { Router, Route, link } from "svelte-routing";
   import HomePage from "./pages/HomePage/index.svelte";
   import ConfigPage from "./pages/ConfigPage/index.svelte";
+  import ConfigDetailPage from "./pages/ConfigDetailPage/index.svelte";
   import NotFoundPage from "./pages/NotFoundPage/index.svelte";
 
   const queryClient = new QueryClient();
@@ -16,11 +17,12 @@
     <div class="content">
       <nav>
         <p class="menuLabel">관리</p>
-        <a class="menuItem" href="/config" use:link>컨피그</a>
+        <a class={"menuItem"} href="/config" use:link>컨피그</a>
       </nav>
       <main>
         <Route path="/" component={HomePage} />
         <Route path="/config" component={ConfigPage} />
+        <Route path="/config/:configName" component={ConfigDetailPage} />
         <Route path="*" component={NotFoundPage} />
       </main>
     </div>
