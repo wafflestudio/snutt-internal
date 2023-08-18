@@ -1,8 +1,8 @@
-import { getContext, setContext } from "svelte";
+import { getContext } from "svelte";
 import type { ConfigService } from "../../services/ConfigService";
 
-const key = "services";
+const key = "service";
 type ServiceContext = { configService: ConfigService };
-export const setServiceContext = (context: ServiceContext) =>
-  setContext(key, context);
+export const serviceContextSetter = (context: ServiceContext) =>
+  [key, context] as const;
 export const getServiceContext = () => getContext(key) as ServiceContext;

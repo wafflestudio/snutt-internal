@@ -3,4 +3,8 @@ export type ApiClient = {
     path: string,
     options?: { headers?: Record<string, string> }
   ) => Promise<T>;
+  delete: <T>(
+    path: string,
+    options?: { headers?: Record<string, string> }
+  ) => Promise<T>;
 };

@@ -1,15 +1,20 @@
 import App from "./app/App.svelte";
+import { authContextSetter } from "./app/contexts/AuthContext";
+import { serviceContextSetter } from "./app/contexts/ServiceContext";
 import { createConfigRepository } from "./infrastructures/createConfigRepository";
 import { createConfigService } from "./infrastructures/createConfigService";
 import { createFetchClient } from "./infrastructures/createFetchClient";
 
 const mode = import.meta.env.MODE;
 const apiKey = import.meta.env.VITE_API_KEY;
+const token = import.meta.env.VITE_TOKEN;
 
 if (!apiKey || typeof apiKey !== "string")
   throw new Error("VITE_API_KEY is not set");
-if (!["localDev", "dev", "prod"].includes(mode))
+if (mode !== "localDev" && mode !== "dev" && mode !== "prod")
   throw new Error("Invalid mode");
+if (token !== undefined && typeof token !== "string")
+  throw new Error("Invalid token");
 
 const baseUrl = {
   localDev: "/api",
@@ -24,8 +29,10 @@ const configService = createConfigService({
 });
 
 const app = new App({
-  target: document.getElementById("app"),
-  context: new Map().set("services", { configService }),
+  target: document.getElementById("app") as HTMLElement,
+  context: new Map()
+    .set(...serviceContextSetter({ configService }))
+    .set(...authContextSetter({ token })),
 });
 
 export default app;

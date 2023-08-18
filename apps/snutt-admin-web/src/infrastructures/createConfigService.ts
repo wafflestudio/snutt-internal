@@ -6,5 +6,9 @@ export const createConfigService = ({
 }: {
   repositories: [ConfigRepository];
 }): ConfigService => {
-  return { getConfigs: (req) => configRepository.getConfigs(req) };
+  return {
+    getConfigs: (req) => configRepository.getConfigs(req),
+    getAdminConfig: (req) => configRepository.getAdminConfig(req),
+    deleteAdminConfig: (req) => configRepository.deleteAdminConfig(req),
+  };
 };
