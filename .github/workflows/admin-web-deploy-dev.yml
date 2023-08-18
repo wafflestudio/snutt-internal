@@ -27,6 +27,7 @@ jobs:
         run: |
           yarn install
           yarn build
+        working-directory: ${{ env.working-directory }}
 
       - name: Deploy to S3 and Invalidate Cloudfront
         id: deploy-s3
@@ -36,3 +37,4 @@ jobs:
         run: |
           aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete
           aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+        working-directory: ${{ env.working-directory }}
