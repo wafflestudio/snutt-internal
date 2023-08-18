@@ -1,26 +1,31 @@
 <script lang="ts">
   import "./app.css";
   import "./colors.css";
+  import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
   import { Router, Route, link } from "svelte-routing";
   import HomePage from "./pages/HomePage/index.svelte";
   import ConfigPage from "./pages/ConfigPage/index.svelte";
   import NotFoundPage from "./pages/NotFoundPage/index.svelte";
+
+  const queryClient = new QueryClient();
 </script>
 
-<Router>
-  <header><a href="/" use:link>스누티티로고들어갈자리</a></header>
-  <div class="content">
-    <nav>
-      <p class="menuLabel">관리</p>
-      <a class="menuItem" href="/config" use:link>컨피그</a>
-    </nav>
-    <main>
-      <Route path="/" component={HomePage} />
-      <Route path="/config" component={ConfigPage} />
-      <Route path="*" component={NotFoundPage} />
-    </main>
-  </div>
-</Router>
+<QueryClientProvider client={queryClient}>
+  <Router>
+    <header><a href="/" use:link>스누티티로고들어갈자리</a></header>
+    <div class="content">
+      <nav>
+        <p class="menuLabel">관리</p>
+        <a class="menuItem" href="/config" use:link>컨피그</a>
+      </nav>
+      <main>
+        <Route path="/" component={HomePage} />
+        <Route path="/config" component={ConfigPage} />
+        <Route path="*" component={NotFoundPage} />
+      </main>
+    </div>
+  </Router></QueryClientProvider
+>
 
 <style>
   header {
@@ -62,6 +67,7 @@
 
     & > main {
       padding: 20px;
+      flex: 1;
     }
   }
 </style>
