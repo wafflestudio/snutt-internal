@@ -9,8 +9,10 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./apps/snutt-admin-web
+
+    defaults:
+      run:
+        working-directory: ./apps/snutt-admin-web
 
     steps:
       - name: Checkout
@@ -27,7 +29,6 @@ jobs:
         run: |
           yarn install
           VITE_API_KEY=${{ secrets.SNUTT_API_KEY }} yarn build:dev
-        working-directory: ${{ env.working-directory }}
 
       - name: Deploy to S3 and Invalidate Cloudfront
         id: deploy-s3
@@ -37,4 +38,3 @@ jobs:
         run: |
           aws s3 sync ./dist s3://$AWS_S3_BUCKET --delete
           aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
-        working-directory: ${{ env.working-directory }}
