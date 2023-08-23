@@ -1,3 +1,12 @@
+import { Group, Member } from '../entities/member';
+
+export type MessageHelpers = {
+  formatMemberMention: (member: Member) => string;
+  formatGroupMention: (group: Group) => string;
+};
+
+export type GenerateMessage = (helpers: MessageHelpers) => string;
+
 export type MessengerClient = {
-  sendThread: (message: string, threadMessages: string[]) => Promise<unknown>;
+  sendThread: (message: GenerateMessage, threadMessages: GenerateMessage[]) => Promise<unknown>;
 };
