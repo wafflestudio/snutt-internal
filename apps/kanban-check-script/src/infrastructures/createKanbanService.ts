@@ -40,12 +40,12 @@ export const createKanbanService = ({
 
       await messengerClient.sendThread(
         () => '칸반 이슈',
-        abnormalCards.map((card) => ({ formatMemberMention, formatGroupMention }) => {
+        abnormalCards.map((card) => ({ formatMemberMention, formatGroupMention, formatLink }) => {
           const mention =
             card.assignee.length === 0
               ? formatGroupMention(card.group ?? Group.ALL)
               : card.assignee.map(formatMemberMention).join(' ');
-          const title = `<${card.url}|${card.title}>`;
+          const title = formatLink(card.title, { url: card.url });
           const reason = REASON_MESSAGE_MAP[card.reason];
           return `${mention} ${title}\n\n${reason}`;
         }),

@@ -29,6 +29,7 @@ const getMessage = (message: GenerateMessage) =>
   message({
     formatMemberMention: (member) => `<@${MEMBER_SLACK_ID_MAP[member]}>`,
     formatGroupMention: (group) => `<!subteam^${GROUP_SLACK_ID_MAP[group]}>`,
+    formatLink: (text, { url }) => `<${url}|${text}>`,
   });
 
 // TODO: 적절한 곳으로 옮기기. 근데 템플릿이 여깄어서 되려나..
