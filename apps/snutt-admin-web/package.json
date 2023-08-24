@@ -20,6 +20,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "@tanstack/svelte-query": "^4.32.6"
+    "@tanstack/svelte-query": "^4.32.6",
+    "utils": "*"
   }
 }
