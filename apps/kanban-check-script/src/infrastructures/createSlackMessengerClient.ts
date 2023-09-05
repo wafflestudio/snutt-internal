@@ -32,7 +32,6 @@ const getMessage = (message: GenerateMessage) =>
     formatLink: (text, { url }) => `<${url}|${text}>`,
   });
 
-// TODO: 적절한 곳으로 옮기기. 근데 템플릿이 여깄어서 되려나..
 const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.WOOHM402]: 'U01JQM3GNBW',
   [Member.SHP7724]: 'U030UCYBZC3',
@@ -45,6 +44,7 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.PENG_U_0807]: 'U03171C4MFT',
   [Member.CHAEMIN2001]: 'U030WM38PM2',
   [Member.EUXXNIA]: 'U04F0NCC9L4',
+  [Member.SUBEENPARK_IO]: 'U01RWCD0821',
 };
 
 const GROUP_SLACK_ID_MAP: Record<Group, string> = {
