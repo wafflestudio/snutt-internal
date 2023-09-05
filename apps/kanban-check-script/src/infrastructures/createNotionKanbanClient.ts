@@ -74,6 +74,7 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   'a8186318-c9d9-42d7-9b2b-303f15ab8367': Member.PENG_U_0807,
   '5f018d07-d2d8-4845-b4f1-e7dbdb49015e': Member.CHAEMIN2001,
   'e3c4232e-41ce-4189-90f4-121c7cda69f8': Member.EUXXNIA,
+  '9c79e047-4de9-4089-8787-8349e049f960': Member.SUBEENPARK_IO,
 };
 
 const GROUP_NOTION_ID_MAP = {

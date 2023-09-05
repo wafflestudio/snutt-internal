@@ -10,6 +10,7 @@ export enum Member {
   PENG_U_0807 = 'PENG_U_0807',
   CHAEMIN2001 = 'CHAEMIN2001',
   EUXXNIA = 'EUXXNIA',
+  SUBEENPARK_IO = 'SUBEENPARK_IO',
 }
 
 export enum Group {
