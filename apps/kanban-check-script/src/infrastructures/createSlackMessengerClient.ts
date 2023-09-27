@@ -1,7 +1,7 @@
 import { LogLevel, WebClient } from '@slack/web-api';
 
 import { GenerateMessage, MessengerClient } from '../clients/messengerClient';
-import { Group, Member } from '../entities/member';
+import { Member, Part } from '../entities/member';
 
 export const createSlackMessengerClient = ({
   slackToken,
@@ -28,7 +28,7 @@ export const createSlackMessengerClient = ({
 const getMessage = (message: GenerateMessage) =>
   message({
     formatMemberMention: (member) => `<@${MEMBER_SLACK_ID_MAP[member]}>`,
-    formatGroupMention: (group) => `<!subteam^${GROUP_SLACK_ID_MAP[group]}>`,
+    formatPartMention: (part) => `<!subteam^${PART_SLACK_ID_MAP[part]}>`,
     formatLink: (text, { url }) => `<${url}|${text}>`,
   });
 
@@ -47,11 +47,11 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.SUBEENPARK_IO]: 'U01RWCD0821',
 };
 
-const GROUP_SLACK_ID_MAP: Record<Group, string> = {
-  [Group.ALL]: 'S032EFLT1FT',
-  [Group.FRONTEND]: 'S0435V69VCG',
-  [Group.ANDROID]: 'S0496KFE3RP',
-  [Group.IOS]: 'S048U19HQTU',
-  [Group.SERVER]: 'S048TT15J9H',
-  [Group.DESIGN]: 'S04URBVFHJN',
+const PART_SLACK_ID_MAP: Record<Part, string> = {
+  [Part.ALL]: 'S032EFLT1FT',
+  [Part.FRONTEND]: 'S0435V69VCG',
+  [Part.ANDROID]: 'S0496KFE3RP',
+  [Part.IOS]: 'S048U19HQTU',
+  [Part.SERVER]: 'S048TT15J9H',
+  [Part.DESIGN]: 'S04URBVFHJN',
 };

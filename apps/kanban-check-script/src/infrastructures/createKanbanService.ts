@@ -1,6 +1,6 @@
 import { MessengerClient } from '../clients/messengerClient';
 import { Card } from '../entities/kanban';
-import { Group } from '../entities/member';
+import { Part } from '../entities/member';
 import { KanbanRepository } from '../repositories/kanbanRepository';
 import { KanbanService } from '../services/kanbanService';
 
@@ -40,10 +40,10 @@ export const createKanbanService = ({
 
       await messengerClient.sendThread(
         () => '칸반 이슈',
-        abnormalCards.map((card) => ({ formatMemberMention, formatGroupMention, formatLink }) => {
+        abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
           const mention =
             card.assignee.length === 0
-              ? formatGroupMention(card.group ?? Group.ALL)
+              ? formatPartMention(card.part ?? Part.ALL)
               : card.assignee.map(formatMemberMention).join(' ');
           const title = formatLink(card.title, { url: card.url });
           const reason = REASON_MESSAGE_MAP[card.reason];

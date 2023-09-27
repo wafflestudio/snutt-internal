@@ -13,7 +13,7 @@ export enum Member {
   SUBEENPARK_IO = 'SUBEENPARK_IO',
 }
 
-export enum Group {
+export enum Part {
   ALL = 'ALL',
   FRONTEND = 'FRONTEND',
   ANDROID = 'ANDROID',
