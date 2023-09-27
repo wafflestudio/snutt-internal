@@ -1,21 +1,19 @@
 import { Client } from '@notionhq/client';
 
-import { KanbanClient } from '../clients/kanbanClient';
+import { KanbanRepository } from '../adapters/kanbanRepository';
 import { Card } from '../entities/kanban';
 import { Member, Part } from '../entities/member';
 
-export const createNotionKanbanClient = ({
-  notionToken,
+export const createNotionKanbanRepository = ({
   databaseId,
+  notionClient,
 }: {
-  notionToken: string;
   databaseId: string;
-}): KanbanClient => {
-  const notion = new Client({ auth: notionToken });
-
+  notionClient: Client;
+}): KanbanRepository => {
   return {
     listCards: async ({ status }) => {
-      const { results } = (await notion.databases.query({
+      const { results } = (await notionClient.databases.query({
         database_id: databaseId,
         filter: {
           or: Object.entries(status ?? {})

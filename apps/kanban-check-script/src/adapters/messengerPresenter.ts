@@ -8,6 +8,6 @@ export type MessageHelpers = {
 
 export type GenerateMessage = (helpers: MessageHelpers) => string;
 
-export type MessengerClient = {
+export type MessengerPresenter = {
   sendThread: (message: GenerateMessage, threadMessages: GenerateMessage[]) => Promise<unknown>;
 };

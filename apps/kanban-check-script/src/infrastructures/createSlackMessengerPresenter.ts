@@ -1,24 +1,22 @@
-import { LogLevel, WebClient } from '@slack/web-api';
+import { WebClient } from '@slack/web-api';
 
-import { GenerateMessage, MessengerClient } from '../clients/messengerClient';
+import { GenerateMessage, MessengerPresenter } from '../adapters/messengerPresenter';
 import { Member, Part } from '../entities/member';
 
-export const createSlackMessengerClient = ({
-  slackToken,
+export const createSlackMessengerPresenter = ({
+  slackClient,
   slackChannel,
 }: {
-  slackToken: string;
   slackChannel: string;
-}): MessengerClient => {
-  const client = new WebClient(slackToken, { logLevel: LogLevel.DEBUG });
-
+  slackClient: WebClient;
+}): MessengerPresenter => {
   return {
     sendThread: async (text, thread) => {
       const channel = `#${slackChannel}`;
-      const response = await client.chat.postMessage({ channel, text: getMessage(text) });
+      const response = await slackClient.chat.postMessage({ channel, text: getMessage(text) });
       await Promise.all(
         thread.map((message) =>
-          client.chat.postMessage({ channel, text: getMessage(message), thread_ts: response.ts }),
+          slackClient.chat.postMessage({ channel, text: getMessage(message), thread_ts: response.ts }),
         ),
       );
     },
