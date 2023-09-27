@@ -30,13 +30,12 @@ export const createKanbanService = ({
           Done: false,
         },
       });
-      const abnormalCards = cards.reduce<(Card & { reason: KanbanAbnormalReason })[]>((acc, card) => {
+
+      const abnormalCards = cards.flatMap((card) => {
         const result = checkKanbanAbnormal(card);
-
-        if (result.abnormal) return [...acc, { ...card, reason: result.reason }];
-
-        return acc;
-      }, []);
+        if (!result.abnormal) return [];
+        return [{ ...card, reason: result.reason }];
+      });
 
       await messengerPresenter.sendThread(
         () => '칸반 이슈',
