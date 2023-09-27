@@ -1,9 +1,10 @@
+import { Client } from '@notionhq/client';
+import { WebClient } from '@slack/web-api';
 import dotenv from 'dotenv';
 
-import { createKanbanRepository } from './infrastructures/createKanbanRepository';
 import { createKanbanService } from './infrastructures/createKanbanService';
-import { createNotionKanbanClient } from './infrastructures/createNotionKanbanClient';
-import { createSlackMessengerClient } from './infrastructures/createSlackMessengerClient';
+import { createNotionKanbanRepository } from './infrastructures/createNotionKanbanRepository';
+import { createSlackMessengerPresenter } from './infrastructures/createSlackMessengerPresenter';
 
 dotenv.config({ path: './.env.local' }); // for local development
 
@@ -18,14 +19,14 @@ if (!SLACK_TTUNS_TOKEN) throw new Error();
 if (!SLACK_CHANNEL) throw new Error();
 
 const kanbanService = createKanbanService({
-  repositories: [
-    createKanbanRepository({
-      clients: [
-        createNotionKanbanClient({ databaseId: NOTION_KANBAN_DATABASE_ID, notionToken: NOTION_KANBANBOT_TOKEN }),
-      ],
-    }),
-  ],
-  clients: [createSlackMessengerClient({ slackToken: SLACK_TTUNS_TOKEN, slackChannel: SLACK_CHANNEL })],
+  kanbanRepository: createNotionKanbanRepository({
+    databaseId: NOTION_KANBAN_DATABASE_ID,
+    notionClient: new Client({ auth: NOTION_KANBANBOT_TOKEN }),
+  }),
+  messengerPresenter: createSlackMessengerPresenter({
+    slackChannel: SLACK_CHANNEL,
+    slackClient: new WebClient(SLACK_TTUNS_TOKEN),
+  }),
 });
 
 kanbanService.sendAbnormalCardStatuses();

@@ -1,21 +1,19 @@
 import { Client } from '@notionhq/client';
 
-import { KanbanClient } from '../clients/kanbanClient';
+import { KanbanRepository } from '../adapters/kanbanRepository';
 import { Card } from '../entities/kanban';
-import { Group, Member } from '../entities/member';
+import { Member, Part } from '../entities/member';
 
-export const createNotionKanbanClient = ({
-  notionToken,
+export const createNotionKanbanRepository = ({
   databaseId,
+  notionClient,
 }: {
-  notionToken: string;
   databaseId: string;
-}): KanbanClient => {
-  const notion = new Client({ auth: notionToken });
-
+  notionClient: Client;
+}): KanbanRepository => {
   return {
     listCards: async ({ status }) => {
-      const { results } = (await notion.databases.query({
+      const { results } = (await notionClient.databases.query({
         database_id: databaseId,
         filter: {
           or: Object.entries(status ?? {})
@@ -56,7 +54,7 @@ export const createNotionKanbanClient = ({
 
           return [new Date(c.properties.Schedule.date.start), toEndDate(new Date(c.properties.Schedule.date.end))];
         })(),
-        group: c.properties.Group.select ? GROUP_NOTION_ID_MAP[c.properties.Group.select.name] : null,
+        part: c.properties.Group.select ? PART_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
     },
   };
@@ -77,10 +75,10 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   '9c79e047-4de9-4089-8787-8349e049f960': Member.SUBEENPARK_IO,
 };
 
-const GROUP_NOTION_ID_MAP = {
-  iOS: Group.IOS,
-  Android: Group.ANDROID,
-  Server: Group.SERVER,
-  Frontend: Group.FRONTEND,
-  Design: Group.DESIGN,
+const PART_NOTION_ID_MAP = {
+  iOS: Part.IOS,
+  Android: Part.ANDROID,
+  Server: Part.SERVER,
+  Frontend: Part.FRONTEND,
+  Design: Part.DESIGN,
 };

@@ -1,7 +1,7 @@
-import { MessengerClient } from '../clients/messengerClient';
+import { KanbanRepository } from '../adapters/kanbanRepository';
+import { MessengerPresenter } from '../adapters/messengerPresenter';
 import { Card } from '../entities/kanban';
-import { Group } from '../entities/member';
-import { KanbanRepository } from '../repositories/kanbanRepository';
+import { Part } from '../entities/member';
 import { KanbanService } from '../services/kanbanService';
 
 enum KanbanAbnormalReason {
@@ -11,11 +11,11 @@ enum KanbanAbnormalReason {
 }
 
 export const createKanbanService = ({
-  repositories: [kanbanRepository],
-  clients: [messengerClient],
+  kanbanRepository,
+  messengerPresenter,
 }: {
-  repositories: [KanbanRepository];
-  clients: [MessengerClient];
+  kanbanRepository: KanbanRepository;
+  messengerPresenter: MessengerPresenter;
 }): KanbanService => {
   return {
     sendAbnormalCardStatuses: async () => {
@@ -38,12 +38,12 @@ export const createKanbanService = ({
         return acc;
       }, []);
 
-      await messengerClient.sendThread(
+      await messengerPresenter.sendThread(
         () => '칸반 이슈',
-        abnormalCards.map((card) => ({ formatMemberMention, formatGroupMention, formatLink }) => {
+        abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
           const mention =
             card.assignee.length === 0
-              ? formatGroupMention(card.group ?? Group.ALL)
+              ? formatPartMention(card.part ?? Part.ALL)
               : card.assignee.map(formatMemberMention).join(' ');
           const title = formatLink(card.title, { url: card.url });
           const reason = REASON_MESSAGE_MAP[card.reason];
