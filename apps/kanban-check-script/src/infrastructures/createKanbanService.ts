@@ -1,14 +1,8 @@
 import { KanbanRepository } from '../adapters/kanbanRepository';
 import { MessengerPresenter } from '../adapters/messengerPresenter';
-import { Card } from '../entities/kanban';
+import { CardAbnormalReason, isCardAbnormal } from '../entities/kanban';
 import { Part } from '../entities/member';
 import { KanbanService } from '../services/kanbanService';
-
-enum KanbanAbnormalReason {
-  DUE_DATE_PASSED = 'DUE_DATE_PASSED',
-  NO_ASSIGNEE = 'NO_ASSIGNEE',
-  NO_SCHEDULE = 'NO_SCHEDULE',
-}
 
 export const createKanbanService = ({
   kanbanRepository,
@@ -32,7 +26,7 @@ export const createKanbanService = ({
       });
 
       const abnormalCards = cards.flatMap((card) => {
-        const result = checkKanbanAbnormal(card);
+        const result = isCardAbnormal(card);
         if (!result.abnormal) return [];
         return [{ ...card, reason: result.reason }];
       });
@@ -53,29 +47,8 @@ export const createKanbanService = ({
   };
 };
 
-const REASON_MESSAGE_MAP: Record<KanbanAbnormalReason, string> = {
-  [KanbanAbnormalReason.DUE_DATE_PASSED]: '설정된 schedule이 지났습니다. 일정을 변경하거나 상태를 업데이트해 주세요.',
-  [KanbanAbnormalReason.NO_ASSIGNEE]: '담당자가 없습니다. 담당자를 지정해 주세요.',
-  [KanbanAbnormalReason.NO_SCHEDULE]: 'schedule이 없습니다. 일정을 설정하거나 상태를 Backlog로 변경해 주세요.',
-};
-
-const checkKanbanAbnormal = (card: Card): { abnormal: false } | { abnormal: true; reason: KanbanAbnormalReason } => {
-  if (
-    (card.status === 'To Do' || card.status === 'In Progress' || card.status === 'In Review') &&
-    card.schedule === null
-  ) {
-    return { abnormal: true, reason: KanbanAbnormalReason.NO_SCHEDULE };
-  }
-
-  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Released' && card.schedule !== null) {
-    const today = new Date().getTime();
-    const dueDate = card.schedule[1].getTime();
-    if (today > dueDate) return { abnormal: true, reason: KanbanAbnormalReason.DUE_DATE_PASSED };
-  }
-
-  if (card.status !== 'Done' && card.status !== 'Archived' && card.status !== 'Released' && card.status !== 'Backlog') {
-    if (card.assignee.length === 0) return { abnormal: true, reason: KanbanAbnormalReason.NO_ASSIGNEE };
-  }
-
-  return { abnormal: false };
+const REASON_MESSAGE_MAP: Record<CardAbnormalReason, string> = {
+  [CardAbnormalReason.DUE_DATE_PASSED]: '설정된 schedule이 지났습니다. 일정을 변경하거나 상태를 업데이트해 주세요.',
+  [CardAbnormalReason.NO_ASSIGNEE]: '담당자가 없습니다. 담당자를 지정해 주세요.',
+  [CardAbnormalReason.NO_SCHEDULE]: 'schedule이 없습니다. 일정을 설정하거나 상태를 Backlog로 변경해 주세요.',
 };
