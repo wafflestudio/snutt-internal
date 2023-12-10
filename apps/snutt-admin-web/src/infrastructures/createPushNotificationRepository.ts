@@ -1,6 +1,5 @@
-import type { ApiClient } from "../clients/ApiClient";
-import type { ConfigRepository } from "../repositories/ConfigRepository";
-import type { PushNotificationRepository } from "../repositories/PushNotificationRepository";
+import type { ApiClient } from '../clients/ApiClient';
+import type { PushNotificationRepository } from '../repositories/PushNotificationRepository';
 
 export const createPushNotificationRepository = ({
   apiClient,
@@ -8,30 +7,17 @@ export const createPushNotificationRepository = ({
   apiClient: ApiClient;
 }): PushNotificationRepository => {
   return {
-    sendPushNotification: ({
-      token,
-      body,
-      dataPayload,
-      insertFcm,
-      title,
-      type,
-    }) =>
+    sendPushNotification: ({ token, body, dataPayload, insertFcm, title, type }) =>
       apiClient.post(
-        "/v1/admin/insert_noti",
+        '/v1/admin/insert_noti',
         {
           body,
           data_payload: dataPayload,
           insert_fcm: `${insertFcm}`,
           title,
-          type: {
-            NORMAL: 0,
-            COURSEBOOK: 1,
-            LECTURE_UPDATE: 2,
-            LECTURE_REMOVE: 3,
-            FRIEND: 4,
-          }[type],
+          type: { NORMAL: 0, COURSEBOOK: 1, LECTURE_UPDATE: 2, LECTURE_REMOVE: 3, FRIEND: 4 }[type],
         },
-        { headers: { "x-access-token": token } }
+        { headers: { 'x-access-token': token } },
       ),
   };
 };

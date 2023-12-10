@@ -7,20 +7,28 @@
     "dev": "vite --mode localDev",
     "build:dev": "vite build --mode dev",
     "build:prod": "vite build --mode prod",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "lint": "eslint src"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.4.2",
-    "@tsconfig/svelte": "^5.0.0",
-    "svelte": "^4.0.5",
-    "svelte-check": "^3.4.6",
-    "svelte-routing": "^2.0.0",
-    "tslib": "^2.6.0",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "@sveltejs/vite-plugin-svelte": "2.4.2",
+    "@tsconfig/svelte": "5.0.0",
+    "@typescript-eslint/eslint-plugin": "6.2.0",
+    "@typescript-eslint/parser": "6.2.0",
+    "eslint": "8.55.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.0.1",
+    "eslint-plugin-simple-import-sort": "10.0.0",
+    "prettier": "3.1.0",
+    "svelte": "4.0.5",
+    "svelte-check": "3.5.0",
+    "svelte-routing": "2.0.0",
+    "tslib": "2.6.0",
+    "typescript": "5.0.2",
+    "vite": "4.4.5"
   },
   "dependencies": {
-    "@tanstack/svelte-query": "^4.32.6",
+    "@tanstack/svelte-query": "4.32.6",
     "utils": "*"
   }
 }

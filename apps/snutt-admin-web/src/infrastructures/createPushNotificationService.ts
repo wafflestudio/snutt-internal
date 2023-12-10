@@ -1,5 +1,5 @@
-import type { PushNotificationRepository } from "../repositories/PushNotificationRepository";
-import type { PushNotificationService } from "../services/PushNotificationService";
+import type { PushNotificationRepository } from '../repositories/PushNotificationRepository';
+import type { PushNotificationService } from '../services/PushNotificationService';
 
 export const createPushNotificationService = ({
   pushNotificationRepository,
