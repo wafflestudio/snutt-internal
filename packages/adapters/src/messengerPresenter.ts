@@ -1,4 +1,4 @@
-import { Member, Part } from '../entities/member';
+import { Member, Part } from '@sf/entities';
 
 export type MessageHelpers = {
   formatMemberMention: (member: Member) => string;

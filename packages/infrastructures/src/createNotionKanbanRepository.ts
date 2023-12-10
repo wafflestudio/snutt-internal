@@ -1,16 +1,15 @@
 import { Client } from '@notionhq/client';
-
-import { KanbanRepository } from '../adapters/kanbanRepository';
-import { Card } from '../entities/kanban';
-import { Member, Part } from '../entities/member';
+import { KanbanRepository } from '@sf/adapters';
+import { Card, Member, Part } from '@sf/entities';
 
 export const createNotionKanbanRepository = ({
   databaseId,
-  notionClient,
+  notionKanbanBotToken,
 }: {
   databaseId: string;
-  notionClient: Client;
+  notionKanbanBotToken: string;
 }): KanbanRepository => {
+  const notionClient = new Client({ auth: notionKanbanBotToken });
   return {
     listCards: async ({ status }) => {
       const { results } = (await notionClient.databases.query({

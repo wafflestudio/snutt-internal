@@ -1,15 +1,15 @@
+import { GenerateMessage, MessengerPresenter } from '@sf/adapters';
+import { Member, Part } from '@sf/entities';
 import { WebClient } from '@slack/web-api';
 
-import { GenerateMessage, MessengerPresenter } from '../adapters/messengerPresenter';
-import { Member, Part } from '../entities/member';
-
 export const createSlackMessengerPresenter = ({
-  slackClient,
+  slackBotToken,
   slackChannel,
 }: {
   slackChannel: string;
-  slackClient: WebClient;
+  slackBotToken: string;
 }): MessengerPresenter => {
+  const slackClient = new WebClient(slackBotToken);
   return {
     sendThread: async (text, thread) => {
       const channel = `#${slackChannel}`;
