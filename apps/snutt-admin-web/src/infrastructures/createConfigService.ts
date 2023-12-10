@@ -1,5 +1,5 @@
-import type { ConfigRepository } from "../repositories/ConfigRepository";
-import type { ConfigService } from "../services/ConfigService";
+import type { ConfigRepository } from '../repositories/ConfigRepository';
+import type { ConfigService } from '../services/ConfigService';
 
 export const createConfigService = ({
   repositories: [configRepository],

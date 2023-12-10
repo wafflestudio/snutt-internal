@@ -1,4 +1,4 @@
-import type { PushNotificationType } from "../entities/PushNotification";
+import type { PushNotificationType } from '../entities/PushNotification';
 
 export type PushNotificationRepository = {
   sendPushNotification: (req: {
