@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "Hyunmin Woo",
+    "email": "woohm404@gmail.com"
+  },
   "scripts": {
     "dev": "vite --mode localDev",
     "build:dev": "vite build --mode dev",
