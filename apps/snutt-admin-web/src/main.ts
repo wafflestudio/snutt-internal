@@ -4,6 +4,8 @@ import { serviceContextSetter } from "./app/contexts/ServiceContext";
 import { createConfigRepository } from "./infrastructures/createConfigRepository";
 import { createConfigService } from "./infrastructures/createConfigService";
 import { createFetchClient } from "./infrastructures/createFetchClient";
+import { createPushNotificationRepository } from "./infrastructures/createPushNotificationRepository";
+import { createPushNotificationService } from "./infrastructures/createPushNotificationService";
 
 const mode = import.meta.env.MODE;
 const apiKey = import.meta.env.VITE_API_KEY;
@@ -22,16 +24,20 @@ const baseUrl = {
   prod: "https://snutt-api.wafflestudio.com",
 }[mode];
 
+const apiClient = createFetchClient(baseUrl, apiKey);
+
 const configService = createConfigService({
-  repositories: [
-    createConfigRepository({ clients: [createFetchClient(baseUrl, apiKey)] }),
-  ],
+  repositories: [createConfigRepository({ clients: [apiClient] })],
+});
+
+const pushNotificationService = createPushNotificationService({
+  pushNotificationRepository: createPushNotificationRepository({ apiClient }),
 });
 
 const app = new App({
   target: document.getElementById("app") as HTMLElement,
   context: new Map()
-    .set(...serviceContextSetter({ configService }))
+    .set(...serviceContextSetter({ configService, pushNotificationService }))
     .set(...authContextSetter({ token })),
 });
 
