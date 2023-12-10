@@ -1,0 +1,35 @@
+name: send-kanban-dashboard
+
+on:
+  schedule:
+    - cron: "10 1 * * *" # 매일 한국시간 오전 10시 10분
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+
+      # cron job을 실행합니다.
+      - name: run script
+        run: |
+          cd crons/kanban-dashboard
+          yarn install
+          NOTION_KANBAN_DATABASE_ID=${{ secrets.NOTION_KANBAN_DATABASE_ID }} \
+          NOTION_KANBANBOT_TOKEN=${{ secrets.NOTION_KANBANBOT_TOKEN }} \
+          SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
+          SLACK_CHANNEL=${{ secrets.SLACK_CHANNEL }} \
+            yarn send
