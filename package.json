@@ -2,7 +2,10 @@
   "name": "snutt-internal",
   "private": true,
   "license": "MIT",
-  "author": "woohm402 <woohm404@gmail.com>",
+  "author": {
+    "name": "Hyunmin Woo",
+    "email": "woohm404@gmail.com"
+  },
   "scripts": {
     "lint": "turbo run lint",
     "deploy:snutt-admin-web:dev": "scripts/deploy.sh snutt-admin-web dev"

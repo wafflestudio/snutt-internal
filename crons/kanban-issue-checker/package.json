@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": false,
+  "author": {
+    "name": "Hyunmin Woo",
+    "email": "woohm404@gmail.com"
+  },
   "scripts": {
     "send": "ts-node src/index.ts",
     "lint": "eslint src"
