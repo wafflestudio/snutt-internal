@@ -13,17 +13,21 @@ export const createKanbanService = ({
     sendDashboard: async () => {
       const cards = await kanbanRepository.listCards({
         status: {
-          'To Do': true,
+          'To Do': false,
           'In Progress': true,
-          'In Review': true,
+          'In Review': false,
           Archived: false,
           Backlog: false,
           Released: false,
-          Done: true,
+          Done: false,
         },
       });
 
-      await messengerPresenter.sendThread(() => `카드 ${cards.length}개`, []);
+      await messengerPresenter.sendThread(
+        ({ formatLink }) =>
+          ['진행 중인 SNUTT 태스크', '', ...cards.map((c) => `- ${formatLink(c.title, { url: c.url })}`)].join('\n'),
+        [],
+      );
     },
   };
 };
