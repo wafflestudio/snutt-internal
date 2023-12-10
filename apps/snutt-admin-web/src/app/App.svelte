@@ -7,6 +7,7 @@
   import ConfigPage from "./pages/ConfigPage/index.svelte";
   import ConfigDetailPage from "./pages/ConfigDetailPage/index.svelte";
   import NotFoundPage from "./pages/NotFoundPage/index.svelte";
+  import PushNotificationPage from "./pages/PushNotificationPage/index.svelte";
 
   const queryClient = new QueryClient();
 </script>
@@ -18,11 +19,13 @@
       <nav>
         <p class="menuLabel">관리</p>
         <a class={"menuItem"} href="/config" use:link>컨피그</a>
+        <a class={"menuItem"} href="/push-notification" use:link>푸시</a>
       </nav>
       <main>
         <Route path="/" component={HomePage} />
         <Route path="/config" component={ConfigPage} />
         <Route path="/config/:configName" component={ConfigDetailPage} />
+        <Route path="/push-notification" component={PushNotificationPage} />
         <Route path="*" component={NotFoundPage} />
       </main>
     </div>
