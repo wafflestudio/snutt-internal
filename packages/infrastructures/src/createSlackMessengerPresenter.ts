@@ -23,12 +23,17 @@ export const createSlackMessengerPresenter = ({
   };
 };
 
-const getMessage = (message: GenerateMessage) =>
-  message({
+const escapeSymbols = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const getMessage = (message: GenerateMessage) => {
+  const formatted = message({
     formatMemberMention: (member) => `<@${MEMBER_SLACK_ID_MAP[member]}>`,
     formatPartMention: (part) => `<!subteam^${PART_SLACK_ID_MAP[part]}>`,
-    formatLink: (text, { url }) => `<${url}|${text}>`,
+    formatLink: (text, { url }) => `<${url}|${escapeSymbols(text)}>`,
   });
+  // https://api.slack.com/reference/surfaces/formatting#escaping
+  return formatted;
+};
 
 const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.WOOHM402]: 'U01JQM3GNBW',
