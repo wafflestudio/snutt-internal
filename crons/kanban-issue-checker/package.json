@@ -1,5 +1,5 @@
 {
-  "name": "kanban-check-script",
+  "name": "kanban-issue-checker",
   "version": "1.0.0",
   "license": "MIT",
   "private": false,
