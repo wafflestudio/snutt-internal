@@ -1,34 +1,32 @@
 <script lang="ts">
-  import {
-    createMutation,
-    createQuery,
-    getQueryClientContext,
-  } from "@tanstack/svelte-query";
-  import { getServiceContext } from "../../contexts/ServiceContext";
-  import type { AdminConfigId } from "../../../entities/Config";
-  import { getAuthContext } from "../../contexts/AuthContext";
+  import { createMutation, createQuery, getQueryClientContext } from '@tanstack/svelte-query';
+  import { getServiceContext } from '../../contexts/ServiceContext';
+  import type { AdminConfigId } from '../../../entities/Config';
+  import { getAuthContext } from '../../contexts/AuthContext';
 
   export let configName: string;
   const queryClient = getQueryClientContext();
   const { configService } = getServiceContext();
   const { token } = getAuthContext();
 
-  $: query = createQuery(
-    ["configs", { configName, token }] as const,
-    ({ queryKey: [, { configName, token }] }) => {
+  $: query = createQuery({
+    queryKey: ['configs', { configName, token }] as const,
+    queryFn: ({ queryKey: [, { configName, token }] }) => {
       if (!token) throw new Error();
       return configService.getAdminConfig({ configName, token });
     },
-    { enabled: !!token }
-  );
-
-  const mutation = createMutation((configId: AdminConfigId) => {
-    if (!token) throw new Error();
-
-    return configService.deleteAdminConfig({ configName, configId, token });
+    enabled: !!token,
   });
 
-  const versionKeys = ["minVersion", "maxVersion"] as const;
+  const mutation = createMutation({
+    mutationFn: (configId: AdminConfigId) => {
+      if (!token) throw new Error();
+
+      return configService.deleteAdminConfig({ configName, configId, token });
+    },
+  });
+
+  const versionKeys = ['minVersion', 'maxVersion'] as const;
 </script>
 
 <div>
@@ -47,7 +45,7 @@
             >
           </div>
           <dl>
-            {#each versionKeys.map( (version) => ({ version, config: adminConfig[version] }) ) as vc}
+            {#each versionKeys.map((version) => ({ version, config: adminConfig[version] })) as vc}
               <dt>{vc.version}</dt>
               <dd>
                 {#if vc.config}<div>
