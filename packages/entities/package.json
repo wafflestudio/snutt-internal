@@ -1,20 +1,18 @@
 {
-  "name": "kanban-issue-checker",
-  "version": "1.0.0",
-  "license": "MIT",
-  "private": false,
+  "name": "@sf/entities",
+  "main": "src/index.ts",
+  "version": "0.0.0",
+  "types": "src/index.ts",
   "author": {
     "name": "Hyunmin Woo",
     "email": "woohm404@gmail.com"
   },
+  "private": true,
   "scripts": {
-    "send": "ts-node src/index.ts",
     "lint": "eslint src"
   },
   "dependencies": {
-    "@sf/entities": "*",
-    "@sf/infrastructures": "*",
-    "dotenv": "16.3.1"
+    "typescript": "5.3.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "6.13.2",
@@ -22,9 +20,6 @@
     "eslint": "8.55.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.0.1",
-    "eslint-plugin-simple-import-sort": "10.0.0",
-    "prettier": "3.1.1",
-    "ts-node": "10.9.2",
-    "typescript": "5.3.3"
+    "prettier": "3.1.1"
   }
 }

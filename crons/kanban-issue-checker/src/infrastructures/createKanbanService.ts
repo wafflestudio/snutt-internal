@@ -1,7 +1,7 @@
-import { KanbanRepository } from '../adapters/kanbanRepository';
-import { MessengerPresenter } from '../adapters/messengerPresenter';
+import { KanbanRepository, MessengerPresenter } from '@sf/adapters';
+import { Part } from '@sf/entities';
+
 import { CardAbnormalReason, isCardAbnormal } from '../entities/kanban';
-import { Part } from '../entities/member';
 import { KanbanService } from '../services/kanbanService';
 
 export const createKanbanService = ({

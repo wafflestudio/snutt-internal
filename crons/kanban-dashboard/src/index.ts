@@ -26,4 +26,4 @@ const kanbanService = createKanbanService({
   }),
 });
 
-kanbanService.sendAbnormalCardStatuses();
+kanbanService.sendDashboard();
