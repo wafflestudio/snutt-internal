@@ -1,4 +1,4 @@
-import { GenerateMessage, MessengerPresenter } from '@sf/adapters';
+import { GenerateMessage, MessageHelpers, MessengerPresenter } from '@sf/adapters';
 import { Member, Part } from '@sf/entities';
 import { WebClient } from '@slack/web-api';
 
@@ -30,6 +30,8 @@ const getMessage = (message: GenerateMessage) => {
     formatMemberMention: (member) => `<@${MEMBER_SLACK_ID_MAP[member]}>`,
     formatPartMention: (part) => `<!subteam^${PART_SLACK_ID_MAP[part]}>`,
     formatLink: (text, { url }) => `<${url}|${escapeSymbols(text)}>`,
+    formatEmoji: (emoji) => `:${EMOJI_SLACK_EMOJI_MAP[emoji]}:`,
+    formatBold: (text) => `*${text}*`,
   });
   // https://api.slack.com/reference/surfaces/formatting#escaping
   return formatted;
@@ -57,4 +59,15 @@ const PART_SLACK_ID_MAP: Record<Part, string> = {
   [Part.IOS]: 'S048U19HQTU',
   [Part.SERVER]: 'S048TT15J9H',
   [Part.DESIGN]: 'S04URBVFHJN',
+};
+
+const EMOJI_SLACK_EMOJI_MAP: Record<Parameters<MessageHelpers['formatEmoji']>[0], string> = {
+  spring: 'spring',
+  react: 'react',
+  android: 'android',
+  ios: 'apple-black',
+  design: 'art',
+  null: 'sql-null',
+  snutt: 'snutt',
+  wip: 'wip',
 };
