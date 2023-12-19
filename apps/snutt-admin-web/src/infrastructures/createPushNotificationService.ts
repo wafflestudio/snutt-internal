@@ -14,7 +14,7 @@ export const createPushNotificationService = ({
         body: req.body,
         insertFcm: req.insertFcm,
         type: req.type,
-        dataPayload: req.urlScheme ? { urlScheme: req.urlScheme } : {},
+        dataPayload: req.urlScheme ? { url_scheme: req.urlScheme } : {},
       });
     },
   };
