@@ -51,4 +51,5 @@ const REASON_MESSAGE_MAP: Record<CardAbnormalReason, string> = {
   [CardAbnormalReason.DUE_DATE_PASSED]: '설정된 schedule이 지났습니다. 일정을 변경하거나 상태를 업데이트해 주세요.',
   [CardAbnormalReason.NO_ASSIGNEE]: '담당자가 없습니다. 담당자를 지정해 주세요.',
   [CardAbnormalReason.NO_SCHEDULE]: 'schedule이 없습니다. 일정을 설정하거나 상태를 Backlog로 변경해 주세요.',
+  [CardAbnormalReason.NO_PART]: 'Group이 없습니다. Group을 지정해 주세요.',
 };
