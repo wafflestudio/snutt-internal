@@ -10,6 +10,7 @@
   "scripts": {
     "send:dashboard": "ts-node src/index.ts dashboard",
     "send:issue": "ts-node src/index.ts issue",
+    "send:weekly-summary": "ts-node src/index.ts weekly-summary",
     "lint": "eslint src"
   },
   "dependencies": {

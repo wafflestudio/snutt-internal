@@ -1,0 +1,35 @@
+name: send-kanban-weekly-summary
+
+on:
+  schedule:
+    - cron: "20 1 * * 3" # 수요일 한국시간 오전 11시 20분
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+
+      # cron job을 실행합니다.
+      - name: run script
+        run: |
+          cd crons/kanban-reporter
+          yarn install
+          NOTION_KANBAN_DATABASE_ID=${{ secrets.NOTION_KANBAN_DATABASE_ID }} \
+          NOTION_KANBANBOT_TOKEN=${{ secrets.NOTION_KANBANBOT_TOKEN }} \
+          SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
+          SLACK_CHANNEL=${{ secrets.SLACK_CHANNEL }} \
+            yarn send:weekly-summary

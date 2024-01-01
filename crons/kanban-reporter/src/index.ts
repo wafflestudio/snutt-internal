@@ -7,7 +7,7 @@ dotenv.config({ path: './.env.local' }); // for local development
 
 const mode = process.argv[2];
 
-if (!mode || (mode !== 'issue' && mode !== 'dashboard')) throw new Error();
+if (!mode || (mode !== 'issue' && mode !== 'dashboard' && mode !== 'weekly-summary')) throw new Error();
 
 const NOTION_KANBAN_DATABASE_ID = process.env.NOTION_KANBAN_DATABASE_ID;
 const NOTION_KANBANBOT_TOKEN = process.env.NOTION_KANBANBOT_TOKEN;
@@ -36,5 +36,8 @@ switch (mode) {
     break;
   case 'dashboard':
     kanbanService.sendDashboard();
+    break;
+  case 'weekly-summary':
+    kanbanService.sendWeeklySummary();
     break;
 }
