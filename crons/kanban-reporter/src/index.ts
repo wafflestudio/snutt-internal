@@ -5,6 +5,10 @@ import { createKanbanService } from './infrastructures/createKanbanService';
 
 dotenv.config({ path: './.env.local' }); // for local development
 
+const mode = process.argv[2];
+
+if (!mode || (mode !== 'issue' && mode !== 'dashboard')) throw new Error();
+
 const NOTION_KANBAN_DATABASE_ID = process.env.NOTION_KANBAN_DATABASE_ID;
 const NOTION_KANBANBOT_TOKEN = process.env.NOTION_KANBANBOT_TOKEN;
 const SLACK_TTUNS_TOKEN = process.env.SLACK_TTUNS_TOKEN;
@@ -26,4 +30,11 @@ const kanbanService = createKanbanService({
   }),
 });
 
-kanbanService.sendDashboard();
+switch (mode) {
+  case 'issue':
+    kanbanService.sendAbnormalCardStatuses();
+    break;
+  case 'dashboard':
+    kanbanService.sendDashboard();
+    break;
+}

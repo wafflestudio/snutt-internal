@@ -26,10 +26,10 @@ jobs:
       # cron job을 실행합니다.
       - name: run script
         run: |
-          cd crons/kanban-dashboard
+          cd crons/kanban-reporter
           yarn install
           NOTION_KANBAN_DATABASE_ID=${{ secrets.NOTION_KANBAN_DATABASE_ID }} \
           NOTION_KANBANBOT_TOKEN=${{ secrets.NOTION_KANBANBOT_TOKEN }} \
           SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
           SLACK_CHANNEL=${{ secrets.SLACK_CHANNEL }} \
-            yarn send
+            yarn send:dashboard
