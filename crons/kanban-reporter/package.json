@@ -1,5 +1,5 @@
 {
-  "name": "kanban-issue-checker",
+  "name": "kanban-reporter",
   "version": "1.0.0",
   "license": "MIT",
   "private": false,
@@ -8,7 +8,8 @@
     "email": "woohm404@gmail.com"
   },
   "scripts": {
-    "send": "ts-node src/index.ts",
+    "send:dashboard": "ts-node src/index.ts dashboard",
+    "send:issue": "ts-node src/index.ts issue",
     "lint": "eslint src"
   },
   "dependencies": {
