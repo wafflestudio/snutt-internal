@@ -65,7 +65,7 @@ type NotionCard = {
     Schedule: { date: { start: string; end: string | null } | null };
     Assignee: { people: { id: string; name: string }[] };
     Name: { title: { plain_text: string }[] };
-    Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' } | null };
+    Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' | 'All' } | null };
   };
 };
 
@@ -90,4 +90,5 @@ const PART_NOTION_ID_MAP = {
   Server: Part.SERVER,
   Frontend: Part.FRONTEND,
   Design: Part.DESIGN,
+  All: Part.ALL,
 };
