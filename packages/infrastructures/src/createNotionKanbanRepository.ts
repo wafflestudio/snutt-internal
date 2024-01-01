@@ -46,10 +46,10 @@ export const createNotionKanbanRepository = ({
 
           if (c.properties.Schedule.date === null) return null;
 
-          if (c.properties.Schedule.date.end === null)
-            return [null, toEndDate(new Date(c.properties.Schedule.date.start))];
-
-          return [new Date(c.properties.Schedule.date.start), toEndDate(new Date(c.properties.Schedule.date.end))];
+          return [
+            new Date(c.properties.Schedule.date.start),
+            toEndDate(new Date(c.properties.Schedule.date.end ?? c.properties.Schedule.date.start)),
+          ];
         })(),
         part: c.properties.Group.select ? PART_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
