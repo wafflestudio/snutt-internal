@@ -13,17 +13,7 @@ export const createKanbanService = ({
 }): KanbanService => {
   return {
     sendDashboard: async () => {
-      const cards = await kanbanRepository.listCards({
-        status: {
-          'To Do': false,
-          'In Progress': true,
-          'In Review': false,
-          Archived: false,
-          Backlog: false,
-          Released: false,
-          Done: false,
-        },
-      });
+      const cards = (await kanbanRepository.listCards()).filter((c) => c.status === 'In Progress');
 
       await messengerPresenter.sendThread(
         ({ formatLink, formatEmoji, formatBold }) =>
@@ -53,17 +43,9 @@ export const createKanbanService = ({
     },
 
     sendAbnormalCardStatuses: async () => {
-      const cards = await kanbanRepository.listCards({
-        status: {
-          'To Do': true,
-          'In Progress': true,
-          'In Review': true,
-          Archived: false,
-          Backlog: true,
-          Released: false,
-          Done: false,
-        },
-      });
+      const cards = (await kanbanRepository.listCards()).filter(
+        (c) => c.status === 'In Progress' || c.status === 'In Review' || c.status === 'Backlog' || c.status === 'To Do',
+      );
 
       const abnormalCards = cards.flatMap((card) => {
         const result = isCardAbnormal(card);

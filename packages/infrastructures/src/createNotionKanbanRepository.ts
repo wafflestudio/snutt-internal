@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client';
+import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
 import { KanbanRepository } from '@sf/adapters';
 import { Card, Member, Part } from '@sf/entities';
 
@@ -10,28 +11,25 @@ export const createNotionKanbanRepository = ({
   notionKanbanBotToken: string;
 }): KanbanRepository => {
   const notionClient = new Client({ auth: notionKanbanBotToken });
+
+  const listCards = async ({ cursor }: { cursor?: string }): Promise<QueryDatabaseResponse['results']> => {
+    const { results, has_more, next_cursor } = await notionClient.databases.query({
+      database_id: databaseId,
+      start_cursor: cursor,
+    });
+
+    const allResults = await (async () => {
+      if (!has_more) return results;
+      if (!next_cursor) throw new Error();
+      return [...results, ...(await listCards({ cursor: next_cursor }))];
+    })();
+
+    return allResults;
+  };
+
   return {
-    listCards: async ({ status }) => {
-      const { results } = (await notionClient.databases.query({
-        database_id: databaseId,
-        filter: {
-          or: Object.entries(status ?? {})
-            .filter(([, selected]) => selected)
-            .map(([status]) => ({ property: 'Status', status: { equals: status } })),
-        },
-      })) as unknown as {
-        results: {
-          id: string;
-          url: string;
-          properties: {
-            Status: { status: { name: Card['status'] } };
-            Schedule: { date: { start: string; end: string | null } | null };
-            Assignee: { people: { id: string; name: string }[] };
-            Name: { title: { plain_text: string }[] };
-            Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' } | null };
-          };
-        }[];
-      };
+    listCards: async () => {
+      const results = (await listCards({})) as unknown as NotionCard[];
 
       return results.map((c) => ({
         id: c.id,
@@ -56,6 +54,18 @@ export const createNotionKanbanRepository = ({
         part: c.properties.Group.select ? PART_NOTION_ID_MAP[c.properties.Group.select.name] : null,
       }));
     },
+  };
+};
+
+type NotionCard = {
+  id: string;
+  url: string;
+  properties: {
+    Status: { status: { name: Card['status'] } };
+    Schedule: { date: { start: string; end: string | null } | null };
+    Assignee: { people: { id: string; name: string }[] };
+    Name: { title: { plain_text: string }[] };
+    Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' } | null };
   };
 };
 
