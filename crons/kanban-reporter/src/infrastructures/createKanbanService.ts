@@ -1,5 +1,5 @@
 import { KanbanRepository, MessengerPresenter } from '@sf/adapters';
-import { Part } from '@sf/entities';
+import { CARD_STATUS_ORDER, Part } from '@sf/entities';
 
 import { CardAbnormalReason, isCardAbnormal } from '../entities/kanban';
 import { KanbanService } from '../services/kanbanService';
@@ -22,20 +22,9 @@ export const createKanbanService = ({
             '',
             ...cards.map(
               (c) =>
-                `${formatEmoji(
-                  c.part
-                    ? (
-                        {
-                          [Part.ALL]: 'snutt',
-                          [Part.ANDROID]: 'android',
-                          [Part.DESIGN]: 'design',
-                          [Part.FRONTEND]: 'react',
-                          [Part.IOS]: 'ios',
-                          [Part.SERVER]: 'spring',
-                        } as const
-                      )[c.part]
-                    : ('null' as const),
-                )} ${formatLink(c.title, { url: c.url })}`,
+                `${formatEmoji(c.part ? PART_EMOJI_MAP[c.part] : ('null' as const))} ${formatLink(c.title, {
+                  url: c.url,
+                })}`,
             ),
           ].join('\n'),
         [],
@@ -66,6 +55,39 @@ export const createKanbanService = ({
         }),
       );
     },
+
+    sendWeeklySummary: async () => {
+      const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const to = new Date();
+
+      const cards = (await kanbanRepository.listCards()).filter((c) => {
+        if (c.schedule === null) return false;
+        const [start, end] = c.schedule;
+        if (end.getTime() < from.getTime()) return false;
+        if (start.getTime() > to.getTime()) return false;
+        return true;
+      });
+
+      await messengerPresenter.sendThread(
+        ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
+        [Part.ALL, Part.ANDROID, Part.DESIGN, Part.FRONTEND, Part.IOS, Part.SERVER].map(
+          (part) =>
+            ({ formatEmoji, formatInlineCode, formatLink, formatBold }) => {
+              const partCards = cards.filter((c) => c.part === part);
+
+              return `${formatEmoji(PART_EMOJI_MAP[part])} ${part}\n\n${partCards
+                .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status])
+                .map(
+                  (c) =>
+                    `[ ${formatBold(formatInlineCode(c.status.padStart(12, ' ')))} ] ${formatLink(c.title, {
+                      url: c.url,
+                    })}`,
+                )
+                .join('\n')}`;
+            },
+        ),
+      );
+    },
   };
 };
 
@@ -75,3 +97,12 @@ const REASON_MESSAGE_MAP: Record<CardAbnormalReason, string> = {
   [CardAbnormalReason.NO_SCHEDULE]: 'schedule이 없습니다. 일정을 설정하거나 상태를 Backlog로 변경해 주세요.',
   [CardAbnormalReason.NO_PART]: 'Group이 없습니다. Group을 지정해 주세요.',
 };
+
+const PART_EMOJI_MAP = {
+  [Part.ALL]: 'snutt',
+  [Part.ANDROID]: 'android',
+  [Part.DESIGN]: 'design',
+  [Part.FRONTEND]: 'react',
+  [Part.IOS]: 'ios',
+  [Part.SERVER]: 'spring',
+} as const;

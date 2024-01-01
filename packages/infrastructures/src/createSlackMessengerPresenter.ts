@@ -14,11 +14,8 @@ export const createSlackMessengerPresenter = ({
     sendThread: async (text, thread) => {
       const channel = `#${slackChannel}`;
       const response = await slackClient.chat.postMessage({ channel, text: getMessage(text) });
-      await Promise.all(
-        thread.map((message) =>
-          slackClient.chat.postMessage({ channel, text: getMessage(message), thread_ts: response.ts }),
-        ),
-      );
+      for (const message of thread)
+        await slackClient.chat.postMessage({ channel, text: getMessage(message), thread_ts: response.ts });
     },
   };
 };
@@ -32,6 +29,7 @@ const getMessage = (message: GenerateMessage) => {
     formatLink: (text, { url }) => `<${url}|${escapeSymbols(text)}>`,
     formatEmoji: (emoji) => `:${EMOJI_SLACK_EMOJI_MAP[emoji]}:`,
     formatBold: (text) => `*${text}*`,
+    formatInlineCode: (text) => `\`${text}\``,
   });
   // https://api.slack.com/reference/surfaces/formatting#escaping
   return formatted;
@@ -70,4 +68,5 @@ const EMOJI_SLACK_EMOJI_MAP: Record<Parameters<MessageHelpers['formatEmoji']>[0]
   null: 'sql-null',
   snutt: 'snutt',
   wip: 'wip',
+  help: 'blob_help',
 };
