@@ -79,7 +79,7 @@ export const createKanbanService = ({
                 .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status])
                 .map(
                   (c) =>
-                    `[ ${formatBold(formatInlineCode(c.status.padStart(12, ' ')))} ] ${formatLink(c.title, {
+                    `${formatBold(formatInlineCode(`[ ${c.status.padStart(12, ' ')} ]`))} ${formatLink(c.title, {
                       url: c.url,
                     })}`,
                 )
