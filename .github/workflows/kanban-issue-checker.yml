@@ -2,7 +2,7 @@ name: send-kanban-issue-checker
 
 on:
   schedule:
-    - cron: "20 1 * * 3,6" # 수, 토 한국시간 오전 10시 20분
+    - cron: "20 1 * * *" # 수, 토 한국시간 오전 10시 20분
 
 jobs:
   cron:
