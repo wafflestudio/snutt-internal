@@ -29,6 +29,7 @@ jobs:
           cd crons/kanban-reporter
           yarn install
           NOTION_KANBAN_DATABASE_ID=${{ secrets.NOTION_KANBAN_DATABASE_ID }} \
+          NOTION_EPIC_DATABASE_ID=${{ secrets.NOTION_EPIC_DATABASE_ID }} \
           NOTION_KANBANBOT_TOKEN=${{ secrets.NOTION_KANBANBOT_TOKEN }} \
           SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
           SLACK_CHANNEL=${{ secrets.SLACK_CHANNEL }} \

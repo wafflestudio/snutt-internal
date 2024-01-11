@@ -8,6 +8,8 @@ snutt internal 용도의 것들을 위한 모노레포
 
 - `NOTION_KANBAN_DATABASE_ID`
   - 노션의 칸반 페이지 데이터베이스 id. ex) `6e5...`
+- `NOTION_EPIC_DATABASE_ID`
+  - 노션의 에픽 페이지 데이터베이스 id. ex) `287...`
 - `NOTION_KANBANBOT_TOKEN`
   - 노션 칸반 페이지를 읽기 위한 권한이 있는 봇의 토큰. ex) `secret_TK0...`
 - `SLACK_TTUNS_TOKEN`
