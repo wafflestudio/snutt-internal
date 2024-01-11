@@ -7,7 +7,16 @@ export type Card = {
   assignee: Member[];
   status: 'Backlog' | 'To Do' | 'In Progress' | 'In Review' | 'Archived' | 'Done' | 'Released';
   title: string;
-  schedule: [Date, Date] | null;
+  schedule: readonly [Date, Date] | null;
+  epic: Epic['id'] | null;
+};
+
+export type Epic = {
+  id: string;
+  title: string;
+  url: string;
+  manager: Member;
+  status: 'Not Started' | 'In Progress' | 'Archived' | 'Done';
 };
 
 export const CARD_STATUS_ORDER: Record<Card['status'], number> = {

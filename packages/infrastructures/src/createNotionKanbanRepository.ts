@@ -1,20 +1,37 @@
 import { Client } from '@notionhq/client';
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
 import { KanbanRepository } from '@sf/adapters';
-import { Card, Member, Part } from '@sf/entities';
+import { Card, Epic, Member, Part } from '@sf/entities';
 
 export const createNotionKanbanRepository = ({
-  databaseId,
-  notionKanbanBotToken,
+  epicDatabaseId,
+  kanbanDatabaseId,
+  notionBotToken,
 }: {
-  databaseId: string;
-  notionKanbanBotToken: string;
+  epicDatabaseId: string;
+  kanbanDatabaseId: string;
+  notionBotToken: string;
 }): KanbanRepository => {
-  const notionClient = new Client({ auth: notionKanbanBotToken });
+  const notionClient = new Client({ auth: notionBotToken });
+
+  const listEpics = async ({ cursor }: { cursor?: string }): Promise<QueryDatabaseResponse['results']> => {
+    const { results, has_more, next_cursor } = await notionClient.databases.query({
+      database_id: epicDatabaseId,
+      start_cursor: cursor,
+    });
+
+    const allResults = await (async () => {
+      if (!has_more) return results;
+      if (!next_cursor) throw new Error();
+      return [...results, ...(await listEpics({ cursor: next_cursor }))];
+    })();
+
+    return allResults;
+  };
 
   const listCards = async ({ cursor }: { cursor?: string }): Promise<QueryDatabaseResponse['results']> => {
     const { results, has_more, next_cursor } = await notionClient.databases.query({
-      database_id: databaseId,
+      database_id: kanbanDatabaseId,
       start_cursor: cursor,
     });
 
@@ -28,13 +45,31 @@ export const createNotionKanbanRepository = ({
   };
 
   return {
-    listCards: async () => {
-      const results = (await listCards({})) as unknown as NotionCard[];
+    listEpics: async () => {
+      const notionEpics = (await listEpics({})) as unknown as NotionEpic[];
 
-      return results.map((c) => ({
+      return notionEpics.map((e) => {
+        const managerItem = e.properties.PM.people[0];
+        if (!managerItem) throw new Error('no manager');
+        const manager = MEMBER_NOTION_ID_MAP[managerItem.id];
+        if (!manager) throw new Error('unknown manager');
+        const title = e.properties.Title.title.map((t) => t.plain_text).join('');
+
+        return { id: e.id, title, manager, status: e.properties.Status.status.name, url: e.url };
+      });
+    },
+
+    listCards: async () => {
+      const notionCards = (await listCards({})) as unknown as NotionCard[];
+
+      return notionCards.map((c) => ({
         id: c.id,
         url: c.url,
-        assignee: c.properties.Assignee.people.map((p) => MEMBER_NOTION_ID_MAP[p.id]).filter((m): m is Member => !!m),
+        assignee: c.properties.Assignee.people.flatMap((p) => {
+          const member = MEMBER_NOTION_ID_MAP[p.id];
+          if (!member) return [];
+          return [member];
+        }),
         status: c.properties.Status.status.name,
         title: c.properties.Name.title.map((t) => t.plain_text).join(''),
         schedule: (() => {
@@ -49,9 +84,10 @@ export const createNotionKanbanRepository = ({
           return [
             new Date(c.properties.Schedule.date.start),
             toEndDate(new Date(c.properties.Schedule.date.end ?? c.properties.Schedule.date.start)),
-          ];
+          ] as const;
         })(),
         part: c.properties.Group.select ? PART_NOTION_ID_MAP[c.properties.Group.select.name] : null,
+        epic: c.properties.Epic.relation[0]?.id ?? null,
       }));
     },
   };
@@ -66,6 +102,17 @@ type NotionCard = {
     Assignee: { people: { id: string; name: string }[] };
     Name: { title: { plain_text: string }[] };
     Group: { select: { name: 'iOS' | 'Android' | 'Server' | 'Frontend' | 'Design' | 'All' } | null };
+    Epic: { id: string; type: 'relation'; relation: { id: string }[] };
+  };
+};
+
+type NotionEpic = {
+  id: string;
+  url: string;
+  properties: {
+    Title: { title: { plain_text: string }[] };
+    PM: { people: { id: string }[] };
+    Status: { status: { name: Epic['status'] } };
   };
 };
 
