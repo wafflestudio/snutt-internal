@@ -2,7 +2,7 @@ name: send-kanban-dashboard
 
 on:
   schedule:
-    - cron: "10 1 * * *" # 매일 한국시간 오전 10시 10분
+    - cron: "10 1 * * 1,5" # 월/금 한국시간 오전 10시 10분
 
 jobs:
   cron:
