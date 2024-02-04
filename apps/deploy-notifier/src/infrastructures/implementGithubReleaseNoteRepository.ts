@@ -25,6 +25,7 @@ export const implementGithubReleaseNoteRepository = ({
       });
 
       const { url, body } = await response.json().then((data): { url: string; body: string } => {
+        console.log(data);
         if (
           !data ||
           typeof data !== 'object' ||
@@ -41,18 +42,17 @@ export const implementGithubReleaseNoteRepository = ({
 
       return {
         releaseUrl: url,
-        changes: body
-          .split('\n')
-          .filter((line) => line.startsWith('*'))
-          .map((line) => {
-            const match = line.match(/\* (.*) by @(.*) in (.*)/);
-            if (!match) throw new Error('Invalid line');
-            const member = Object.entries(MEMBER_GITHUB_ID_MAP).find(
-              ([, githubId]) => githubId === match[2],
-            )?.[0] as Member;
-            if (!member) throw new Error('Invalid member');
-            return { content: match[1], member, detailUrl: match[3] };
-          }),
+        changes: body.split('\n').reduce<{ content: string; member: Member; detailUrl: string }[]>((acc, cur) => {
+          const match = cur.match(/\* (.*) by @(.*) in (.*)/);
+          if (!match) return acc;
+
+          const member = Object.entries(MEMBER_GITHUB_ID_MAP).find(
+            ([, githubId]) => githubId === match[2],
+          )?.[0] as Member;
+          if (!member) return acc;
+
+          return [...acc, { content: match[1], member, detailUrl: match[3] }];
+        }, []),
       };
     },
   };
