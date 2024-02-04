@@ -26,7 +26,7 @@ jobs:
       # cron job을 실행합니다.
       - name: run script
         run: |
-          cd crons/kanban-reporter
+          cd apps/kanban-reporter
           yarn install
           NOTION_KANBAN_DATABASE_ID=${{ secrets.NOTION_KANBAN_DATABASE_ID }} \
           NOTION_EPIC_DATABASE_ID=${{ secrets.NOTION_EPIC_DATABASE_ID }} \
