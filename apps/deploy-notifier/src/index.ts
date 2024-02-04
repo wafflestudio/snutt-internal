@@ -6,11 +6,9 @@ import { implementNotifyService } from './infrastructures/implementNotifyService
 
 dotenv.config({ path: './.env.local' }); // for local development
 
-const mode = process.argv[2];
-const serviceName = process.argv[3];
-const owner = 'wafflestudio';
-const repository = process.argv[4];
-const tag = process.argv[5];
+const title = process.argv[2];
+const repository = process.argv[3];
+const tag = process.argv[4];
 
 const SLACK_TTUNS_TOKEN = process.env.SLACK_TTUNS_TOKEN;
 const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
@@ -19,16 +17,13 @@ const GHP_AUTH_TOKEN = process.env.GHP_AUTH_TOKEN;
 if (!SLACK_TTUNS_TOKEN) throw new Error();
 if (!SLACK_CHANNEL) throw new Error();
 if (!GHP_AUTH_TOKEN) throw new Error();
-if (!mode) throw new Error();
-if (!serviceName) throw new Error();
-if (!owner) throw new Error();
+if (!title) throw new Error();
 if (!repository) throw new Error();
 if (!tag) throw new Error();
 
 const notifyService = implementNotifyService({
-  serviceName,
+  title,
   releaseNoteRepository: implementGithubReleaseNoteRepository({
-    owner,
     repository,
     tag,
     githubAuthToken: GHP_AUTH_TOKEN,
@@ -36,10 +31,4 @@ const notifyService = implementNotifyService({
   messengerPresenter: createSlackMessengerPresenter({ slackBotToken: SLACK_TTUNS_TOKEN, slackChannel: SLACK_CHANNEL }),
 });
 
-switch (mode) {
-  case 'github-release':
-    notifyService.notifyFromReleaseNote();
-    break;
-  default:
-    throw new Error('Invalid mode');
-}
+notifyService.notifyFromReleaseNote();

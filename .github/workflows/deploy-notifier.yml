@@ -31,4 +31,4 @@ jobs:
           GHP_AUTH_TOKEN=${{ secrets.GHP_AUTH_TOKEN }} \
           SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
           SLACK_CHANNEL=team-snutt-deploy \
-            yarn send ${{ github.event.client_payload.mode }} ${{ github.event.client_payload.serviceName }} ${{ github.event.client_payload.repository }} ${{ github.event.client_payload.tag }}
+            yarn send ${{ github.event.client_payload.title }} ${{ github.event.client_payload.repository }} ${{ github.event.client_payload.tag }}
