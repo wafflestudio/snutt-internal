@@ -12,5 +12,5 @@ export type MessageHelpers = {
 export type GenerateMessage = (helpers: MessageHelpers) => string;
 
 export type MessengerPresenter = {
-  sendThread: (message: GenerateMessage, threadMessages: GenerateMessage[]) => Promise<unknown>;
+  sendThread: (message: GenerateMessage, threadMessages?: GenerateMessage[]) => Promise<unknown>;
 };
