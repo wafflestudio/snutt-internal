@@ -3,7 +3,7 @@ name: dispatch github release deploy-notifier
 on:
   workflow_call:
     inputs:
-      service:
+      title:
         required: true
         type: string
     secrets:
@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Slack Notify
         run: |
-          title=${{ inputs.service }}
+          title=${{ inputs.title }}
           repository=${{ github.repository }}
           tag=${{ github.ref_name }}
 
