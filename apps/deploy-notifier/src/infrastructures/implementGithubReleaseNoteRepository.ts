@@ -3,12 +3,10 @@ import { Member } from '@sf/entities';
 import { ReleaseNoteRepository } from '../repositories/ReleaseNoteRepository';
 
 export const implementGithubReleaseNoteRepository = ({
-  owner,
   repository,
   tag,
   githubAuthToken,
 }: {
-  owner: string;
   repository: string;
   tag: string;
   githubAuthToken: string;
@@ -16,7 +14,7 @@ export const implementGithubReleaseNoteRepository = ({
   return {
     getReleaseNote: async () => {
       // https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#get-a-release-by-tag-name
-      const response = await fetch(`https://api.github.com/repos/${owner}/${repository}/releases/tags/${tag}`, {
+      const response = await fetch(`https://api.github.com/repos/${repository}/releases/tags/${tag}`, {
         headers: {
           Authorization: `token ${githubAuthToken}`,
           Accept: 'application/vnd.github+json',
