@@ -1,0 +1,34 @@
+name: Notify Deployment
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+
+      # cron job을 실행합니다.
+      - name: run script
+        run: |
+          cd apps/deploy-notifier
+          yarn install
+          GITHUB_AUTH_TOKEN=${{ secrets.GITHUB_AUTH_TOKEN }} \
+          SLACK_TTUNS_TOKEN=${{ secrets.SLACK_TTUNS_TOKEN }} \
+          SLACK_CHANNEL=team-snutt-deploy \
+            yarn send ${{ github.event.client_payload.mode }} ${{ github.event.client_payload.serviceName }} ${{ github.event.client_payload.repository }} ${{ github.event.client_payload.tag }}

@@ -11,7 +11,7 @@ export const createSlackMessengerPresenter = ({
 }): MessengerPresenter => {
   const slackClient = new WebClient(slackBotToken);
   return {
-    sendThread: async (text, thread) => {
+    sendThread: async (text, thread = []) => {
       const channel = `#${slackChannel}`;
       const response = await slackClient.chat.postMessage({ channel, text: getMessage(text) });
       for (const message of thread)
