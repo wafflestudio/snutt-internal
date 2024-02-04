@@ -25,7 +25,6 @@ export const implementGithubReleaseNoteRepository = ({
       });
 
       const { url, body } = await response.json().then((data): { url: string; body: string } => {
-        console.log(data);
         if (
           !data ||
           typeof data !== 'object' ||
