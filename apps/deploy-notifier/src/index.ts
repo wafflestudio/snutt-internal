@@ -14,11 +14,11 @@ const tag = process.argv[5];
 
 const SLACK_TTUNS_TOKEN = process.env.SLACK_TTUNS_TOKEN;
 const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
-const GITHUB_AUTH_TOKEN = process.env.GITHUB_AUTH_TOKEN;
+const GHP_AUTH_TOKEN = process.env.GHP_AUTH_TOKEN;
 
 if (!SLACK_TTUNS_TOKEN) throw new Error();
 if (!SLACK_CHANNEL) throw new Error();
-if (!GITHUB_AUTH_TOKEN) throw new Error();
+if (!GHP_AUTH_TOKEN) throw new Error();
 if (!mode) throw new Error();
 if (!serviceName) throw new Error();
 if (!owner) throw new Error();
@@ -31,7 +31,7 @@ const notifyService = implementNotifyService({
     owner,
     repository,
     tag,
-    githubAuthToken: GITHUB_AUTH_TOKEN,
+    githubAuthToken: GHP_AUTH_TOKEN,
   }),
   messengerPresenter: createSlackMessengerPresenter({ slackBotToken: SLACK_TTUNS_TOKEN, slackChannel: SLACK_CHANNEL }),
 });
