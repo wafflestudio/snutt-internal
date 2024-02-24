@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import Paper from '../../components/Paper.svelte';
+  import Paper from '../../design-system/Paper.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import { link } from 'svelte-routing';
   import type { OS } from '../../../entities/NativeClient';

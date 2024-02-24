@@ -1,5 +1,6 @@
 import App from './app/App.svelte';
 import { authContextSetter } from './app/contexts/AuthContext';
+import { environmentContextSetter } from './app/contexts/EnvironmentContext';
 import { serviceContextSetter } from './app/contexts/ServiceContext';
 import { createConfigRepository } from './infrastructures/createConfigRepository';
 import { createConfigService } from './infrastructures/createConfigService';
@@ -35,7 +36,8 @@ const app = new App({
   target: document.getElementById('app') as HTMLElement,
   context: new Map()
     .set(...serviceContextSetter({ configService, pushNotificationService }))
-    .set(...authContextSetter({ token })),
+    .set(...authContextSetter({ token }))
+    .set(...environmentContextSetter({ APP_ENV: mode })),
 });
 
 export default app;

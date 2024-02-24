@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { PushNotificationType } from '../../../entities/PushNotification';
-  import Checkbox from '../../components/Checkbox.svelte';
-  import Input from '../../components/Input.svelte';
-  import Select from '../../components/Select.svelte';
-  import Button from '../../components/Button.svelte';
   import { createMutation } from '@tanstack/svelte-query';
+  import type { PushNotificationType } from '../../../entities/PushNotification';
+  import Checkbox from '../../design-system/Checkbox.svelte';
+  import Input from '../../design-system/Input.svelte';
+  import Select from '../../design-system/Select.svelte';
+  import Button from '../../design-system/Button.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
   const { pushNotificationService } = getServiceContext();
 
