@@ -6,7 +6,7 @@
 
 <label class="my-custom-input">
   <div>
-    <span>{label}</span><span style="color: red;">{required ? "*" : ""}</span>
+    <span>{label}</span><span style="color: red;">{required ? '*' : ''}</span>
   </div>
   <input bind:checked type="checkbox" {...$$restProps} />
 </label>

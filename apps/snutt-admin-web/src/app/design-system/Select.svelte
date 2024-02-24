@@ -7,7 +7,7 @@
 
 <label class="my-custom-input">
   <div>
-    <span>{label}</span><span style="color: red;">{required ? "*" : ""}</span>
+    <span>{label}</span><span style="color: red;">{required ? '*' : ''}</span>
   </div>
   <select {required} {value}>
     {#each values as { value, label }}
