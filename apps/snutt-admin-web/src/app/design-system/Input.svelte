@@ -18,6 +18,10 @@
     gap: 4px;
   }
 
+  span {
+    font-size: 14px;
+  }
+
   label.my-custom-input > input {
     background: #333;
     height: 40px;

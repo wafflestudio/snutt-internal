@@ -3,6 +3,7 @@
 
   import type { Token } from '../../../entities/Auth';
   import type { AdminConfigId } from '../../../entities/Config';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
 
   export let configName: string;
@@ -39,20 +40,27 @@
         <div class="item">
           <div class="itemHeader">
             <p>{adminConfig.id}</p>
-            <button
-              on:click={() =>
+            <ConfirmRequiredButton
+              variant="danger"
+              confirmTitle="정말 삭제하시겠습니까?"
+              confirmMessage="이 작업은 되돌릴 수 없습니다"
+              onConfirm={() =>
                 $mutation.mutate(adminConfig.id, {
                   onSuccess: () => queryClient.invalidateQueries(),
-                })}>제거</button
+                })}
             >
+              제거
+            </ConfirmRequiredButton>
           </div>
           <dl>
             {#each versionKeys.map((version) => ({ version, config: adminConfig[version] })) as vc}
               <dt>{vc.version}</dt>
               <dd>
-                {#if vc.config}<div>
-                    aos: {vc.config.android} / ios: {vc.config.ios}
-                  </div>{:else}<div>null</div>{/if}
+                {#if vc.config}
+                  <div>aos: {vc.config.android} / ios: {vc.config.ios}</div>
+                {:else}
+                  <div>null</div>
+                {/if}
               </dd>
             {/each}
           </dl>
