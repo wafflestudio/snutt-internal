@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createMutation, createQuery, getQueryClientContext } from '@tanstack/svelte-query';
-  import { getServiceContext } from '../../contexts/ServiceContext';
+
   import type { AdminConfigId } from '../../../entities/Config';
   import { getAuthContext } from '../../contexts/AuthContext';
+  import { getServiceContext } from '../../contexts/ServiceContext';
 
   export let configName: string;
   const queryClient = getQueryClientContext();
