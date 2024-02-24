@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createMutation } from '@tanstack/svelte-query';
+
   import type { PushNotificationType } from '../../../entities/PushNotification';
+  import { getServiceContext } from '../../contexts/ServiceContext';
+  import Button from '../../design-system/Button.svelte';
   import Checkbox from '../../design-system/Checkbox.svelte';
   import Input from '../../design-system/Input.svelte';
   import Select from '../../design-system/Select.svelte';
-  import Button from '../../design-system/Button.svelte';
-  import { getServiceContext } from '../../contexts/ServiceContext';
   const { pushNotificationService } = getServiceContext();
 
   let token = '';

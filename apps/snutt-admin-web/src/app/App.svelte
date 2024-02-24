@@ -1,15 +1,16 @@
 <script lang="ts">
   import './app.css';
   import './colors.css';
+
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
-  import { Router, Route, link } from 'svelte-routing';
-  import HomePage from './pages/HomePage/index.svelte';
-  import ConfigPage from './pages/ConfigPage/index.svelte';
+  import { link, Route, Router } from 'svelte-routing';
+
+  import Header from './components/Header.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
+  import ConfigPage from './pages/ConfigPage/index.svelte';
+  import HomePage from './pages/HomePage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
-  import { getEnvironmentContext } from './contexts/EnvironmentContext';
-  import Header from './components/Header.svelte';
 
   const queryClient = new QueryClient();
 </script>

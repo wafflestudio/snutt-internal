@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getEnvironmentContext } from '../contexts/EnvironmentContext';
-
   import { link } from 'svelte-routing';
+
   import logo from '../../assets/logo.png';
+  import { getEnvironmentContext } from '../contexts/EnvironmentContext';
 
   const { APP_ENV } = getEnvironmentContext();
 </script>
