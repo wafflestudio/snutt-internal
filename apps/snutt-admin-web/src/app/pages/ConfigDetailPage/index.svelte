@@ -1,20 +1,21 @@
 <script lang="ts">
   import { createMutation, createQuery, getQueryClientContext } from '@tanstack/svelte-query';
 
+  import type { Token } from '../../../entities/Auth';
   import type { AdminConfigId } from '../../../entities/Config';
-  import { getAuthContext } from '../../contexts/AuthContext';
   import { getServiceContext } from '../../contexts/ServiceContext';
 
   export let configName: string;
   const queryClient = getQueryClientContext();
   const { configService } = getServiceContext();
-  const { token } = getAuthContext();
+
+  export let token: Token;
 
   $: query = createQuery({
     queryKey: ['configs', { configName, token }] as const,
-    queryFn: ({ queryKey: [, { configName, token }] }) => {
-      if (!token) throw new Error();
-      return configService.getAdminConfig({ configName, token });
+    queryFn: ({ queryKey: [, params] }) => {
+      if (!params.token) throw new Error();
+      return configService.getAdminConfig(params);
     },
     enabled: !!token,
   });

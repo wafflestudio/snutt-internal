@@ -5,35 +5,45 @@
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
   import { link, Route, Router } from 'svelte-routing';
 
+  import type { Token } from '../entities/Auth';
   import Header from './components/Header.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
   import ConfigPage from './pages/ConfigPage/index.svelte';
   import HomePage from './pages/HomePage/index.svelte';
+  import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
 
   const queryClient = new QueryClient();
+
+  let token: Token | null = null;
 </script>
 
 <QueryClientProvider client={queryClient}>
-  <Router>
-    <Header />
-    <div class="content">
-      <nav>
-        <p class="menuLabel">관리</p>
-        <a class={'menuItem'} href="/config" use:link>컨피그</a>
-        <a class={'menuItem'} href="/push-notification" use:link>푸시</a>
-      </nav>
-      <main>
-        <Route path="/" component={HomePage} />
-        <Route path="/config" component={ConfigPage} />
-        <Route path="/config/:configName" component={ConfigDetailPage} />
-        <Route path="/push-notification" component={PushNotificationPage} />
-        <Route path="*" component={NotFoundPage} />
-      </main>
-    </div>
-  </Router></QueryClientProvider
->
+  {#if token !== null}
+    <Router>
+      <Header />
+      <div class="content">
+        <nav>
+          <p class="menuLabel">관리</p>
+          <a class={'menuItem'} href="/config" use:link>컨피그</a>
+          <a class={'menuItem'} href="/push-notification" use:link>푸시</a>
+        </nav>
+        <main>
+          <Route path="/"><HomePage /></Route>
+          <Route path="/config"><ConfigPage /></Route>
+          <Route path="/config/:configName" let:params>
+            <ConfigDetailPage configName={params.configName} {token} />
+          </Route>
+          <Route path="/push-notification"><PushNotificationPage {token} /></Route>
+          <Route path="*"><NotFoundPage /></Route>
+        </main>
+      </div>
+    </Router>
+  {:else}
+    <LoginPage bind:token />
+  {/if}
+</QueryClientProvider>
 
 <style>
   .content {

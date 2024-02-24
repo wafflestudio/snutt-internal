@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createMutation } from '@tanstack/svelte-query';
 
+  import type { Token } from '../../../entities/Auth';
   import type { PushNotificationType } from '../../../entities/PushNotification';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
@@ -9,7 +10,7 @@
   import Select from '../../design-system/Select.svelte';
   const { pushNotificationService } = getServiceContext();
 
-  let token = '';
+  export let token: Token;
   let title = '';
   let body = '';
   let insertFcm = false;
@@ -38,8 +39,6 @@
 
   <form on:submit|preventDefault={onSubmit}>
     <div class="section">
-      <Input required label="어드민 토큰" bind:value={token} placeholder="10103419312387d9a89..." />
-
       <Input required label="title" bind:value={title} placeholder="아아 마이크테스트" />
 
       <Input required label="body" bind:value={body} placeholder="붕어빵 먹고싶엉" />

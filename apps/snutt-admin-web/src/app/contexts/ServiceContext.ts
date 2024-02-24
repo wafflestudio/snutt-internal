@@ -1,10 +1,12 @@
 import { getContext } from 'svelte';
 
+import type { AuthService } from '../../services/AuthService';
 import type { ConfigService } from '../../services/ConfigService';
 import type { PushNotificationService } from '../../services/PushNotificationService';
 
 const key = 'service';
 type ServiceContext = {
+  authService: AuthService;
   configService: ConfigService;
   pushNotificationService: PushNotificationService;
 };
