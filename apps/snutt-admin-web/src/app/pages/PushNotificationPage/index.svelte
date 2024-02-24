@@ -3,8 +3,8 @@
 
   import type { Token } from '../../../entities/Auth';
   import type { PushNotificationType } from '../../../entities/PushNotification';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
-  import Button from '../../design-system/Button.svelte';
   import Checkbox from '../../design-system/Checkbox.svelte';
   import Input from '../../design-system/Input.svelte';
   import Select from '../../design-system/Select.svelte';
@@ -37,7 +37,7 @@
 <div class="wrapper">
   <div class="header"><h2>푸시 보내기</h2></div>
 
-  <form on:submit|preventDefault={onSubmit}>
+  <form on:submit|preventDefault>
     <div class="section">
       <Input required label="title" bind:value={title} placeholder="아아 마이크테스트" />
 
@@ -61,7 +61,16 @@
       <Input label="url_scheme" bind:value={urlScheme} />
     </div>
 
-    <Button disabled={!isValid} class="button">전송</Button>
+    <ConfirmRequiredButton
+      onConfirm={onSubmit}
+      disabled={!isValid}
+      class="button"
+      confirmTitle="정말 보내시겠습니까?"
+      confirmMessage="모든 유저에게 전송됩니다"
+      type="basic"
+    >
+      전송
+    </ConfirmRequiredButton>
   </form>
 </div>
 
