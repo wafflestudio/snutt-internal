@@ -33,9 +33,7 @@
 </script>
 
 <div class="wrapper">
-  <div class="header">
-    <h2>푸시 보내기</h2>
-  </div>
+  <div class="header"><h2>푸시 보내기</h2></div>
 
   <form on:submit|preventDefault={onSubmit}>
     <div class="section">
