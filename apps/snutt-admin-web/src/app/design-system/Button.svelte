@@ -7,6 +7,7 @@
 <style>
   button {
     height: 40px;
+    min-height: 40px;
     border: 1px solid var(--color-border-default);
     padding: 8px 24px;
     border-radius: 8px;

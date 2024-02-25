@@ -1,5 +1,5 @@
 <script lang="ts">
-  import './colors.css';
+  import './theme.css';
   import './app.css';
 
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
