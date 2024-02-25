@@ -26,7 +26,7 @@
   }
 
   label.my-custom-input > input {
-    background-color: var(--color-bg-default);
+    background: var(--color-bg-default);
     height: 40px;
     border: 1px solid var(--color-border-default);
     padding-inline: 12px;

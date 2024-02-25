@@ -6,7 +6,7 @@
 
   $: theme = screenService.getCurrentTheme();
 
-  const items: Theme[] = ['dark', 'light', 'neon'];
+  const items: Theme[] = ['light', 'dark', 'neon'];
 
   const onChange = () => {
     const nextTheme = items[(items.findIndex((t) => t === theme) + 1) % items.length];
@@ -17,9 +17,9 @@
 
 <div class="wrapper">
   <button on:click={onChange}>
-    <span style={theme !== 'light' ? 'transform: translateY(100%);' : undefined}>🌞</span>
-    <span style={theme !== 'dark' ? 'transform: translateY(100%);' : undefined}>🌙</span>
-    <span style={theme !== 'neon' ? 'transform: translateY(100%);' : undefined}>💥</span>
+    <span style={theme !== 'light' ? 'transform: translateY(200%);' : undefined}>🌞</span>
+    <span style={theme !== 'dark' ? 'transform: translateY(200%);' : undefined}>🌙</span>
+    <span style={theme !== 'neon' ? 'transform: translateY(200%);' : undefined}>💥</span>
   </button>
 </div>
 
@@ -36,7 +36,7 @@
     padding: 4px 8px;
     border-radius: 16px;
     border: 2px solid var(--color-border-accent);
-    background-color: var(--color-bg-accent);
+    background: var(--color-bg-accent);
     cursor: pointer;
     position: relative;
     overflow: hidden;

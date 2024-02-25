@@ -18,11 +18,12 @@
 <style>
   header {
     width: 100%;
-    background-color: var(--color-bg-accent);
+    background: var(--color-bg-accent);
     display: flex;
     align-items: center;
     padding: 0 20px;
     justify-content: space-between;
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   img.logo {

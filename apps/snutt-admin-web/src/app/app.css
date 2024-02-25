@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  background-color: var(--color-bg-default);
+  background: var(--color-bg-default);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,7 +15,7 @@
 * {
   box-sizing: border-box;
   transition:
-    background-color 0.2s,
+    background 0.2s,
     color 0.2s,
     transform 0.2s,
     opacity 0.2s;
@@ -41,7 +41,7 @@ body {
 }
 
 button {
-  background-color: transparent;
+  background: transparent;
 }
 
 h1,

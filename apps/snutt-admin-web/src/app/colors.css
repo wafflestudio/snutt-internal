@@ -39,3 +39,51 @@
 
   --color-text-default: var(--palette-gray-10);
 }
+
+:root[data-theme='neon'] {
+  --color-bg-default: linear-gradient(to top right, rgb(0, 0, 0) 0%, rgb(12, 54, 6) 100%);
+  --color-bg-accent: linear-gradient(to top right, rgb(0, 0, 0) 0%, rgb(6, 36, 2) 90%, rgb(44, 207, 23) 100%);
+  --color-bg-primary: linear-gradient(to top right, rgb(168, 168, 168) 0%, rgb(31, 214, 6) 100%);
+  --color-bg-third: var(--palette-gray-20);
+  --color-bg-disabled: linear-gradient(to top right, rgb(168, 168, 168) 0%, rgb(218, 240, 215) 100%);
+
+  --color-border-default: #00ff00;
+  --color-border-accent: #ff00ff;
+
+  --color-text-default: #85fb85;
+
+  * button:not(:disabled) {
+    color: #fff352;
+    border: 1px solid #fff352;
+    box-shadow:
+      0 0 5px #fff352,
+      0 0 5px #fff352 inset;
+    z-index: 2;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  * button:not(:disabled):after {
+    position: absolute;
+    content: ' ';
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+  * button:not(:disabled):hover {
+    color: #000;
+  }
+  * button:not(:disabled):hover:after {
+    background: #fff352;
+    -webkit-transform: scale(2) rotate(180deg);
+    transform: scale(2) rotate(180deg);
+    box-shadow:
+      4px 4px 6px 0 rgba(255, 255, 255, 1),
+      -4px -4px 6px 0 rgba(116, 125, 136, 0.2),
+      inset -4px -4px 6px 0 rgba(255, 255, 255, 1),
+      inset 4px 4px 6px 0 rgba(116, 125, 136, 0.3);
+  }
+}
