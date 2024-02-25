@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Typography from './Typography.svelte';
+
   export let value: string | undefined;
   export let values: { value: string; label: string }[];
   export let label: string;
@@ -7,7 +9,7 @@
 
 <label class="my-custom-input">
   <div>
-    <span>{label}</span><span style="color: red;">{required ? '*' : ''}</span>
+    <Typography variant="body">{label}</Typography><span style="color: red;">{required ? '*' : ''}</span>
   </div>
   <select {required} {value}>
     {#each values as { value, label }}
@@ -24,16 +26,19 @@
   }
 
   label.my-custom-input > select {
-    background: #333;
+    background: var(--color-bg-default);
     height: 40px;
-    border: 1px solid white;
+    border: 1px solid var(--color-border-default);
     padding-inline: 12px;
     border-radius: 4px;
-    transition: background 0.2s ease-in-out;
     cursor: pointer;
   }
 
   label.my-custom-input > select:hover {
-    background: #444;
+    opacity: 0.8;
+  }
+
+  select {
+    color: var(--color-text-default);
   }
 </style>

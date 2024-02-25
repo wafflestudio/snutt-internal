@@ -3,6 +3,7 @@
 
   import Button from '../design-system/Button.svelte';
   import Input from '../design-system/Input.svelte';
+  import Typography from '../design-system/Typography.svelte';
 
   export let type: 'basic' | 'complex';
 
@@ -25,17 +26,17 @@
 {#if isOpen}
   <div class="dimmer" on:click={onClose} on:keydown={onKeydown} aria-label="dimmer" tabindex="0" role="button">
     <div class="popup" on:click|stopPropagation on:keydown={onKeydown} aria-label="popup" tabindex="0" role="button">
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <Typography variant="subtitle">{title}</Typography>
+      <Typography variant="body">{description}</Typography>
       <div class="confirmBox">
         {#if type === 'complex'}
           <Input
             bind:value={confirmValue}
             label="아래 확인 문자열을 따라 입력하세요"
-            placeholder="따라 입력하세요"
+            placeholder={confirmString}
             hideLabel
           />
-          <pre>{confirmString}</pre>
+          <Typography variant="code" preventDrag>{confirmString}</Typography>
         {/if}
       </div>
       <div class="buttons">
@@ -50,29 +51,21 @@
   div.dimmer {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
   }
 
   div.popup {
-    width: 300px;
-    background-color: var(--color-gray-30);
+    width: 400px;
+    background-color: var(--color-bg-default);
     padding: 20px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-
-  h3 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  p {
-    font-size: 16px;
   }
 
   div.confirmBox {
@@ -82,13 +75,7 @@
     flex: 1;
     justify-content: center;
     height: 200px;
-  }
-
-  pre {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    padding: 20px;
   }
 
   div.buttons {

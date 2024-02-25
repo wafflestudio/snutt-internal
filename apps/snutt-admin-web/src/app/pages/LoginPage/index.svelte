@@ -3,6 +3,7 @@
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Input from '../../design-system/Input.svelte';
+  import Typography from '../../design-system/Typography.svelte';
 
   export let token: null | Token = null;
   let loading: boolean = false;
@@ -25,11 +26,11 @@
 </script>
 
 <form on:submit|preventDefault={onSubmit}>
-  <h1>로그인</h1>
-  <Input name="login-username" type="text" label="id" bind:value={username} />
-  <Input name="login-password" type="password" label="password" bind:value={password} />
-  <Button type="submit" disabled={loading || !username || !password}>로그인</Button>
-  <pre>Note: 자동 로그인이 되지 않습니다 :)</pre>
+  <Typography variant="title">로그인</Typography>
+  <Input autocomplete="username" name="login-username" type="text" label="username" bind:value={username} />
+  <Input autocomplete="current-password" name="login-password" type="password" label="password" bind:value={password} />
+  <Button type="submit" disabled={loading}>로그인</Button>
+  <Typography variant="code">Note: 자동 로그인이 되지 않습니다 :)</Typography>
 </form>
 
 <style>

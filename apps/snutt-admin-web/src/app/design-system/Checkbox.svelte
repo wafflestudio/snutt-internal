@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Typography from './Typography.svelte';
+
   export let checked: boolean;
   export let required = false;
   export let label: string;
@@ -6,7 +8,7 @@
 
 <label class="my-custom-input">
   <div>
-    <span>{label}</span><span style="color: red;">{required ? '*' : ''}</span>
+    <Typography variant="body">{label}</Typography><span style="color: red;">{required ? '*' : ''}</span>
   </div>
   <input bind:checked type="checkbox" {...$$restProps} />
 </label>
@@ -21,7 +23,7 @@
   label.my-custom-input > input {
     background: transparent;
     height: 40px;
-    border: 1px solid white;
+    border: 1px solid var(--color-border-default);
     cursor: pointer;
   }
 </style>
