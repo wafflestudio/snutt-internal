@@ -27,7 +27,12 @@ a {
 body {
   margin: 0;
   min-width: 320px;
+}
+
+#app {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
