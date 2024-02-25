@@ -3,10 +3,11 @@
   import './colors.css';
 
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
-  import { link, Route, Router } from 'svelte-routing';
+  import { Route, Router } from 'svelte-routing';
 
   import type { Token } from '../entities/Auth';
   import Header from './components/Header.svelte';
+  import Link from './design-system/Link.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
   import ConfigPage from './pages/ConfigPage/index.svelte';
   import HomePage from './pages/HomePage/index.svelte';
@@ -26,8 +27,8 @@
       <div class="content">
         <nav>
           <p class="menuLabel">관리</p>
-          <a class={'menuItem'} href="/config" use:link>컨피그</a>
-          <a class={'menuItem'} href="/push-notification" use:link>푸시</a>
+          <Link class={'menuItem'} href="/config">컨피그</Link>
+          <Link class={'menuItem'} href="/push-notification">푸시</Link>
         </nav>
         <main>
           <Route path="/"><HomePage /></Route>
@@ -47,7 +48,7 @@
 
 <style>
   .content {
-    min-height: calc(100vh - 60px);
+    flex: 1;
     display: flex;
 
     & > nav {
@@ -60,17 +61,6 @@
         margin: 30px 28px 10px;
         font-size: 12px;
         color: var(--color-gray-50);
-      }
-
-      & > .menuItem {
-        display: flex;
-        align-items: center;
-        padding: 16px 28px;
-        transition: background-color 0.1s linear;
-
-        &:hover {
-          background-color: var(--color-gray-30);
-        }
       }
     }
 
