@@ -1,7 +1,7 @@
-type Theme = 'light' | 'dark';
+import type { Theme } from '../entities/Screen';
 
 export type ScreenService = {
-  setCurrentTheme: (theme: 'light' | 'dark') => void;
+  setCurrentTheme: (theme: Theme) => void;
   getCurrentTheme: () => Theme | undefined;
   getInitialTheme: () => Theme;
 };

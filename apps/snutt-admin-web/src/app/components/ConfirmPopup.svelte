@@ -60,7 +60,7 @@
 
   div.popup {
     width: 400px;
-    background-color: var(--color-bg-default);
+    background: var(--color-bg-default);
     padding: 20px;
     border-radius: 20px;
     display: flex;

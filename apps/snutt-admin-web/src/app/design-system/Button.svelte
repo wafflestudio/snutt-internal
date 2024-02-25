@@ -15,23 +15,23 @@
   }
 
   button.primary {
-    background-color: var(--color-bg-primary);
+    background: var(--color-bg-primary);
   }
 
   button.third {
-    background-color: var(--color-bg-third);
+    background: var(--color-bg-third);
   }
 
   button.danger {
     background: #e74c3c;
   }
 
-  button:hover {
+  button:not(:disabled):hover {
     opacity: 0.8;
   }
 
   button:disabled {
-    background-color: var(--color-bg-disabled);
+    background: var(--color-bg-disabled);
     cursor: not-allowed;
   }
 </style>
