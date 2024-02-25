@@ -6,8 +6,11 @@ import { createAuthService } from './infrastructures/createAuthService';
 import { createConfigRepository } from './infrastructures/createConfigRepository';
 import { createConfigService } from './infrastructures/createConfigService';
 import { createFetchClient } from './infrastructures/createFetchClient';
+import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
+import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
 import { createPushNotificationRepository } from './infrastructures/createPushNotificationRepository';
 import { createPushNotificationService } from './infrastructures/createPushNotificationService';
+import { createScreenService } from './infrastructures/createThemeService';
 
 const mode = import.meta.env.MODE;
 const apiKey = import.meta.env.VITE_API_KEY;
@@ -32,11 +35,17 @@ const pushNotificationService = createPushNotificationService({
 });
 
 const authService = createAuthService({ authRepository: createAuthRepository({ apiClient }) });
+const screenService = createScreenService({
+  themeRepository: createHtmlDocumentThemeRepository(),
+  persistStorageRepository: createLocalStorageRepository(),
+});
+
+screenService.setCurrentTheme(screenService.getInitialTheme());
 
 const app = new App({
   target: document.getElementById('app') as HTMLElement,
   context: new Map()
-    .set(...serviceContextSetter({ configService, pushNotificationService, authService }))
+    .set(...serviceContextSetter({ configService, pushNotificationService, authService, screenService }))
     .set(...environmentContextSetter({ APP_ENV: mode })),
 });
 

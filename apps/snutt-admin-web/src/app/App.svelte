@@ -1,6 +1,6 @@
 <script lang="ts">
-  import './app.css';
   import './colors.css';
+  import './app.css';
 
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
   import { Route, Router } from 'svelte-routing';
@@ -14,6 +14,7 @@
   import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
+  import ThemeToggle from './components/ThemeToggle.svelte';
 
   const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@
   {:else}
     <LoginPage bind:token />
   {/if}
+  <ThemeToggle />
 </QueryClientProvider>
 
 <style>
