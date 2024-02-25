@@ -1,16 +1,18 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { link } from 'svelte-routing';
 
   import type { OS } from '../../../entities/NativeClient';
   import { getServiceContext } from '../../contexts/ServiceContext';
-  import Paper from '../../design-system/Paper.svelte';
+  import Input from '../../design-system/Input.svelte';
+  import Link from '../../design-system/Link.svelte';
+  import Select from '../../design-system/Select.svelte';
+  import Typography from '../../design-system/Typography.svelte';
 
   const { configService } = getServiceContext();
 
   let os: OS = 'android';
   let version1 = '3',
-    version2 = '2',
+    version2 = '5',
     version3 = '0';
 
   $: ver1Num = parseInt(version1);
@@ -30,68 +32,57 @@
 </script>
 
 <div class="wrapper">
-  <Paper class="paperCurrent">
-    <div class="header">
-      <h2>현재 컨피그 확인</h2>
+  <div class="header">
+    <Typography variant="subtitle">현재 컨피그 확인</Typography>
+    <div>
+      <Select bind:value={os} values={['android', 'ios'].map((item) => ({ value: item, label: item }))} label="os" />
       <div>
-        <select bind:value={os}><option value="android">android</option><option value="ios">ios</option></select>
-        <div>
-          <input bind:value={version1} type="number" min="1" max="3" step="1" />.
-          <input bind:value={version2} type="number" min="0" step="1" />.
-          <input bind:value={version3} type="number" min="0" step="1" />
-        </div>
+        <Input label="M" bind:value={version1} type="number" min="1" max="3" step="1" />.
+        <Input label="m" bind:value={version2} type="number" min="0" step="1" />.
+        <Input label="p" bind:value={version3} type="number" min="0" step="1" />
       </div>
     </div>
-    {#if $query.isSuccess}{#each Object.entries($query.data) as [key, value]}<a use:link href={`/config/${key}`}
-          ><h3>
-            {key}
-          </h3>
-          <p>{JSON.stringify(value)}</p>
-        </a>{/each}{/if}</Paper
-  >
+  </div>
+  {#if $query.isSuccess}
+    {#each Object.entries($query.data) as [key, value]}
+      <Link href={`/config/${key}`}>
+        <div class="link-item">
+          <Typography variant="subtitle">{key}</Typography>
+          <Typography variant="code">{JSON.stringify(value, null, 2)}</Typography>
+        </div>
+      </Link>
+    {/each}
+  {/if}
 </div>
 
 <style>
   .wrapper {
     width: 100%;
-  }
-
-  :global(.paperCurrent) {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 
     & > .header {
       display: flex;
       justify-content: space-between;
 
-      & > h2 {
-        margin-bottom: 20px;
-      }
-
       & > div {
         display: flex;
         gap: 20px;
-        height: 30px;
+        height: 70px;
         align-items: stretch;
 
         & > div {
           display: flex;
           align-items: stretch;
-
-          & > input {
-            width: 30px;
-          }
+          width: 200px;
         }
       }
     }
+  }
 
-    & > a {
-      padding: 12px 16px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      transition: 0.1s background-color;
-      &:hover {
-        background-color: var(--color-gray-30);
-      }
-    }
+  div.link-item {
+    display: flex;
+    flex-direction: column;
   }
 </style>

@@ -7,21 +7,19 @@
 <style>
   button {
     height: 40px;
-    border: 1px solid white;
+    border: 1px solid var(--color-border-default);
     padding: 8px 24px;
     border-radius: 8px;
     cursor: pointer;
-    transition:
-      background 0.2s ease-in-out,
-      opacity 0.2s ease-in-out;
+    color: var(--color-text-default);
   }
 
   button.primary {
-    background: #eb8f58;
+    background-color: var(--color-bg-primary);
   }
 
   button.third {
-    background: #898989;
+    background-color: var(--color-bg-third);
   }
 
   button.danger {
@@ -33,7 +31,7 @@
   }
 
   button:disabled {
-    background: #ccc;
+    background-color: var(--color-bg-disabled);
     cursor: not-allowed;
   }
 </style>

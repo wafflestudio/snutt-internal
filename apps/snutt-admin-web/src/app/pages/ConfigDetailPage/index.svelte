@@ -5,6 +5,7 @@
   import type { AdminConfigId } from '../../../entities/Config';
   import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
+  import Typography from '../../design-system/Typography.svelte';
 
   export let configName: string;
   const queryClient = getQueryClientContext();
@@ -33,50 +34,59 @@
 </script>
 
 <div>
-  <h2>{configName}</h2>
+  <Typography variant="subtitle">{configName}</Typography>
 
-  {#if $query.data}<div>
-      {#each $query.data as adminConfig}
-        <div class="item">
-          <div class="itemHeader">
-            <p>{adminConfig.id}</p>
-            <ConfirmRequiredButton
-              variant="danger"
-              confirmTitle="정말 삭제하시겠습니까?"
-              confirmMessage="이 작업은 되돌릴 수 없습니다"
-              onConfirm={() =>
-                $mutation.mutate(adminConfig.id, {
-                  onSuccess: () => queryClient.invalidateQueries(),
-                })}
-            >
-              제거
-            </ConfirmRequiredButton>
-          </div>
-          <dl>
-            {#each versionKeys.map((version) => ({ version, config: adminConfig[version] })) as vc}
-              <dt>{vc.version}</dt>
-              <dd>
-                {#if vc.config}
-                  <div>aos: {vc.config.android} / ios: {vc.config.ios}</div>
-                {:else}
-                  <div>null</div>
-                {/if}
-              </dd>
-            {/each}
-          </dl>
-          <div>{JSON.stringify(adminConfig.data)}</div>
+  {#if $query.data}
+    {#each $query.data as adminConfig}
+      <div class="item">
+        <div class="itemHeader">
+          <Typography variant="subtitle">{adminConfig.id}</Typography>
+          <ConfirmRequiredButton
+            variant="danger"
+            confirmTitle="정말 삭제하시겠습니까?"
+            confirmMessage="이 작업은 되돌릴 수 없습니다"
+            onConfirm={() =>
+              $mutation.mutate(adminConfig.id, {
+                onSuccess: () => queryClient.invalidateQueries(),
+              })}
+          >
+            제거
+          </ConfirmRequiredButton>
         </div>
-      {/each}
-    </div>{/if}
+
+        <table>
+          <thead
+            ><th></th><th><Typography variant="code">android</Typography></th><th
+              ><Typography variant="code">ios</Typography></th
+            ></thead
+          >
+          <tbody>
+            {#each versionKeys.map((version) => ({ version, config: adminConfig[version] })) as vc}
+              <tr>
+                <td><Typography variant="body">{vc.version}</Typography></td>
+
+                {#if vc.config}
+                  <td><Typography variant="code">{vc.config.android}</Typography></td>
+                  <td><Typography variant="code">{vc.config.ios}</Typography></td>
+                {:else}
+                  <td colspan="2">
+                    <Typography variant="code">null</Typography>
+                  </td>
+                {/if}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+
+        <Typography variant="code">{JSON.stringify(adminConfig.data, null, 2)}</Typography>
+      </div>
+    {/each}
+  {/if}
 </div>
 
 <style>
-  h2 {
-    margin-bottom: 20px;
-  }
-
   div.item {
-    margin-bottom: 20px;
+    margin-top: 20px;
     padding: 20px;
     border: 1px solid #ccc;
 
@@ -86,5 +96,19 @@
       align-items: center;
       margin-bottom: 10px;
     }
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid var(--color-border-default);
+  }
+
+  td {
+    padding: 4px 20px;
+  }
+
+  table {
+    margin-bottom: 20px;
   }
 </style>

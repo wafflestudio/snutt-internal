@@ -16,7 +16,7 @@
   <button on:click={onChange}>
     <span>🌞</span>
     <span>🌙</span>
-    <div class="switch" style={theme === 'dark' ? 'transform: translateX(100%)' : undefined}></div>
+    <div class="switch" style={theme === 'light' ? 'transform: translateX(100%)' : undefined}></div>
   </button>
 </div>
 
@@ -32,8 +32,8 @@
     gap: 10px;
     padding: 4px 8px;
     border-radius: 16px;
-    border: 2px solid var(--color-border-default);
-    background-color: var(--color-bg-default);
+    border: 2px solid var(--color-border-accent);
+    background-color: var(--color-bg-accent);
     cursor: pointer;
     position: relative;
   }
@@ -51,13 +51,10 @@
     position: absolute;
     width: 50%;
     border-radius: 50%;
-    background-color: var(--color-bg-default);
+    background-color: var(--color-bg-accent);
     top: 0;
     bottom: 0;
     height: 100%;
     left: 0;
-    transition:
-      transform 0.2s,
-      background-color 0.2s;
   }
 </style>

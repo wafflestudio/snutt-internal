@@ -40,7 +40,11 @@ const screenService = createScreenService({
   persistStorageRepository: createLocalStorageRepository(),
 });
 
+document.documentElement.style.setProperty('transition', 'none');
 screenService.setCurrentTheme(screenService.getInitialTheme());
+setTimeout(() => {
+  document.documentElement.style.setProperty('transition', null);
+}, 200);
 
 const app = new App({
   target: document.getElementById('app') as HTMLElement,

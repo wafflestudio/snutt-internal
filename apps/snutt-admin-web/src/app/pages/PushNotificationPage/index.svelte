@@ -8,6 +8,7 @@
   import Checkbox from '../../design-system/Checkbox.svelte';
   import Input from '../../design-system/Input.svelte';
   import Select from '../../design-system/Select.svelte';
+  import Typography from '../../design-system/Typography.svelte';
   const { pushNotificationService } = getServiceContext();
 
   export let token: Token;
@@ -35,7 +36,7 @@
 </script>
 
 <div class="wrapper">
-  <div class="header"><h2>푸시 보내기</h2></div>
+  <div class="header"><Typography variant="subtitle">푸시 보내기</Typography></div>
 
   <form on:submit|preventDefault>
     <div class="section">

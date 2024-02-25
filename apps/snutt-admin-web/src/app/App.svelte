@@ -7,6 +7,7 @@
 
   import type { Token } from '../entities/Auth';
   import Header from './components/Header.svelte';
+  import ThemeToggle from './components/ThemeToggle.svelte';
   import Link from './design-system/Link.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
   import ConfigPage from './pages/ConfigPage/index.svelte';
@@ -14,7 +15,6 @@
   import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
-  import ThemeToggle from './components/ThemeToggle.svelte';
 
   const queryClient = new QueryClient();
 
@@ -55,14 +55,14 @@
 
     & > nav {
       width: 200px;
-      background-color: var(--color-gray-30);
-      border-right: 1px solid var(--color-gray-10);
+      background-color: var(--color-bg-accent);
+      border-right: 1px solid var(--color-border-default);
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
       & > .menuLabel {
         margin: 30px 28px 10px;
         font-size: 12px;
-        color: var(--color-gray-50);
+        color: var(--color-text-default);
       }
     }
 
