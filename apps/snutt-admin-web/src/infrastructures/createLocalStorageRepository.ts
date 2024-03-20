@@ -16,5 +16,9 @@ export const createLocalStorageRepository = (): PersistStorageRepository => {
     setItem: (key, value) => {
       localStorage.setItem(key, JSON.stringify(value));
     },
+
+    removeItem: (key) => {
+      localStorage.removeItem(key);
+    },
   };
 };
