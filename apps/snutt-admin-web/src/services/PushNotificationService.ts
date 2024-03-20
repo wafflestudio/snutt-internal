@@ -8,5 +8,6 @@ export type PushNotificationService = {
     insertFcm: boolean;
     type: PushNotificationType;
     urlScheme: string | undefined;
+    userId?: string;
   }) => Promise<unknown>;
 };

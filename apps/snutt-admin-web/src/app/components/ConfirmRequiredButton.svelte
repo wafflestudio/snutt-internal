@@ -6,6 +6,7 @@
   export let confirmTitle: string;
   export let confirmMessage: string;
   export let onConfirm: () => void;
+  export let skipConfirm: boolean = false;
 
   const { APP_ENV } = getEnvironmentContext();
 
@@ -21,7 +22,7 @@
   };
 </script>
 
-<Button on:click={onClickButton} type="button" {...$$restProps}>
+<Button on:click={skipConfirm ? onClickConfirm : onClickButton} type="button" {...$$restProps}>
   <slot />
 </Button>
 

@@ -8,5 +8,11 @@ export const createAuthRepository = ({ apiClient }: { apiClient: ApiClient }): A
       const response = await apiClient.post<{ token: string }>('/v1/auth/login_local', { id: username, password });
       return { token: response.token as Token };
     },
+    getMe: async ({ token }) => {
+      const response = await apiClient.get<{ id: string }>('/v1/users/me', {
+        headers: { 'x-access-token': token },
+      });
+      return { userId: response.id };
+    },
   };
 };

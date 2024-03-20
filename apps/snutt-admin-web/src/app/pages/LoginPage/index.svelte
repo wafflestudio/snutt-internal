@@ -1,22 +1,24 @@
 <script lang="ts">
   import type { Token } from '../../../entities/Auth';
+  import { getEnvironmentContext } from '../../contexts/EnvironmentContext';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Input from '../../design-system/Input.svelte';
   import Typography from '../../design-system/Typography.svelte';
 
-  export let token: null | Token = null;
+  export let onLogin: (token: Token) => void;
   let loading: boolean = false;
   let username: string = '';
   let password: string = '';
 
+  const { APP_ENV } = getEnvironmentContext();
   const { authService } = getServiceContext();
 
   const onSubmit = async () => {
     loading = true;
     try {
       const response = await authService.login({ username, password });
-      token = response.token;
+      onLogin(response.token);
     } catch (e) {
       console.error(e);
     } finally {
@@ -30,7 +32,9 @@
   <Input autocomplete="username" name="login-username" type="text" label="username" bind:value={username} />
   <Input autocomplete="current-password" name="login-password" type="password" label="password" bind:value={password} />
   <Button type="submit" disabled={loading}>로그인</Button>
-  <Typography variant="code">Note: 자동 로그인이 되지 않습니다 :)</Typography>
+  {#if APP_ENV === 'prod'}
+    <Typography variant="code">Prod 에서는 자동 로그인이 되지 않습니다</Typography>
+  {/if}
 </form>
 
 <style>
