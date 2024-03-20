@@ -8,7 +8,7 @@
   import type { Token } from '../entities/Auth';
   import Header from './components/Header.svelte';
   import ThemeToggle from './components/ThemeToggle.svelte';
-  import { getEnvironmentContext } from './contexts/EnvironmentContext';
+  import { getServiceContext } from './contexts/ServiceContext';
   import Link from './design-system/Link.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
   import ConfigPage from './pages/ConfigPage/index.svelte';
@@ -17,20 +17,18 @@
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
 
-  const { APP_ENV } = getEnvironmentContext();
   const queryClient = new QueryClient();
+  const { authService } = getServiceContext();
 
-  const tokenKey = 'token';
-  let token: Token | null = sessionStorage.getItem(tokenKey) as Token | null;
+  let token: Token | null = authService.autoLogin.enabled ? authService.autoLogin.initialToken : null;
 
   const onLogout = () => {
+    authService.logout();
     token = null;
-    sessionStorage.removeItem(tokenKey);
   };
 
   const onLogin = (loginToken: Token) => {
     token = loginToken;
-    if (APP_ENV !== 'prod') sessionStorage.setItem(tokenKey, loginToken);
   };
 </script>
 

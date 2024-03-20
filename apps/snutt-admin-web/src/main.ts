@@ -7,16 +7,17 @@ import { createConfigRepository } from './infrastructures/createConfigRepository
 import { createConfigService } from './infrastructures/createConfigService';
 import { createFetchClient } from './infrastructures/createFetchClient';
 import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
+import { createImportMetaEnvironmentRepository } from './infrastructures/createImportMetaEnvironmentRepository';
 import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
 import { createPushNotificationRepository } from './infrastructures/createPushNotificationRepository';
 import { createPushNotificationService } from './infrastructures/createPushNotificationService';
 import { createScreenService } from './infrastructures/createThemeService';
 
-const mode = import.meta.env.MODE;
 const apiKey = import.meta.env.VITE_API_KEY;
+const environmentRepository = createImportMetaEnvironmentRepository();
+const mode = environmentRepository.getAppEnv();
 
 if (!apiKey || typeof apiKey !== 'string') throw new Error('VITE_API_KEY is not set');
-if (mode !== 'localDev' && mode !== 'dev' && mode !== 'prod') throw new Error('Invalid mode');
 
 const baseUrl = {
   localDev: '/api',
@@ -36,10 +37,12 @@ const pushNotificationService = createPushNotificationService({
   authRepository,
 });
 
-const authService = createAuthService({ authRepository });
+const persistStorageRepository = createLocalStorageRepository();
+
+const authService = createAuthService({ authRepository, persistStorageRepository, environmentRepository });
 const screenService = createScreenService({
   themeRepository: createHtmlDocumentThemeRepository(),
-  persistStorageRepository: createLocalStorageRepository(),
+  persistStorageRepository,
 });
 
 document.documentElement.style.setProperty('transition', 'none');

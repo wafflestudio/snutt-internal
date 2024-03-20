@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Token } from '../../../entities/Auth';
-  import { getEnvironmentContext } from '../../contexts/EnvironmentContext';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Input from '../../design-system/Input.svelte';
@@ -11,7 +10,6 @@
   let username: string = '';
   let password: string = '';
 
-  const { APP_ENV } = getEnvironmentContext();
   const { authService } = getServiceContext();
 
   const onSubmit = async () => {
@@ -32,7 +30,7 @@
   <Input autocomplete="username" name="login-username" type="text" label="username" bind:value={username} />
   <Input autocomplete="current-password" name="login-password" type="password" label="password" bind:value={password} />
   <Button type="submit" disabled={loading}>로그인</Button>
-  {#if APP_ENV === 'prod'}
+  {#if !authService.autoLogin.enabled}
     <Typography variant="code">Prod 에서는 자동 로그인이 되지 않습니다</Typography>
   {/if}
 </form>
