@@ -1,10 +1,13 @@
 <script lang="ts">
   import logo from '../../assets/logo.png';
   import { getEnvironmentContext } from '../contexts/EnvironmentContext';
+  import Button from '../design-system/Button.svelte';
   import Link from '../design-system/Link.svelte';
   import Typography from '../design-system/Typography.svelte';
 
   const { APP_ENV } = getEnvironmentContext();
+
+  export let onLogout: () => void;
 </script>
 
 <header>
@@ -13,6 +16,7 @@
     <Typography variant="title" class="home-title">SNUTT Admin</Typography>
   </Link>
   <Typography variant="subtitle">{APP_ENV}</Typography>
+  <Button variant="third" on:click={onLogout}>로그아웃</Button>
 </header>
 
 <style>

@@ -8,5 +8,6 @@ export type PushNotificationRepository = {
     insertFcm: boolean;
     type: PushNotificationType;
     dataPayload: Record<string, string>;
+    userId?: string;
   }) => Promise<unknown>;
 };

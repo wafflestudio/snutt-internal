@@ -1,4 +1,6 @@
+import type { Theme } from '../entities/Screen';
+
 export type ThemeRepository = {
-  setTheme: (theme: 'light' | 'dark') => void;
-  getTheme: () => 'light' | 'dark' | undefined;
+  setTheme: (theme: Theme) => void;
+  getTheme: () => Theme | undefined;
 };

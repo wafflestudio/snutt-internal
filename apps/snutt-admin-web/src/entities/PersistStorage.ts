@@ -1,3 +1,5 @@
+import type { Theme } from './Screen';
+
 export type PersistStorageData = {
-  theme: 'light' | 'dark';
+  theme: Theme;
 };

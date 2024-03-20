@@ -15,16 +15,29 @@
   import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
+  import { getEnvironmentContext } from './contexts/EnvironmentContext';
 
+  const { APP_ENV } = getEnvironmentContext();
   const queryClient = new QueryClient();
 
-  let token: Token | null = null;
+  const tokenKey = 'token';
+  let token: Token | null = sessionStorage.getItem(tokenKey) as Token | null;
+
+  const onLogout = () => {
+    token = null;
+    sessionStorage.removeItem(tokenKey);
+  };
+
+  const onLogin = (loginToken: Token) => {
+    token = loginToken;
+    if (APP_ENV !== 'prod') sessionStorage.setItem(tokenKey, loginToken);
+  };
 </script>
 
 <QueryClientProvider client={queryClient}>
   {#if token !== null}
     <Router>
-      <Header />
+      <Header {onLogout} />
       <div class="content">
         <nav>
           <p class="menuLabel">관리</p>
@@ -43,7 +56,7 @@
       </div>
     </Router>
   {:else}
-    <LoginPage bind:token />
+    <LoginPage {onLogin} />
   {/if}
   <ThemeToggle />
 </QueryClientProvider>
