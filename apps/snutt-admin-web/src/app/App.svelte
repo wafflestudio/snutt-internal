@@ -8,6 +8,7 @@
   import type { Token } from '../entities/Auth';
   import Header from './components/Header.svelte';
   import ThemeToggle from './components/ThemeToggle.svelte';
+  import { getEnvironmentContext } from './contexts/EnvironmentContext';
   import Link from './design-system/Link.svelte';
   import ConfigDetailPage from './pages/ConfigDetailPage/index.svelte';
   import ConfigPage from './pages/ConfigPage/index.svelte';
@@ -15,7 +16,6 @@
   import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
-  import { getEnvironmentContext } from './contexts/EnvironmentContext';
 
   const { APP_ENV } = getEnvironmentContext();
   const queryClient = new QueryClient();
