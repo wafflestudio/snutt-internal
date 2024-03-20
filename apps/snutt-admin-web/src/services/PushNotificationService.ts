@@ -1,13 +1,16 @@
 import type { PushNotificationType } from '../entities/PushNotification';
 
 export type PushNotificationService = {
-  sendPushNotification: (req: {
+  sendNotification: (req: {
     token: string;
-    title: string;
-    body: string;
-    insertFcm: boolean;
-    type: PushNotificationType;
-    urlScheme: string | undefined;
-    userId?: string;
+    notification: {
+      title: string;
+      body: string;
+
+      sendPush: boolean;
+      sendToMeOnly: boolean;
+      type: PushNotificationType;
+      urlScheme?: string;
+    };
   }) => Promise<unknown>;
 };

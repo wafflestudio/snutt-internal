@@ -26,15 +26,17 @@ const baseUrl = {
 
 const apiClient = createFetchClient(baseUrl, apiKey);
 
+const authRepository = createAuthRepository({ apiClient });
 const configService = createConfigService({
   repositories: [createConfigRepository({ clients: [apiClient] })],
 });
 
 const pushNotificationService = createPushNotificationService({
   pushNotificationRepository: createPushNotificationRepository({ apiClient }),
+  authRepository,
 });
 
-const authService = createAuthService({ authRepository: createAuthRepository({ apiClient }) });
+const authService = createAuthService({ authRepository });
 const screenService = createScreenService({
   themeRepository: createHtmlDocumentThemeRepository(),
   persistStorageRepository: createLocalStorageRepository(),

@@ -15,7 +15,7 @@ export const createPushNotificationRepository = ({
           dataPayload,
           insertFcm,
           title,
-          type: { NORMAL: 0, COURSEBOOK: 1, LECTURE_UPDATE: 2, LECTURE_REMOVE: 3, FRIEND: 4 }[type],
+          type,
           userId,
         },
         { headers: { 'x-access-token': token } },
