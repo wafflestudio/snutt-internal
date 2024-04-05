@@ -11,6 +11,9 @@ export enum Member {
   CHAEMIN2001 = 'CHAEMIN2001',
   EUXXNIA = 'EUXXNIA',
   SUBEENPARK_IO = 'SUBEENPARK_IO',
+  PLGAFHD = 'PLGAFHD',
+  YUJINMIN514 = 'YUJINMIN514',
+  ASP345 = 'ASP345',
 }
 
 export enum Part {

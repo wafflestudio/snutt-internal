@@ -32,75 +32,91 @@ export const createKanbanService = ({
     },
 
     sendAbnormalCardStatuses: async () => {
-      const cards = (await kanbanRepository.listCards()).filter(
-        (c) => c.status === 'In Progress' || c.status === 'In Review' || c.status === 'Backlog' || c.status === 'To Do',
-      );
+      try {
+        const cards = (await kanbanRepository.listCards()).filter(
+          (c) =>
+            c.status === 'In Progress' || c.status === 'In Review' || c.status === 'Backlog' || c.status === 'To Do',
+        );
 
-      const abnormalCards = cards.flatMap((card) => {
-        const result = isCardAbnormal(card);
-        if (!result.abnormal) return [];
-        return [{ ...card, reason: result.reason }];
-      });
+        const abnormalCards = cards.flatMap((card) => {
+          const result = isCardAbnormal(card);
+          if (!result.abnormal) return [];
+          return [{ ...card, reason: result.reason }];
+        });
 
-      await messengerPresenter.sendThread(
-        () => '칸반 이슈',
-        abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
-          const mention =
-            card.assignee.length === 0
-              ? formatPartMention(card.part ?? Part.ALL)
-              : card.assignee.map(formatMemberMention).join(' ');
-          const title = formatLink(card.title, { url: card.url });
-          const reason = REASON_MESSAGE_MAP[card.reason];
-          return `${mention} ${title}\n\n${reason}`;
-        }),
-      );
+        if (abnormalCards.length === 0) return;
+
+        await messengerPresenter.sendThread(
+          ({ formatEmoji }) => `${formatEmoji('blob0w0')} 칸반 이슈`,
+          abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
+            const mention =
+              card.assignee.length === 0
+                ? formatPartMention(card.part ?? Part.ALL)
+                : card.assignee.map((a) => (a.type === 'member' ? formatMemberMention(a.member) : a.display)).join(' ');
+            const title = formatLink(card.title, { url: card.url });
+            const reason = REASON_MESSAGE_MAP[card.reason];
+            return `${mention} ${title}\n\n${reason}`;
+          }),
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '알 수 없는 오류';
+        await messengerPresenter.sendThread(() => '칸반 이슈 확인 불가: ' + message);
+      }
     },
 
     sendWeeklySummary: async () => {
-      const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      const to = new Date();
+      try {
+        const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const to = new Date();
 
-      const [epics, cards] = await Promise.all([
-        kanbanRepository.listEpics().then((es) => es.filter((e) => e.status === 'In Progress')),
-        kanbanRepository.listCards().then((cs) =>
-          cs
-            .filter((c) => {
-              if (c.schedule === null) return false;
-              const [start, end] = c.schedule;
-              if (end.getTime() < from.getTime()) return false;
-              if (start.getTime() > to.getTime()) return false;
-              return true;
-            })
-            .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status]),
-        ),
-      ]);
+        const [epics, cards] = await Promise.all([
+          kanbanRepository.listEpics().then((es) => es.filter((e) => e.status === 'In Progress')),
+          kanbanRepository.listCards().then((cs) =>
+            cs
+              .filter((c) => {
+                if (c.schedule === null) return false;
+                const [start, end] = c.schedule;
+                if (end.getTime() < from.getTime()) return false;
+                if (start.getTime() > to.getTime()) return false;
+                return true;
+              })
+              .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status]),
+          ),
+        ]);
 
-      const formatCard =
-        ({ formatEmoji, formatInlineCode, formatLink, formatBold }: MessageHelpers) =>
-        (c: Card) =>
-          `${formatBold(formatInlineCode(` ${c.status.padStart(11, ' ')} `))} ${formatEmoji(
-            c.part ? PART_EMOJI_MAP[c.part] : 'null',
-          )} ${formatLink(c.title, { url: c.url })}`;
+        const formatCard =
+          ({ formatEmoji, formatInlineCode, formatLink, formatBold }: MessageHelpers) =>
+          (c: Card) =>
+            `${formatBold(formatInlineCode(` ${c.status.padStart(11, ' ')} `))} ${formatEmoji(
+              c.part ? PART_EMOJI_MAP[c.part] : 'null',
+            )} ${formatLink(c.title, { url: c.url })}`;
 
-      await messengerPresenter.sendThread(
-        ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
-        [
-          ...epics.map(
-            (epic) => (helpers: MessageHelpers) =>
-              `${helpers.formatMemberMention(epic.manager)} ${helpers.formatLink(epic.title, {
-                url: epic.url,
-              })}\n\n${cards
-                .filter((c) => c.epic === epic.id)
+        await messengerPresenter.sendThread(
+          ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
+          [
+            ...epics.map(
+              (epic) => (helpers: MessageHelpers) =>
+                `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
+                  epic.title,
+                  {
+                    url: epic.url,
+                  },
+                )}\n\n${cards
+                  .filter((c) => c.epic === epic.id)
+                  .map(formatCard(helpers))
+                  .join('\n')}`,
+            ),
+            (helpers) =>
+              `기타\n\n${cards
+                .filter((c) => epics.every((e) => e.id !== c.epic))
                 .map(formatCard(helpers))
                 .join('\n')}`,
-          ),
-          (helpers) =>
-            `기타\n\n${cards
-              .filter((c) => epics.every((e) => e.id !== c.epic))
-              .map(formatCard(helpers))
-              .join('\n')}`,
-        ],
-      );
+          ],
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '알 수 없는 오류';
+        await messengerPresenter.sendThread(() => '스크럼 도우미 실패: ' + message);
+      }
     },
   };
 };
