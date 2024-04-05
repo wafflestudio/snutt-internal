@@ -52,7 +52,7 @@ export const createNotionKanbanRepository = ({
 
       return notionEpics.map((e) => {
         const managerItem = e.properties.PM.people[0];
-        if (!managerItem) throw new Error('no manager');
+        if (!managerItem) throw new Error('PM이 없는 에픽 ' + e.url);
         const manager = MEMBER_NOTION_ID_MAP[managerItem.id];
         const title = e.properties.Title.title.map((t) => t.plain_text).join('');
 

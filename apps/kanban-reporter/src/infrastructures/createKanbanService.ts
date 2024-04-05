@@ -65,53 +65,58 @@ export const createKanbanService = ({
     },
 
     sendWeeklySummary: async () => {
-      const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      const to = new Date();
+      try {
+        const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const to = new Date();
 
-      const [epics, cards] = await Promise.all([
-        kanbanRepository.listEpics().then((es) => es.filter((e) => e.status === 'In Progress')),
-        kanbanRepository.listCards().then((cs) =>
-          cs
-            .filter((c) => {
-              if (c.schedule === null) return false;
-              const [start, end] = c.schedule;
-              if (end.getTime() < from.getTime()) return false;
-              if (start.getTime() > to.getTime()) return false;
-              return true;
-            })
-            .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status]),
-        ),
-      ]);
+        const [epics, cards] = await Promise.all([
+          kanbanRepository.listEpics().then((es) => es.filter((e) => e.status === 'In Progress')),
+          kanbanRepository.listCards().then((cs) =>
+            cs
+              .filter((c) => {
+                if (c.schedule === null) return false;
+                const [start, end] = c.schedule;
+                if (end.getTime() < from.getTime()) return false;
+                if (start.getTime() > to.getTime()) return false;
+                return true;
+              })
+              .sort((c1, c2) => CARD_STATUS_ORDER[c1.status] - CARD_STATUS_ORDER[c2.status]),
+          ),
+        ]);
 
-      const formatCard =
-        ({ formatEmoji, formatInlineCode, formatLink, formatBold }: MessageHelpers) =>
-        (c: Card) =>
-          `${formatBold(formatInlineCode(` ${c.status.padStart(11, ' ')} `))} ${formatEmoji(
-            c.part ? PART_EMOJI_MAP[c.part] : 'null',
-          )} ${formatLink(c.title, { url: c.url })}`;
+        const formatCard =
+          ({ formatEmoji, formatInlineCode, formatLink, formatBold }: MessageHelpers) =>
+          (c: Card) =>
+            `${formatBold(formatInlineCode(` ${c.status.padStart(11, ' ')} `))} ${formatEmoji(
+              c.part ? PART_EMOJI_MAP[c.part] : 'null',
+            )} ${formatLink(c.title, { url: c.url })}`;
 
-      await messengerPresenter.sendThread(
-        ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
-        [
-          ...epics.map(
-            (epic) => (helpers: MessageHelpers) =>
-              `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
-                epic.title,
-                {
-                  url: epic.url,
-                },
-              )}\n\n${cards
-                .filter((c) => c.epic === epic.id)
+        await messengerPresenter.sendThread(
+          ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
+          [
+            ...epics.map(
+              (epic) => (helpers: MessageHelpers) =>
+                `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
+                  epic.title,
+                  {
+                    url: epic.url,
+                  },
+                )}\n\n${cards
+                  .filter((c) => c.epic === epic.id)
+                  .map(formatCard(helpers))
+                  .join('\n')}`,
+            ),
+            (helpers) =>
+              `기타\n\n${cards
+                .filter((c) => epics.every((e) => e.id !== c.epic))
                 .map(formatCard(helpers))
                 .join('\n')}`,
-          ),
-          (helpers) =>
-            `기타\n\n${cards
-              .filter((c) => epics.every((e) => e.id !== c.epic))
-              .map(formatCard(helpers))
-              .join('\n')}`,
-        ],
-      );
+          ],
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '알 수 없는 오류';
+        await messengerPresenter.sendThread(() => '스크럼 도우미 실패: ' + message);
+      }
     },
   };
 };
