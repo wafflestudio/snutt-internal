@@ -32,28 +32,36 @@ export const createKanbanService = ({
     },
 
     sendAbnormalCardStatuses: async () => {
-      const cards = (await kanbanRepository.listCards()).filter(
-        (c) => c.status === 'In Progress' || c.status === 'In Review' || c.status === 'Backlog' || c.status === 'To Do',
-      );
+      try {
+        const cards = (await kanbanRepository.listCards()).filter(
+          (c) =>
+            c.status === 'In Progress' || c.status === 'In Review' || c.status === 'Backlog' || c.status === 'To Do',
+        );
 
-      const abnormalCards = cards.flatMap((card) => {
-        const result = isCardAbnormal(card);
-        if (!result.abnormal) return [];
-        return [{ ...card, reason: result.reason }];
-      });
+        const abnormalCards = cards.flatMap((card) => {
+          const result = isCardAbnormal(card);
+          if (!result.abnormal) return [];
+          return [{ ...card, reason: result.reason }];
+        });
 
-      await messengerPresenter.sendThread(
-        () => '칸반 이슈',
-        abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
-          const mention =
-            card.assignee.length === 0
-              ? formatPartMention(card.part ?? Part.ALL)
-              : card.assignee.map(formatMemberMention).join(' ');
-          const title = formatLink(card.title, { url: card.url });
-          const reason = REASON_MESSAGE_MAP[card.reason];
-          return `${mention} ${title}\n\n${reason}`;
-        }),
-      );
+        if (abnormalCards.length === 0) return;
+
+        await messengerPresenter.sendThread(
+          ({ formatEmoji }) => `${formatEmoji('blob0w0')} 칸반 이슈`,
+          abnormalCards.map((card) => ({ formatMemberMention, formatPartMention, formatLink }) => {
+            const mention =
+              card.assignee.length === 0
+                ? formatPartMention(card.part ?? Part.ALL)
+                : card.assignee.map((a) => (a.type === 'member' ? formatMemberMention(a.member) : a.display)).join(' ');
+            const title = formatLink(card.title, { url: card.url });
+            const reason = REASON_MESSAGE_MAP[card.reason];
+            return `${mention} ${title}\n\n${reason}`;
+          }),
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '알 수 없는 오류';
+        await messengerPresenter.sendThread(() => '칸반 이슈 확인 불가: ' + message);
+      }
     },
 
     sendWeeklySummary: async () => {
@@ -87,9 +95,12 @@ export const createKanbanService = ({
         [
           ...epics.map(
             (epic) => (helpers: MessageHelpers) =>
-              `${helpers.formatMemberMention(epic.manager)} ${helpers.formatLink(epic.title, {
-                url: epic.url,
-              })}\n\n${cards
+              `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
+                epic.title,
+                {
+                  url: epic.url,
+                },
+              )}\n\n${cards
                 .filter((c) => c.epic === epic.id)
                 .map(formatCard(helpers))
                 .join('\n')}`,

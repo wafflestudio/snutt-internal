@@ -44,6 +44,8 @@ export const createNotionKanbanRepository = ({
     return allResults;
   };
 
+  const getDisplay = ({ id, name }: { id: string; name: string }): string => `${name} (${id})`;
+
   return {
     listEpics: async () => {
       const notionEpics = (await listEpics({})) as unknown as NotionEpic[];
@@ -52,10 +54,17 @@ export const createNotionKanbanRepository = ({
         const managerItem = e.properties.PM.people[0];
         if (!managerItem) throw new Error('no manager');
         const manager = MEMBER_NOTION_ID_MAP[managerItem.id];
-        if (!manager) throw new Error('unknown manager');
         const title = e.properties.Title.title.map((t) => t.plain_text).join('');
 
-        return { id: e.id, title, manager, status: e.properties.Status.status.name, url: e.url };
+        return {
+          id: e.id,
+          title,
+          manager: manager
+            ? { type: 'member', member: manager }
+            : { type: 'anonymous', display: getDisplay(managerItem) },
+          status: e.properties.Status.status.name,
+          url: e.url,
+        };
       });
     },
 
@@ -65,10 +74,9 @@ export const createNotionKanbanRepository = ({
       return notionCards.map((c) => ({
         id: c.id,
         url: c.url,
-        assignee: c.properties.Assignee.people.flatMap((p) => {
+        assignee: c.properties.Assignee.people.map((p) => {
           const member = MEMBER_NOTION_ID_MAP[p.id];
-          if (!member) return [];
-          return [member];
+          return member ? { type: 'member', member } : { type: 'anonymous', display: getDisplay(p) };
         }),
         status: c.properties.Status.status.name,
         title: c.properties.Name.title.map((t) => t.plain_text).join(''),
@@ -111,7 +119,7 @@ type NotionEpic = {
   url: string;
   properties: {
     Title: { title: { plain_text: string }[] };
-    PM: { people: { id: string }[] };
+    PM: { people: { id: string; name: string }[] };
     Status: { status: { name: Epic['status'] } };
   };
 };
@@ -129,6 +137,7 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   '5f018d07-d2d8-4845-b4f1-e7dbdb49015e': Member.CHAEMIN2001,
   'e3c4232e-41ce-4189-90f4-121c7cda69f8': Member.EUXXNIA,
   '9c79e047-4de9-4089-8787-8349e049f960': Member.SUBEENPARK_IO,
+  'e014290e-7acf-43e2-a45f-aebdde53d116': Member.ASP345,
 };
 
 const PART_NOTION_ID_MAP = {

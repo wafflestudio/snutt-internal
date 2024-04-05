@@ -48,6 +48,9 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.CHAEMIN2001]: 'U030WM38PM2',
   [Member.EUXXNIA]: 'U04F0NCC9L4',
   [Member.SUBEENPARK_IO]: 'U01RWCD0821',
+  [Member.PLGAFHD]: 'U06BEHTT2M8',
+  [Member.YUJINMIN514]: 'U05R78P0K8X',
+  [Member.ASP345]: 'U06BEEJ664T',
 };
 
 const PART_SLACK_ID_MAP: Record<Part, string> = {
@@ -69,4 +72,5 @@ const EMOJI_SLACK_EMOJI_MAP: Record<Parameters<MessageHelpers['formatEmoji']>[0]
   snutt: 'snutt',
   wip: 'wip',
   help: 'blob_help',
+  blob0w0: 'blob0w0',
 };

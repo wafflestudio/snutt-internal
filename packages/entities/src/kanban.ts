@@ -4,7 +4,7 @@ export type Card = {
   id: string;
   part: Part | null;
   url: string;
-  assignee: Member[];
+  assignee: KanbanMember[];
   status: 'Backlog' | 'To Do' | 'In Progress' | 'In Review' | 'Archived' | 'Done' | 'Released';
   title: string;
   schedule: readonly [Date, Date] | null;
@@ -15,7 +15,7 @@ export type Epic = {
   id: string;
   title: string;
   url: string;
-  manager: Member;
+  manager: KanbanMember;
   status: 'Not Started' | 'In Progress' | 'Archived' | 'Done';
 };
 
@@ -28,3 +28,5 @@ export const CARD_STATUS_ORDER: Record<Card['status'], number> = {
   Released: 5,
   Archived: 6,
 };
+
+export type KanbanMember = { type: 'member'; member: Member } | { type: 'anonymous'; display: string };
