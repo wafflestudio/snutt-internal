@@ -9,9 +9,11 @@ import { createFetchClient } from './infrastructures/createFetchClient';
 import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
 import { createImportMetaEnvironmentRepository } from './infrastructures/createImportMetaEnvironmentRepository';
 import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
+import { createPopupService } from './infrastructures/createPopupService';
 import { createPushNotificationRepository } from './infrastructures/createPushNotificationRepository';
 import { createPushNotificationService } from './infrastructures/createPushNotificationService';
 import { createScreenService } from './infrastructures/createThemeService';
+import { createUserPopupRepository } from './infrastructures/createUserPopupRepository';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const environmentRepository = createImportMetaEnvironmentRepository();
@@ -45,6 +47,8 @@ const screenService = createScreenService({
   persistStorageRepository,
 });
 
+const popupService = createPopupService({ userPopupRepository: createUserPopupRepository({ apiClient }) });
+
 document.documentElement.style.setProperty('transition', 'none');
 screenService.setCurrentTheme(screenService.getInitialTheme());
 setTimeout(() => {
@@ -54,7 +58,7 @@ setTimeout(() => {
 const app = new App({
   target: document.getElementById('app') as HTMLElement,
   context: new Map()
-    .set(...serviceContextSetter({ configService, pushNotificationService, authService, screenService }))
+    .set(...serviceContextSetter({ configService, pushNotificationService, authService, screenService, popupService }))
     .set(...environmentContextSetter({ APP_ENV: mode })),
 });
 
