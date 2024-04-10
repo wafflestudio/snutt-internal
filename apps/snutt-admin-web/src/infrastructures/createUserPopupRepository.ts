@@ -9,9 +9,14 @@ export const createUserPopupRepository = ({
   return {
     getPopups: () =>
       apiClient
-        .get<{ content: { key: string; imageUri: string; hiddenDays: number }[] }>(`/v1/popups`)
+        .get<{ content: { key: string; imageUri: string; hiddenDays: number; id: string }[] }>(`/v1/popups`)
         .then((res) =>
-          res.content.map((popup) => ({ key: popup.key, url: popup.imageUri, hiddenDays: popup.hiddenDays })),
+          res.content.map((popup) => ({
+            key: popup.key,
+            url: popup.imageUri,
+            hiddenDays: popup.hiddenDays,
+            id: popup.id,
+          })),
         ),
   };
 };

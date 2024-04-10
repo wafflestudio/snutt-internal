@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createQuery } from '@tanstack/svelte-query';
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
   import { getServiceContext } from '../../contexts/ServiceContext';
@@ -10,6 +10,8 @@
 
   export let token: Token;
 
+  const queryClient = useQueryClient();
+
   const { popupService } = getServiceContext();
 
   let isCreatePopupOpen = false;
@@ -18,6 +20,13 @@
     queryKey: ['PopupService', 'getCurrentPopups'],
     queryFn: () => popupService.getCurrentPopups(),
   });
+
+  const onClickDelete = async (id: string) => {
+    try {
+      await popupService.deletePopup({ id, token });
+      queryClient.invalidateQueries({ queryKey: ['PopupService'] });
+    } catch (err) {}
+  };
 </script>
 
 <div>
@@ -32,6 +41,7 @@
           <Typography variant="body">key: {popup.key}</Typography>
           <Typography variant="body">hiddenDays: {popup.hiddenDays}</Typography>
           <img class="popupImage" src={popup.url} alt={popup.key} />
+          <Button variant="danger" on:click={() => onClickDelete(popup.id)}>제거하기</Button>
         </Paper>
       {/each}
     {/if}
@@ -66,5 +76,6 @@
   img.popupImage {
     width: 100%;
     object-fit: contain;
+    flex: 1;
   }
 </style>

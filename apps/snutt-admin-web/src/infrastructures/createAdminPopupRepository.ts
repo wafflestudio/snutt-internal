@@ -15,5 +15,7 @@ export const createAdminPopupRepository = ({
         .then((res) => res[0]),
     createPopup: async ({ hiddenDays, imageOriginUri, key, token }) =>
       apiClient.post(`/v1/admin/popups`, { hiddenDays, imageOriginUri, key }, { headers: { 'x-access-token': token } }),
+    deletePopup: ({ id, token }) =>
+      apiClient.delete(`/v1/admin/popups/${id}`, { headers: { 'x-access-token': token } }),
   };
 };
