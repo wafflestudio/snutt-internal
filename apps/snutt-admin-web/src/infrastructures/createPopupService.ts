@@ -6,10 +6,11 @@ export const createPopupService = ({
   adminPopupRepository,
   popupImageRepository,
 }: {
-  userPopupRepository: { getPopups: () => Promise<{ key: string; url: string; hiddenDays: number }[]> };
+  userPopupRepository: { getPopups: () => Promise<{ key: string; url: string; hiddenDays: number; id: string }[]> };
   adminPopupRepository: {
     getPresignedUri: (_: { token: Token }) => Promise<{ uploadUri: string; fileOriginUri: string; fileUri: string }>;
     createPopup: (_: { key: string; hiddenDays: number; imageOriginUri: string; token: Token }) => Promise<void>;
+    deletePopup: (_: { id: string; token: Token }) => Promise<void>;
   };
   popupImageRepository: {
     upload: (_: { file: File; uploadUri: string }) => Promise<void>;
@@ -28,5 +29,6 @@ export const createPopupService = ({
       await popupImageRepository.upload({ file, uploadUri });
       await adminPopupRepository.createPopup({ key, hiddenDays: hiddenDaysNum, imageOriginUri: fileOriginUri, token });
     },
+    deletePopup: async ({ id, token }) => adminPopupRepository.deletePopup({ id, token }),
   };
 };
