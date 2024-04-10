@@ -15,6 +15,7 @@
   import HomePage from './pages/HomePage/index.svelte';
   import LoginPage from './pages/LoginPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
+  import PopupPage from './pages/PopupPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
 
   const queryClient = new QueryClient();
@@ -41,6 +42,7 @@
           <p class="menuLabel">관리</p>
           <Link class={'menuItem'} href="/config">컨피그</Link>
           <Link class={'menuItem'} href="/push-notification">푸시</Link>
+          <Link class={'menuItem'} href="/popup">팝업</Link>
         </nav>
         <main>
           <Route path="/"><HomePage /></Route>
@@ -49,6 +51,7 @@
             <ConfigDetailPage configName={params.configName} {token} />
           </Route>
           <Route path="/push-notification"><PushNotificationPage {token} /></Route>
+          <Route path="/popup"><PopupPage /></Route>
           <Route path="*"><NotFoundPage /></Route>
         </main>
       </div>
