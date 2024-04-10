@@ -55,7 +55,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2;
+    z-index: var(--z-index-popup);
   }
 
   div.popup {

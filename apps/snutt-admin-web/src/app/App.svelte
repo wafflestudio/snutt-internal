@@ -1,6 +1,7 @@
 <script lang="ts">
   import './theme.css';
   import './app.css';
+  import './zIndex.css';
 
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
   import { Route, Router } from 'svelte-routing';

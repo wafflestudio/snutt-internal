@@ -2,6 +2,7 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Paper from '../../design-system/Paper.svelte';
@@ -41,7 +42,14 @@
           <Typography variant="body">key: {popup.key}</Typography>
           <Typography variant="body">hiddenDays: {popup.hiddenDays}</Typography>
           <img class="popupImage" src={popup.url} alt={popup.key} />
-          <Button variant="danger" on:click={() => onClickDelete(popup.id)}>제거하기</Button>
+          <ConfirmRequiredButton
+            confirmTitle={`${popup.key} 팝업 제거`}
+            confirmMessage="이 작업은 되돌릴 수 없습니다."
+            variant="danger"
+            onConfirm={() => onClickDelete(popup.id)}
+          >
+            제거하기
+          </ConfirmRequiredButton>
         </Paper>
       {/each}
     {/if}
