@@ -1,6 +1,7 @@
 import App from './app/App.svelte';
 import { environmentContextSetter } from './app/contexts/EnvironmentContext';
 import { serviceContextSetter } from './app/contexts/ServiceContext';
+import { createAdminPopupRepository } from './infrastructures/createAdminPopupRepository';
 import { createAuthRepository } from './infrastructures/createAuthRepository';
 import { createAuthService } from './infrastructures/createAuthService';
 import { createConfigRepository } from './infrastructures/createConfigRepository';
@@ -9,6 +10,7 @@ import { createFetchClient } from './infrastructures/createFetchClient';
 import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
 import { createImportMetaEnvironmentRepository } from './infrastructures/createImportMetaEnvironmentRepository';
 import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
+import { createPopupImageFetchRepository } from './infrastructures/createPopupImageFetchRepository';
 import { createPopupService } from './infrastructures/createPopupService';
 import { createPushNotificationRepository } from './infrastructures/createPushNotificationRepository';
 import { createPushNotificationService } from './infrastructures/createPushNotificationService';
@@ -47,7 +49,11 @@ const screenService = createScreenService({
   persistStorageRepository,
 });
 
-const popupService = createPopupService({ userPopupRepository: createUserPopupRepository({ apiClient }) });
+const popupService = createPopupService({
+  userPopupRepository: createUserPopupRepository({ apiClient }),
+  adminPopupRepository: createAdminPopupRepository({ apiClient }),
+  popupImageRepository: createPopupImageFetchRepository(),
+});
 
 document.documentElement.style.setProperty('transition', 'none');
 screenService.setCurrentTheme(screenService.getInitialTheme());

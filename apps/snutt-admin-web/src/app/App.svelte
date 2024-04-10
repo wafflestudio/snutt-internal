@@ -51,7 +51,7 @@
             <ConfigDetailPage configName={params.configName} {token} />
           </Route>
           <Route path="/push-notification"><PushNotificationPage {token} /></Route>
-          <Route path="/popup"><PopupPage /></Route>
+          <Route path="/popup"><PopupPage {token} /></Route>
           <Route path="*"><NotFoundPage /></Route>
         </main>
       </div>
