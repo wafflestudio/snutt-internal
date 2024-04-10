@@ -11,7 +11,7 @@ export const createAdminPopupRepository = ({
       apiClient
         .post<
           { uploadUri: string; fileOriginUri: string; fileUri: string }[]
-        >(`/v1/admin/images/popup/upload-uris`, { headers: { 'x-access-token': token } })
+        >(`/v1/admin/images/popup/upload-uris`, {}, { headers: { 'x-access-token': token } })
         .then((res) => res[0]),
     createPopup: async ({ hiddenDays, imageOriginUri, key, token }) =>
       apiClient.post(`/v1/admin/popups`, { hiddenDays, imageOriginUri, key }, { headers: { 'x-access-token': token } }),
