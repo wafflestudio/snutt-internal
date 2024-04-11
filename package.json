@@ -11,6 +11,10 @@
     "deploy:snutt-admin-web:dev": "scripts/deploy.sh snutt-admin-web dev",
     "deploy:snutt-admin-web:prod": "echo 'prod 배포는 github 에서 release 를 생성해 주세요.'; exit 1;"
   },
+  "engines": {
+    "node": ">=20.11.1"
+  },
+  "type": "module",
   "dependencies": {
     "turbo": "1.13.2"
   },

@@ -8,11 +8,12 @@
     "email": "woohm404@gmail.com"
   },
   "scripts": {
-    "send:dashboard": "ts-node src/index.ts dashboard",
-    "send:issue": "ts-node src/index.ts issue",
-    "send:weekly-summary": "ts-node src/index.ts weekly-summary",
+    "send:dashboard": "tsx src/index.ts dashboard",
+    "send:issue": "tsx src/index.ts issue",
+    "send:weekly-summary": "tsx src/index.ts weekly-summary",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src"
   },
+  "type": "module",
   "engines": {
     "node": ">=20.11.1"
   },
@@ -29,7 +30,7 @@
     "eslint-plugin-prettier": "5.1.3",
     "eslint-plugin-simple-import-sort": "12.0.0",
     "prettier": "3.2.5",
-    "ts-node": "10.9.2",
+    "tsx": "4.7.2",
     "typescript": "5.4.5"
   }
 }
