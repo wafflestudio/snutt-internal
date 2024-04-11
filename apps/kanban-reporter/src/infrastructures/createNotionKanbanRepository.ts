@@ -1,7 +1,9 @@
 import { Client } from '@notionhq/client';
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
-import { KanbanRepository } from '@sf/adapters';
-import { Card, Epic, Member, Part } from '@sf/entities';
+
+import { Card, Epic } from '../entities/kanban';
+import { Member, Part } from '../entities/member';
+import { createKanbanService } from './../services/kanbanService';
 
 export const createNotionKanbanRepository = ({
   epicDatabaseId,
@@ -11,7 +13,7 @@ export const createNotionKanbanRepository = ({
   epicDatabaseId: string;
   kanbanDatabaseId: string;
   notionBotToken: string;
-}): KanbanRepository => {
+}): Parameters<typeof createKanbanService>[0]['kanbanRepository'] => {
   const notionClient = new Client({ auth: notionBotToken });
 
   const listEpics = async ({ cursor }: { cursor?: string }): Promise<QueryDatabaseResponse['results']> => {

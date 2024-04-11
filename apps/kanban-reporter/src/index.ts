@@ -1,7 +1,8 @@
-import { createNotionKanbanRepository, createSlackMessengerPresenter } from '@sf/infrastructures';
 import dotenv from 'dotenv';
 
-import { createKanbanService } from './infrastructures/createKanbanService';
+import { createNotionKanbanRepository } from './infrastructures/createNotionKanbanRepository';
+import { createSlackMessengerPresenter } from './infrastructures/createSlackMessengerPresenter';
+import { createKanbanService } from './services/kanbanService';
 
 dotenv.config({ path: './.env.local' }); // for local development
 

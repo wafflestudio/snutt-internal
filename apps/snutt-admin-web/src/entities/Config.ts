@@ -1,4 +1,4 @@
-import { type Brand } from '@sf/utils';
+import { type Brand } from '@si/utils';
 
 import type { OS, Version } from './NativeClient';
 
