@@ -13,6 +13,9 @@
     "send:weekly-summary": "ts-node src/index.ts weekly-summary",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src"
   },
+  "engines": {
+    "node": ">=20.11.1"
+  },
   "dependencies": {
     "@notionhq/client": "2.2.15",
     "@slack/web-api": "7.0.2",

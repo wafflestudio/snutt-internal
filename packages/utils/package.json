@@ -11,6 +11,9 @@
   "scripts": {
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src"
   },
+  "engines": {
+    "node": ">=20.11.1"
+  },
   "dependencies": {
     "typescript": "5.4.5"
   },
