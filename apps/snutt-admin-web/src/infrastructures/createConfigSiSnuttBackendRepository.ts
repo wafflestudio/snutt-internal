@@ -1,6 +1,7 @@
 import type { SnuttBackend } from '@si/snutt-backend';
+
+import type { AdminConfig } from '../entities/Config';
 import type { ConfigRepository } from '../repositories/ConfigRepository';
-import type { AdminConfig, AdminConfigId } from '../entities/Config';
 
 export const createConfigSiSnuttBackendRepository = ({
   snuttBackend,

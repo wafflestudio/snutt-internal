@@ -1,4 +1,5 @@
 import type { SnuttBackend } from '@si/snutt-backend';
+
 import type { PushNotificationRepository } from '../repositories/PushNotificationRepository';
 
 export const createPushNotificationSiSnuttBackendRepository = ({

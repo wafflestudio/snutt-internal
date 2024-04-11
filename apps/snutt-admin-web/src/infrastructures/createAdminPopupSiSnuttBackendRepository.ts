@@ -1,5 +1,6 @@
 import type { SnuttBackend } from '@si/snutt-backend';
-import type { createPopupService } from './createPopupService';
+
+import type { createPopupService } from '../services/PopupService';
 
 export const createAdminPopupSiSnuttBackendRepository = ({
   snuttBackend,

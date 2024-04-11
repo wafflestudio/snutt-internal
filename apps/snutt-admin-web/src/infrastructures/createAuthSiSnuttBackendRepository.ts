@@ -1,4 +1,5 @@
 import type { SnuttBackend } from '@si/snutt-backend';
+
 import type { Token } from '../entities/Auth';
 import type { AuthRepository } from '../repositories/AuthRepository';
 
