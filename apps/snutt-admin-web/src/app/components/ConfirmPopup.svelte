@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getRandomString } from '@sf/utils';
+  import { getRandomString } from '@si/utils';
 
   import Button from '../design-system/Button.svelte';
   import Input from '../design-system/Input.svelte';

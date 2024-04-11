@@ -1,6 +1,11 @@
-import { GenerateMessage, MessageHelpers, MessengerPresenter } from '@sf/adapters';
-import { Member, Part } from '@sf/entities';
 import { WebClient } from '@slack/web-api';
+
+import { Member, Part } from '../entities/member';
+import { createKanbanService } from '../services/kanbanService';
+
+type MessengerPresenter = Parameters<typeof createKanbanService>[0]['messengerPresenter'];
+type GenerateMessage = Parameters<MessengerPresenter['sendThread']>[0];
+type MessageHelpers = Parameters<GenerateMessage>[0];
 
 export const createSlackMessengerPresenter = ({
   slackBotToken,
