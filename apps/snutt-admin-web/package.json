@@ -12,7 +12,7 @@
     "build:dev": "vite build --mode dev",
     "build:prod": "vite build --mode prod",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "lint": "eslint src"
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "3.1.0",

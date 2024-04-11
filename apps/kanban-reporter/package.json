@@ -11,7 +11,7 @@
     "send:dashboard": "ts-node src/index.ts dashboard",
     "send:issue": "ts-node src/index.ts issue",
     "send:weekly-summary": "ts-node src/index.ts weekly-summary",
-    "lint": "eslint src"
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src"
   },
   "dependencies": {
     "@notionhq/client": "2.2.15",
