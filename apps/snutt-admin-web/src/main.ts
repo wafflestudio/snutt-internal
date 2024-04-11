@@ -1,21 +1,22 @@
+import { implSnuttBackend } from '@si/snutt-backend';
+
 import App from './app/App.svelte';
 import { environmentContextSetter } from './app/contexts/EnvironmentContext';
 import { serviceContextSetter } from './app/contexts/ServiceContext';
-import { createAdminPopupRepository } from './infrastructures/createAdminPopupRepository';
-import { createAuthRepository } from './infrastructures/createAuthRepository';
-import { createAuthService } from './infrastructures/createAuthService';
-import { createConfigRepository } from './infrastructures/createConfigRepository';
-import { createConfigService } from './infrastructures/createConfigService';
-import { createFetchClient } from './infrastructures/createFetchClient';
+import { createAdminPopupSiSnuttBackendRepository } from './infrastructures/createAdminPopupSiSnuttBackendRepository';
+import { createAuthSiSnuttBackendRepository } from './infrastructures/createAuthSiSnuttBackendRepository';
+import { createConfigSiSnuttBackendRepository } from './infrastructures/createConfigSiSnuttBackendRepository';
 import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
 import { createImportMetaEnvironmentRepository } from './infrastructures/createImportMetaEnvironmentRepository';
 import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
 import { createPopupImageFetchRepository } from './infrastructures/createPopupImageFetchRepository';
-import { createPopupService } from './infrastructures/createPopupService';
-import { createPushNotificationRepository } from './infrastructures/createPushNotificationRepository';
-import { createPushNotificationService } from './infrastructures/createPushNotificationService';
-import { createScreenService } from './infrastructures/createThemeService';
-import { createUserPopupRepository } from './infrastructures/createUserPopupRepository';
+import { createPushNotificationSiSnuttBackendRepository } from './infrastructures/createPushNotificationSiSnuttBackendRepository';
+import { createUserPopupSiSnuttBackendRepository } from './infrastructures/createUserPopupSiSnuttBackendRepository';
+import { createAuthService } from './services/AuthService';
+import { createConfigService } from './services/ConfigService';
+import { createPopupService } from './services/PopupService';
+import { createPushNotificationService } from './services/PushNotificationService';
+import { createScreenService } from './services/ScreenService';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const environmentRepository = createImportMetaEnvironmentRepository();
@@ -29,15 +30,15 @@ const baseUrl = {
   prod: 'https://snutt-api.wafflestudio.com',
 }[mode];
 
-const apiClient = createFetchClient(baseUrl, apiKey);
+const snuttBackend = implSnuttBackend({ baseUrl, apiKey });
 
-const authRepository = createAuthRepository({ apiClient });
+const authRepository = createAuthSiSnuttBackendRepository({ snuttBackend });
 const configService = createConfigService({
-  repositories: [createConfigRepository({ clients: [apiClient] })],
+  configRepository: createConfigSiSnuttBackendRepository({ snuttBackend }),
 });
 
 const pushNotificationService = createPushNotificationService({
-  pushNotificationRepository: createPushNotificationRepository({ apiClient }),
+  pushNotificationRepository: createPushNotificationSiSnuttBackendRepository({ snuttBackend }),
   authRepository,
 });
 
@@ -50,8 +51,8 @@ const screenService = createScreenService({
 });
 
 const popupService = createPopupService({
-  userPopupRepository: createUserPopupRepository({ apiClient }),
-  adminPopupRepository: createAdminPopupRepository({ apiClient }),
+  userPopupRepository: createUserPopupSiSnuttBackendRepository({ snuttBackend }),
+  adminPopupRepository: createAdminPopupSiSnuttBackendRepository({ snuttBackend }),
   popupImageRepository: createPopupImageFetchRepository(),
 });
 
