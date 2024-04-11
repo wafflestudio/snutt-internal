@@ -1,5 +1,5 @@
 {
-  "name": "@si/utils",
+  "name": "@si/snutt-backend",
   "main": "src/index.ts",
   "version": "0.0.0",
   "types": "src/index.ts",

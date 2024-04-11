@@ -37,6 +37,7 @@
     "vite": "5.2.8"
   },
   "dependencies": {
+    "@si/snutt-backend": "*",
     "@tanstack/svelte-query": "5.29.0"
   }
 }
