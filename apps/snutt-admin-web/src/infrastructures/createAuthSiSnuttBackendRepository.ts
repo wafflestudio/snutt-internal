@@ -10,7 +10,7 @@ export const createAuthSiSnuttBackendRepository = ({
 }): AuthRepository => {
   return {
     login: async ({ username, password }) =>
-      snuttBackend.http.post['/v1/login_local']({ body: { id: username, password } }).then(({ token }) => ({
+      snuttBackend.http.post['/v1/auth/login_local']({ body: { id: username, password } }).then(({ token }) => ({
         token: token as Token,
       })),
 

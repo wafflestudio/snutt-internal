@@ -82,10 +82,10 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
 
       post: {
         // https://snu4t-api-dev.wafflestudio.com/webjars/swagger-ui/index.html#/default/loginLocal
-        '/v1/login_local': ({ body }: { body: { id: string; password: string } }) =>
+        '/v1/auth/login_local': ({ body }: { body: { id: string; password: string } }) =>
           httpCall<{ user_id: string; token: string; message: string }>({
             method: 'POST',
-            path: '/v1/login_local',
+            path: '/v1/auth/login_local',
             body,
           }),
 
