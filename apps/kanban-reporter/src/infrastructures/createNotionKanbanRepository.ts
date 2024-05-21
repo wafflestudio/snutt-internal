@@ -140,6 +140,7 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   'e3c4232e-41ce-4189-90f4-121c7cda69f8': Member.EUXXNIA,
   '9c79e047-4de9-4089-8787-8349e049f960': Member.SUBEENPARK_IO,
   'e014290e-7acf-43e2-a45f-aebdde53d116': Member.ASP345,
+  'c33db05a-a8b4-4dff-905e-37e96ae9b2a1': Member.YUJINMIN514,
 };
 
 const PART_NOTION_ID_MAP = {
