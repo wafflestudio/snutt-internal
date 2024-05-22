@@ -3,6 +3,7 @@ name: send-kanban-issue-checker
 on:
   schedule:
     - cron: "20 13 * * *"
+  workflow_dispatch:
 
 jobs:
   cron:
