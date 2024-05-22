@@ -3,6 +3,7 @@ name: send-kanban-dashboard
 on:
   schedule:
     - cron: "10 1 * * 1,5" # 월/금 한국시간 오전 10시 10분
+  workflow_dispatch:
 
 jobs:
   cron:
