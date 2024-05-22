@@ -91,7 +91,7 @@ export const createKanbanService = ({
         const to = new Date();
 
         const [epics, cards] = await Promise.all([
-          kanbanRepository.listEpics().then((es) => es.filter((e) => e.status === 'In Progress')),
+          kanbanRepository.listEpics(),
           kanbanRepository.listCards().then((cs) =>
             cs
               .filter((c) => {
@@ -112,20 +112,20 @@ export const createKanbanService = ({
               c.part ? PART_EMOJI_MAP[c.part] : 'null',
             )} ${formatLink(c.title, { url: c.url })}`;
 
+        const messageEpics = epics
+          .map((epic) => ({ epic, cards: cards.filter((c) => c.epic === epic.id) }))
+          .filter(({ cards }) => cards.length > 0);
+
         await messengerPresenter.sendThread(
           ({ formatEmoji }) => `${formatEmoji('help')} 스크럼 도우미: 최근 일주일 태스크 요약`,
           [
-            ...epics.map(
-              (epic) => (helpers: MessageHelpers) =>
-                `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
-                  epic.title,
-                  {
-                    url: epic.url,
-                  },
-                )}\n\n${cards
-                  .filter((c) => c.epic === epic.id)
-                  .map(formatCard(helpers))
-                  .join('\n')}`,
+            ...messageEpics.map(
+              ({ epic, cards }) =>
+                (helpers: MessageHelpers) =>
+                  `${epic.manager.type === 'member' ? helpers.formatMemberMention(epic.manager.member) : epic.manager.display} ${helpers.formatLink(
+                    epic.title,
+                    { url: epic.url },
+                  )}\n\n${cards.map(formatCard(helpers)).join('\n')}`,
             ),
             (helpers) =>
               `기타\n\n${cards
