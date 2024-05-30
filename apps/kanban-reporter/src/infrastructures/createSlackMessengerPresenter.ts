@@ -41,7 +41,6 @@ const getMessage = (message: GenerateMessage) => {
 };
 
 const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
-  [Member.WOOHM402]: 'U01JQM3GNBW',
   [Member.SHP7724]: 'U030UCYBZC3',
   [Member.JUTAK97]: 'U030UCYA7U3',
   [Member.DAVIN111]: 'ULHAW7P7Z',

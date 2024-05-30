@@ -127,7 +127,6 @@ type NotionEpic = {
 };
 
 const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
-  'a60a2b22-e58c-4cf8-a100-764f60cac65c': Member.WOOHM402,
   '12233745-30b8-49ac-84aa-d324f7041c23': Member.SHP7724,
   '2a3b479e-13cb-40a7-9aaf-4be38111e97a': Member.JUTAK97,
   '5d1120a3-0a70-4a30-8845-ec17f697f34f': Member.DAVIN111,
