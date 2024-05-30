@@ -1,5 +1,4 @@
 export enum Member {
-  WOOHM402 = 'WOOHM402',
   SHP7724 = 'SHP7724',
   JUTAK97 = 'JUTAK97',
   DAVIN111 = 'DAVIN111',
