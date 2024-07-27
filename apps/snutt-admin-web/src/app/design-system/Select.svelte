@@ -11,7 +11,7 @@
   <div>
     <Typography variant="body">{label}</Typography><span style="color: red;">{required ? '*' : ''}</span>
   </div>
-  <select {required} {value}>
+  <select {required} bind:value>
     {#each values as { value, label }}
       <option {value}>{label}</option>
     {/each}
