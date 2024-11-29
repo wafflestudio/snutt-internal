@@ -141,6 +141,7 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   'e014290e-7acf-43e2-a45f-aebdde53d116': Member.ASP345,
   'c33db05a-a8b4-4dff-905e-37e96ae9b2a1': Member.YUJINMIN514,
   'b5d64ee2-1da8-4eb5-a359-e96da5c99a32': Member.PLGAFHD,
+  '55b2d2f9-6cb0-4cba-a9db-4417fadc095a': Member.SEONGHAEJO,
 };
 
 const PART_NOTION_ID_MAP = {
