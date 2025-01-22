@@ -13,6 +13,7 @@ export enum Member {
   PLGAFHD = 'PLGAFHD',
   YUJINMIN514 = 'YUJINMIN514',
   ASP345 = 'ASP345',
+  SEONGHAEJO = 'SEONGHAEJO',
 }
 
 export enum Part {
