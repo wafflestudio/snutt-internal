@@ -132,16 +132,13 @@ const MEMBER_NOTION_ID_MAP: Record<string, Member | undefined> = {
   '5d1120a3-0a70-4a30-8845-ec17f697f34f': Member.DAVIN111,
   'e11c16b0-537b-4c61-a53a-e707aa481896': Member.HANK_CHOI,
   '4b9f3337-bf6e-4385-bcf2-633b6c0a12b4': Member.ARS_KI_00,
-  '8d57adea-038f-436a-a098-cd53ba5781ae': Member.JHVICTOR4,
   '84254454-3dc7-44e1-808f-7fe2b363a217': Member.EASTSHINE2741,
   'a8186318-c9d9-42d7-9b2b-303f15ab8367': Member.PENG_U_0807,
   '5f018d07-d2d8-4845-b4f1-e7dbdb49015e': Member.CHAEMIN2001,
   'e3c4232e-41ce-4189-90f4-121c7cda69f8': Member.EUXXNIA,
-  '9c79e047-4de9-4089-8787-8349e049f960': Member.SUBEENPARK_IO,
   'e014290e-7acf-43e2-a45f-aebdde53d116': Member.ASP345,
   'c33db05a-a8b4-4dff-905e-37e96ae9b2a1': Member.YUJINMIN514,
   'b5d64ee2-1da8-4eb5-a359-e96da5c99a32': Member.PLGAFHD,
-  '55b2d2f9-6cb0-4cba-a9db-4417fadc095a': Member.SEONGHAEJO,
   '8cbfb523-99e9-4e63-8985-fa65bee2ea57': Member.QDRPTD,
 };
 
