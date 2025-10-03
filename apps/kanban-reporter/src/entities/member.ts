@@ -14,6 +14,7 @@ export enum Member {
   YUJINMIN514 = 'YUJINMIN514',
   ASP345 = 'ASP345',
   SEONGHAEJO = 'SEONGHAEJO',
+  QDRPTD = 'QDRPTD',
 }
 
 export enum Part {

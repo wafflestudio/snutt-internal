@@ -56,6 +56,7 @@ const MEMBER_SLACK_ID_MAP: Record<Member, string> = {
   [Member.YUJINMIN514]: 'U05R78P0K8X',
   [Member.ASP345]: 'U06BEEJ664T',
   [Member.SEONGHAEJO]: 'U06B01WJHBR',
+  [Member.QDRPTD]: 'U08D5TVRR98',
 };
 
 const PART_SLACK_ID_MAP: Record<Part, string> = {
