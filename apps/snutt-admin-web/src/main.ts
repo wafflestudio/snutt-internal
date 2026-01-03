@@ -17,6 +17,8 @@ import { createConfigService } from './services/ConfigService';
 import { createPopupService } from './services/PopupService';
 import { createPushNotificationService } from './services/PushNotificationService';
 import { createScreenService } from './services/ScreenService';
+import { createDiaryService } from './services/DiaryService';
+import { createDiaryRepository } from './infrastructures/createDiaryRepository';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const environmentRepository = createImportMetaEnvironmentRepository();
@@ -56,6 +58,10 @@ const popupService = createPopupService({
   popupImageRepository: createPopupImageFetchRepository(),
 });
 
+const diaryService = createDiaryService({
+  diaryRepository: createDiaryRepository({ snuttBackend }),
+});
+
 document.documentElement.style.setProperty('transition', 'none');
 screenService.setCurrentTheme(screenService.getInitialTheme());
 setTimeout(() => {
@@ -65,7 +71,16 @@ setTimeout(() => {
 const app = new App({
   target: document.getElementById('app') as HTMLElement,
   context: new Map()
-    .set(...serviceContextSetter({ configService, pushNotificationService, authService, screenService, popupService }))
+    .set(
+      ...serviceContextSetter({
+        configService,
+        pushNotificationService,
+        authService,
+        screenService,
+        popupService,
+        diaryService,
+      }),
+    )
     .set(...environmentContextSetter({ APP_ENV: mode })),
 });
 
