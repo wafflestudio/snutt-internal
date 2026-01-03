@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import { createQuery } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
   import { getServiceContext } from '../../contexts/ServiceContext';
@@ -33,13 +33,6 @@
         );
       }),
   });
-
-  // const onClickDelete = async (id: string) => {
-  //   try {
-  //     await popupService.deletePopup({ id, token });
-  //     queryClient.invalidateQueries({ queryKey: ['PopupService'] });
-  //   } catch (err) {}
-  // };
 </script>
 
 <div>
@@ -62,8 +55,8 @@
           </Typography>
           {#if $dailyClassTypesQeury.data}
             <Typography variant="body">
-              targetDailyClassTypeIds:<br />{#each question.targetDailyClassTypeIds as targetDailyClassTypeId}- {$dailyClassTypesQeury
-                  .data[targetDailyClassTypeId]}<br />{/each}
+              targetDailyClassTypes:<br />{#each question.targetDailyClassTypeIds as targetDailyClassTypeId}- {$dailyClassTypesQeury
+                  .data[targetDailyClassTypeId].name}<br />{/each}
             </Typography>
           {/if}
           <Typography variant="body">active: {question.active}</Typography>
