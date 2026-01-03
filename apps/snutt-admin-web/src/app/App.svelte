@@ -37,7 +37,7 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-  {#if token !== null}
+  {#if token}
     <Router>
       <Header {onLogout} />
       <div class="content">

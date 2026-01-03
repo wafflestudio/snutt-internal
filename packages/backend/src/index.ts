@@ -30,6 +30,10 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
       body: body && JSON.stringify(body),
     });
 
+    if (response.ok === false) {
+      throw await response.json();
+    }
+
     return response.json() as R;
   };
 
