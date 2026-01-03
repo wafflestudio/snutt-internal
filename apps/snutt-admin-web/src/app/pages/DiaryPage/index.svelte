@@ -21,7 +21,7 @@
   });
 
   $: dailyClassTypesQeury = createQuery({
-    queryKey: ['diaryService', 'getDailyClassTypes', token],
+    queryKey: ['diaryService', 'getDailyClassTypeMap', token],
     queryFn: () =>
       diaryService.getDailyClassTypes(token).then((dailyClassTypes) => {
         return dailyClassTypes.reduce(
@@ -90,7 +90,7 @@
     flex-direction: column;
     /* white-space: ; */
     /* align-items: center; */
-    gap: 20px;
+    gap: 4px;
     white-space: pre-wrap;
   }
 </style>

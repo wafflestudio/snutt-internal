@@ -15,7 +15,6 @@
   const { diaryService } = getServiceContext();
   const queryClient = useQueryClient();
 
-  // let file: File | null = null;
   let question = '';
   let shortQuestion = '';
   let answers = '';
@@ -65,7 +64,7 @@
         {#each $dailyClassTypesQuery.data as dailyClassType}
           <Checkbox
             label={dailyClassType.name}
-            bind:checked={targetDailyClassTypes[dailyClassType.id]}
+            bind:checked={targetDailyClassTypes[dailyClassType.name]}
             type="checkbox"
           />
         {/each}
