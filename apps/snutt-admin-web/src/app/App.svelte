@@ -18,6 +18,7 @@
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PopupPage from './pages/PopupPage/index.svelte';
   import DiaryPage from './pages/DiaryPage/index.svelte';
+  import DailyClassTypePage from './pages/DailyClassTypePage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
 
   const queryClient = new QueryClient();
@@ -46,6 +47,7 @@
           <Link class={'menuItem'} href="/push-notification">푸시</Link>
           <Link class={'menuItem'} href="/popup">팝업</Link>
           <Link class={'menuItem'} href="/diary">강의일기장 질문</Link>
+          <Link class={'menuItem'} href="/daily-class-type">Daily Class Type</Link>
         </nav>
         <main>
           <Route path="/"><HomePage /></Route>
@@ -56,6 +58,7 @@
           <Route path="/push-notification"><PushNotificationPage {token} /></Route>
           <Route path="/popup"><PopupPage {token} /></Route>
           <Route path="/diary"><DiaryPage {token} /></Route>
+          <Route path="/daily-class-type"><DailyClassTypePage {token} /></Route>
           <Route path="*"><NotFoundPage /></Route>
         </main>
       </div>

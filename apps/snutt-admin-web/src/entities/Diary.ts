@@ -22,3 +22,7 @@ export type DailyClassType = {
   name: string;
   active: boolean;
 };
+
+export type CreateDailyClassTypeRequest = {
+  name: string;
+};

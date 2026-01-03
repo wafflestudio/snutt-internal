@@ -5,8 +5,6 @@
   import { getServiceContext } from '../../../contexts/ServiceContext';
   import Button from '../../../design-system/Button.svelte';
   import Input from '../../../design-system/Input.svelte';
-  import Textarea from '../../../design-system/Textarea.svelte';
-  import Checkbox from '../../../design-system/Checkbox.svelte';
   import Typography from '../../../design-system/Typography.svelte';
 
   export let token: Token;
@@ -15,33 +13,14 @@
   const { diaryService } = getServiceContext();
   const queryClient = useQueryClient();
 
-  let question = '';
-  let shortQuestion = '';
-  let answers = '';
-  let shortAnswers = '';
-  let targetDailyClassTypes: Record<string, boolean> = {};
+  let name = '';
   let errorMessage = '';
-
-  $: dailyClassTypesQuery = createQuery({
-    queryKey: ['diaryService', 'getDailyClassTypes', token],
-    queryFn: () =>
-      diaryService
-        .getDailyClassTypes(token)
-        .then((dailyClassTypes) => dailyClassTypes.filter((dailyClassType) => dailyClassType.active)),
-  });
 
   const onClickCreate = async () => {
     try {
-      await diaryService.createQuestion(
+      await diaryService.createDailyClassType(
         {
-          question,
-          shortQuestion,
-          answers: answers.split('\n').map((answer) => answer.trim()),
-          shortAnswers: shortAnswers.split('\n').map((answer) => answer.trim()),
-          targetDailyClassTypes: Object.entries(targetDailyClassTypes)
-            .filter(([_, value]) => value)
-            .map(([key, _]) => key),
-          active: true,
+          name,
         },
         token,
       );
@@ -56,23 +35,8 @@
 
 <div class="dimmer">
   <div class="question">
-    <Typography variant="subtitle">질문 추가하기</Typography>
-    <Input required type="text" label="question" bind:value={question} />
-    <Input required type="text" label="shortQuestion" bind:value={shortQuestion} />
-    <Textarea required type="text" rows="5" label="answers (엔터로 구분)" bind:value={answers} />
-    <Textarea required type="text" rows="5" label="shortAnswers (엔터로 구분)" bind:value={shortAnswers} />
-    {#if $dailyClassTypesQuery.data}
-      <div class="checkboxes">
-        targetDailyClassTypes
-        {#each $dailyClassTypesQuery.data as dailyClassType}
-          <Checkbox
-            label={dailyClassType.name}
-            bind:checked={targetDailyClassTypes[dailyClassType.name]}
-            type="checkbox"
-          />
-        {/each}
-      </div>
-    {/if}
+    <Typography variant="subtitle">DailyClassType 추가하기</Typography>
+    <Input required type="text" label="name" bind:value={name} />
     <Typography variant="code">{errorMessage}</Typography>
     <div class="buttons">
       <Button on:click={onClose} variant="third">취소</Button>
