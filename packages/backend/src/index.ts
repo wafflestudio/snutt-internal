@@ -30,6 +30,10 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
       body: body && JSON.stringify(body),
     });
 
+    if (response.ok === false) {
+      throw await response.json();
+    }
+
     return response.json() as R;
   };
 
@@ -78,6 +82,28 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
               maxVersion: { ios: string; android: string } | null;
             }[]
           >({ method: 'GET', path: `/v1/admin/configs/${name}`, token }),
+
+        '/v1/admin/diary/questions': ({ token }: { token: string }) =>
+          httpCall<
+            {
+              id: string;
+              question: string;
+              shortQuestion: string;
+              answers: string[];
+              shortAnswers: string[];
+              targetDailyClassTypeIds: string[];
+              active: boolean;
+            }[]
+          >({ method: 'GET', path: '/v1/admin/diary/questions', token }),
+
+        '/v1/admin/diary/dailyClassTypes': ({ token }: { token: string }) =>
+          httpCall<
+            {
+              id: string;
+              name: string;
+              active: boolean;
+            }[]
+          >({ method: 'GET', path: '/v1/admin/diary/dailyClassTypes', token }),
       },
 
       post: {
@@ -114,6 +140,27 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
         }) => httpCall<{ message: string }>({ method: 'POST', path: '/v1/admin/insert_noti', token, body }),
 
         // https://snu4t-api-dev.wafflestudio.com/webjars/swagger-ui/index.html#/default/postPopup
+        '/v1/admin/diary/questions': ({
+          body,
+          token,
+        }: {
+          body: {
+            question: string;
+            shortQuestion: string;
+            answers: string[];
+            shortAnswers: string[];
+            targetDailyClassTypes: string[];
+            active: boolean;
+          };
+          token: string;
+        }) =>
+          httpCall<{
+            message: string;
+          }>({ method: 'POST', path: '/v1/admin/diary/questions', token, body }),
+
+        '/v1/admin/diary/dailyClassTypes': ({ param, token }: { param: { name: string }; token: string }) =>
+          httpCall<void>({ method: 'POST', path: `/v1/admin/diary/dailyClassTypes?name=${param.name}`, token }),
+
         '/v1/admin/popups': ({
           body,
           token,
@@ -144,6 +191,9 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
         // https://snu4t-api-dev.wafflestudio.com/webjars/swagger-ui/index.html#/default/deletePopup
         '/v1/admin/popups/{id}': ({ path: { id }, token }: { path: { id: string }; token: string }) =>
           httpCall<void>({ method: 'DELETE', path: `/v1/admin/popups/${id}`, token }),
+
+        '/v1/admin/diary/dailyClassTypes': ({ name, token }: { name: string; token: string }) =>
+          httpCall<void>({ method: 'DELETE', path: `/v1/admin/diary/dailyClassTypes?name=${name}`, token }),
       },
     },
   };
