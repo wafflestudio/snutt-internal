@@ -4,9 +4,9 @@
   import { type Token } from '../../../../entities/Auth';
   import { getServiceContext } from '../../../contexts/ServiceContext';
   import Button from '../../../design-system/Button.svelte';
+  import Checkbox from '../../../design-system/Checkbox.svelte';
   import Input from '../../../design-system/Input.svelte';
   import Textarea from '../../../design-system/Textarea.svelte';
-  import Checkbox from '../../../design-system/Checkbox.svelte';
   import Typography from '../../../design-system/Typography.svelte';
 
   export let token: Token;
@@ -39,8 +39,8 @@
           answers: answers.split('\n').map((answer) => answer.trim()),
           shortAnswers: shortAnswers.split('\n').map((answer) => answer.trim()),
           targetDailyClassTypes: Object.entries(targetDailyClassTypes)
-            .filter(([_, value]) => value)
-            .map(([key, _]) => key),
+            .filter(([, value]) => value)
+            .map(([key]) => key),
           active: true,
         },
         token,

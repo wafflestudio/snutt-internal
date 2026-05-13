@@ -1,6 +1,7 @@
 import type { SnuttBackend } from '@si/snutt-backend';
-import type { DiaryRepository } from '../repositories/DiaryRepository';
+
 import type { CreateDailyClassTypeRequest, CreateQuestionRequest } from '../entities/Diary';
+import type { DiaryRepository } from '../repositories/DiaryRepository';
 
 export const createDiaryRepository = ({ snuttBackend }: { snuttBackend: SnuttBackend }): DiaryRepository => {
   return {

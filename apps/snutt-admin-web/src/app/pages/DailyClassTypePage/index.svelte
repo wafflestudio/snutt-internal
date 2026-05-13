@@ -2,13 +2,13 @@
   import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Paper from '../../design-system/Paper.svelte';
   import Typography from '../../design-system/Typography.svelte';
   // import type { DailyClassType } from '../../../entities/Diary';
   import CreateDailyClassTypePopup from './CreateDailyClassTypePopup/index.svelte';
-  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
 
   export let token: Token;
 
@@ -22,7 +22,7 @@
     queryFn: () =>
       diaryService
         .getDailyClassTypes(token)
-        .then((dailyClassTypes) => dailyClassTypes.sort((first, _) => (first.active === false ? 1 : -1))),
+        .then((dailyClassTypes) => dailyClassTypes.sort((first) => (first.active === false ? 1 : -1))),
   });
 
   const onClickDelete = async (name: string) => {
