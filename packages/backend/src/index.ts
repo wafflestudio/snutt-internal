@@ -104,6 +104,32 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
               active: boolean;
             }[]
           >({ method: 'GET', path: '/v1/admin/diary/dailyClassTypes', token }),
+
+        '/v1/admin/users/search': ({ query, token }: { query: { email: string }; token: string }) =>
+          httpCall<
+            {
+              id: string;
+              email: string | null;
+              isEmailVerified: boolean | null;
+              nickname: string;
+              localId: string | null;
+              isAdmin: boolean;
+              active: boolean;
+              regDate: string;
+              lastLoginTimestamp: number;
+              authProviders: ('LOCAL' | 'FACEBOOK' | 'GOOGLE' | 'KAKAO' | 'APPLE')[];
+              socialAccounts: {
+                googleEmail: string | null;
+                kakaoEmail: string | null;
+                appleEmail: string | null;
+                facebookName: string | null;
+              };
+            }[]
+          >({
+            method: 'GET',
+            path: `/v1/admin/users/search?email=${encodeURIComponent(query.email)}`,
+            token,
+          }),
       },
 
       post: {
