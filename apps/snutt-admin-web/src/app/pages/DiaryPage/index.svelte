@@ -2,11 +2,11 @@
   import { createQuery } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
+  import type { DailyClassType } from '../../../entities/Diary';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Paper from '../../design-system/Paper.svelte';
   import Typography from '../../design-system/Typography.svelte';
-  import type { DailyClassType } from '../../../entities/Diary';
   import CreateQuestionPopup from './CreateQuestionPopup/index.svelte';
 
   export let token: Token;

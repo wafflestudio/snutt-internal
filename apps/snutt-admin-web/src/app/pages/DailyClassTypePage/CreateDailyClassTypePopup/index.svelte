@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import { useQueryClient } from '@tanstack/svelte-query';
 
   import { type Token } from '../../../../entities/Auth';
   import { getServiceContext } from '../../../contexts/ServiceContext';

@@ -6,19 +6,21 @@ import { serviceContextSetter } from './app/contexts/ServiceContext';
 import { createAdminPopupSiSnuttBackendRepository } from './infrastructures/createAdminPopupSiSnuttBackendRepository';
 import { createAuthSiSnuttBackendRepository } from './infrastructures/createAuthSiSnuttBackendRepository';
 import { createConfigSiSnuttBackendRepository } from './infrastructures/createConfigSiSnuttBackendRepository';
+import { createDiaryRepository } from './infrastructures/createDiaryRepository';
 import { createHtmlDocumentThemeRepository } from './infrastructures/createHtmlDocumentThemeRepository';
 import { createImportMetaEnvironmentRepository } from './infrastructures/createImportMetaEnvironmentRepository';
 import { createLocalStorageRepository } from './infrastructures/createLocalStorageRepository';
 import { createPopupImageFetchRepository } from './infrastructures/createPopupImageFetchRepository';
 import { createPushNotificationSiSnuttBackendRepository } from './infrastructures/createPushNotificationSiSnuttBackendRepository';
 import { createUserPopupSiSnuttBackendRepository } from './infrastructures/createUserPopupSiSnuttBackendRepository';
+import { createUserSiSnuttBackendRepository } from './infrastructures/createUserSiSnuttBackendRepository';
 import { createAuthService } from './services/AuthService';
 import { createConfigService } from './services/ConfigService';
+import { createDiaryService } from './services/DiaryService';
 import { createPopupService } from './services/PopupService';
 import { createPushNotificationService } from './services/PushNotificationService';
 import { createScreenService } from './services/ScreenService';
-import { createDiaryService } from './services/DiaryService';
-import { createDiaryRepository } from './infrastructures/createDiaryRepository';
+import { createUserService } from './services/UserService';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const environmentRepository = createImportMetaEnvironmentRepository();
@@ -62,6 +64,10 @@ const diaryService = createDiaryService({
   diaryRepository: createDiaryRepository({ snuttBackend }),
 });
 
+const userService = createUserService({
+  userRepository: createUserSiSnuttBackendRepository({ snuttBackend }),
+});
+
 document.documentElement.style.setProperty('transition', 'none');
 screenService.setCurrentTheme(screenService.getInitialTheme());
 setTimeout(() => {
@@ -79,6 +85,7 @@ const app = new App({
         screenService,
         popupService,
         diaryService,
+        userService,
       }),
     )
     .set(...environmentContextSetter({ APP_ENV: mode })),
