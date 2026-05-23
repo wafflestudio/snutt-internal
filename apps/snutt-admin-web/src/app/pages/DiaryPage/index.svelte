@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createQuery } from '@tanstack/svelte-query';
+  import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 
   import type { Token } from '../../../entities/Auth';
   import type { DailyClassType } from '../../../entities/Diary';
@@ -7,11 +7,13 @@
   import Button from '../../design-system/Button.svelte';
   import Paper from '../../design-system/Paper.svelte';
   import Typography from '../../design-system/Typography.svelte';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import CreateQuestionPopup from './CreateQuestionPopup/index.svelte';
 
   export let token: Token;
 
   const { diaryService } = getServiceContext();
+  const queryClient = useQueryClient();
 
   let isCreateQuestionOpen = false;
 
@@ -33,6 +35,13 @@
         );
       }),
   });
+
+  const onClickDelete = async (id: string) => {
+    try {
+      await diaryService.deleteQuestion(id, token);
+      queryClient.invalidateQueries({ queryKey: ['diaryService'] });
+    } catch (err) {}
+  };
 </script>
 
 <div>
@@ -60,6 +69,14 @@
             </Typography>
           {/if}
           <Typography variant="body">active: {question.active}</Typography>
+          <div class="actions">
+            <ConfirmRequiredButton
+              confirmTitle="질문 삭제"
+              confirmMessage="이 작업은 되돌릴 수 없습니다."
+              variant="danger"
+              onConfirm={() => onClickDelete(question.id)}
+            >삭제하기</ConfirmRequiredButton>
+          </div>
         </Paper>
       {/each}
     {/if}
@@ -92,5 +109,11 @@
     /* align-items: center; */
     gap: 4px;
     white-space: pre-wrap;
+  }
+
+  :global(.questionItem .actions) {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
   }
 </style>
