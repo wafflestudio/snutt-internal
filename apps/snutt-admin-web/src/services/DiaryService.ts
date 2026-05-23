@@ -4,6 +4,7 @@ import type { DiaryRepository } from '../repositories/DiaryRepository';
 export type DiaryService = {
   getQuestions: (token: string) => Promise<Question[]>;
   createQuestion: (request: CreateQuestionRequest, token: string) => Promise<{ message: string }>;
+  deleteQuestion: (id: string, token: string) => Promise<void>;
   getDailyClassTypes: (token: string) => Promise<DailyClassType[]>;
   createDailyClassType: (param: CreateDailyClassTypeRequest, token: string) => Promise<void>;
   deleteDailyClassType: (name: string, token: string) => Promise<void>;
@@ -14,6 +15,7 @@ export const createDiaryService = ({ diaryRepository }: { diaryRepository: Diary
     getQuestions: (token: string) => diaryRepository.getQuestions(token),
     getDailyClassTypes: (token: string) => diaryRepository.getDailyClassTypes(token),
     createQuestion: (request: CreateQuestionRequest, token: string) => diaryRepository.createQuestion(request, token),
+    deleteQuestion: (id: string, token: string) => diaryRepository.deleteQuestion(id, token),
     createDailyClassType: (param: CreateDailyClassTypeRequest, token: string) =>
       diaryRepository.createDailyClassType(param, token),
     deleteDailyClassType: (name: string, token: string) => diaryRepository.deleteDailyClassType(name, token),

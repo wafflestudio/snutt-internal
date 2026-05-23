@@ -8,6 +8,8 @@ export const createDiaryRepository = ({ snuttBackend }: { snuttBackend: SnuttBac
     getQuestions: (token: string) => snuttBackend.http.get['/v1/admin/diary/questions']({ token }),
     createQuestion: (request: CreateQuestionRequest, token: string) =>
       snuttBackend.http.post['/v1/admin/diary/questions']({ body: request, token }),
+    deleteQuestion: (id: string, token: string) =>
+      snuttBackend.http.delete['/v1/admin/diary/questions/{id}']({ path: { id }, token }),
     getDailyClassTypes: (token: string) => snuttBackend.http.get['/v1/admin/diary/dailyClassTypes']({ token }),
     createDailyClassType: (param: CreateDailyClassTypeRequest, token: string) =>
       snuttBackend.http.post['/v1/admin/diary/dailyClassTypes']({ param, token }),

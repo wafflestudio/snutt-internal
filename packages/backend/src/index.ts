@@ -220,6 +220,9 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
 
         '/v1/admin/diary/dailyClassTypes': ({ name, token }: { name: string; token: string }) =>
           httpCall<void>({ method: 'DELETE', path: `/v1/admin/diary/dailyClassTypes?name=${name}`, token }),
+
+        '/v1/admin/diary/questions/{id}': ({ path: { id }, token }: { path: { id: string }; token: string }) =>
+          httpCall<void>({ method: 'DELETE', path: `/v1/admin/diary/questions/${id}`, token }),
       },
     },
   };
