@@ -6,7 +6,6 @@
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Input from '../../design-system/Input.svelte';
-  import Paper from '../../design-system/Paper.svelte';
   import Typography from '../../design-system/Typography.svelte';
 
   export let token: Token;
@@ -23,9 +22,32 @@
 
   const onSubmit = () => isValid && $mutation.mutate({ email });
 
+  let openSocialId: string | null = null;
+  let popupTop = 0;
+  let popupLeft = 0;
+  let popupFlip = false;
+
+  const toggleSocial = (e: MouseEvent, userId: string) => {
+    if (openSocialId === userId) {
+      openSocialId = null;
+      return;
+    }
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    popupFlip = window.innerHeight - rect.bottom < 120;
+    popupTop = popupFlip ? rect.top : rect.bottom + 4;
+    popupLeft = rect.left;
+    openSocialId = userId;
+  };
+
+  const closePopup = () => {
+    openSocialId = null;
+  };
+
   const formatDate = (iso: string) => {
     try {
-      return new Date(iso).toLocaleString();
+      const d = new Date(iso);
+      const pad = (n: number) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     } catch {
       return iso;
     }
@@ -54,38 +76,63 @@
         <Typography variant="body">일치하는 유저가 없습니다.</Typography>
       {:else}
         <Typography variant="body">{$mutation.data.length}건 검색됨</Typography>
-        <div class="cards">
-          {#each $mutation.data as user (user.id)}
-            <Paper class="userCard">
-              <Typography variant="body">id: {user.id}</Typography>
-              <Typography variant="body"
-                >email: {user.email ?? '-'} (verified: {user.isEmailVerified ?? false})</Typography
-              >
-              <Typography variant="body">nickname: {user.nickname}</Typography>
-              <Typography variant="body">localId: {user.localId ?? '-'}</Typography>
-              <Typography variant="body">active: {user.active}</Typography>
-              <Typography variant="body">isAdmin: {user.isAdmin}</Typography>
-              <Typography variant="body">가입일: {formatDate(user.regDate)}</Typography>
-              <Typography variant="body"
-                >최근 로그인: {formatDate(new Date(user.lastLoginTimestamp).toISOString())}</Typography
-              >
-              <Typography variant="body">
-                로그인 수단:
-                {#if user.authProviders.length === 0}
-                  (없음)
-                {:else}
-                  {user.authProviders.map((p) => AUTH_PROVIDER_LABEL[p]).join(', ')}
-                {/if}
-              </Typography>
-              <details>
-                <summary>소셜 계정 상세</summary>
-                <Typography variant="body">google: {user.socialAccounts.googleEmail ?? '-'}</Typography>
-                <Typography variant="body">kakao: {user.socialAccounts.kakaoEmail ?? '-'}</Typography>
-                <Typography variant="body">apple: {user.socialAccounts.appleEmail ?? '-'}</Typography>
-                <Typography variant="body">facebook name: {user.socialAccounts.facebookName ?? '-'}</Typography>
-              </details>
-            </Paper>
-          {/each}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>이메일</th>
+                <th>인증 여부</th>
+                <th>닉네임</th>
+                <th>localId</th>
+                <th>활성</th>
+                <th>관리자</th>
+                <th>로그인 수단</th>
+                <th>소셜 계정</th>
+                <th>가입일</th>
+                <th>최근 로그인</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each $mutation.data as user (user.id)}
+                <tr>
+                  <td class="mono">{user.id}</td>
+                  <td>{user.email ?? '-'}</td>
+                  <td>
+                    {#if user.isEmailVerified == null}
+                      -
+                    {:else}
+                      <span
+                        class="badge"
+                        class:verified={user.isEmailVerified}
+                        class:unverified={!user.isEmailVerified}
+                      >
+                        {user.isEmailVerified ? '인증' : '미인증'}
+                      </span>
+                    {/if}
+                  </td>
+                  <td>{user.nickname}</td>
+                  <td class="mono">{user.localId ?? '-'}</td>
+                  <td>{user.active ? '활성' : '비활성'}</td>
+                  <td>{user.isAdmin ? '예' : '아니오'}</td>
+                  <td>
+                    {#if user.authProviders.length === 0}
+                      (없음)
+                    {:else}
+                      {user.authProviders.map((p) => AUTH_PROVIDER_LABEL[p]).join(', ')}
+                    {/if}
+                  </td>
+                  <td>
+                    <button class="social-toggle" on:click|stopPropagation={(e) => toggleSocial(e, user.id)}>
+                      상세
+                    </button>
+                  </td>
+                  <td class="nowrap">{formatDate(user.regDate)}</td>
+                  <td class="nowrap">{formatDate(new Date(user.lastLoginTimestamp).toISOString())}</td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
         </div>
       {/if}
     {:else}
@@ -95,6 +142,27 @@
     {/if}
   </section>
 </div>
+
+<svelte:body on:click={closePopup} />
+
+{#if openSocialId}
+  {@const user = $mutation.data?.find((u) => u.id === openSocialId)}
+  {#if user}
+    <div
+      class="social-popup"
+      class:flip={popupFlip}
+      style="top:{popupTop}px;left:{popupLeft}px"
+      on:click|stopPropagation
+    >
+      <ul class="social-list">
+        <li>google: {user.socialAccounts.googleEmail ?? '-'}</li>
+        <li>kakao: {user.socialAccounts.kakaoEmail ?? '-'}</li>
+        <li>apple: {user.socialAccounts.appleEmail ?? '-'}</li>
+        <li>facebook: {user.socialAccounts.facebookName ?? '-'}</li>
+      </ul>
+    </div>
+  {/if}
+{/if}
 
 <style>
   div.wrapper {
@@ -121,24 +189,97 @@
     gap: 12px;
   }
 
-  div.cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  div.table-wrapper {
+    overflow-x: auto;
   }
 
-  :global(.userCard) {
-    min-width: 400px;
-    width: 45%;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
   }
 
-  details > summary {
-    cursor: pointer;
-    margin-top: 8px;
-    font-size: 14px;
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--color-border, #e0e0e0);
+    white-space: nowrap;
     color: var(--color-text-default);
+    font-weight: 600;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border, #e0e0e0);
+    vertical-align: top;
+    color: var(--color-text-default);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  td.mono {
+    font-family: monospace;
+    font-size: 12px;
+    word-break: break-all;
+  }
+
+  td.nowrap {
+    white-space: nowrap;
+  }
+
+  span.badge {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
+  span.badge.verified {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  span.badge.unverified {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  button.social-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-text-default);
+    text-decoration: underline;
+  }
+
+  :global(div.social-popup) {
+    position: fixed;
+    z-index: 1000;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: 6px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+  }
+
+  :global(div.social-popup.flip) {
+    transform: translateY(-100%);
+  }
+
+  :global(ul.social-list) {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    list-style: none;
+  }
+
+  :global(ul.social-list li + li) {
+    margin-top: 4px;
   }
 </style>
