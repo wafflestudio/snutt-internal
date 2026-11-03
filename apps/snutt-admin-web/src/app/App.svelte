@@ -17,6 +17,7 @@
   import DiaryPage from './pages/DiaryPage/index.svelte';
   import HomePage from './pages/HomePage/index.svelte';
   import LoginPage from './pages/LoginPage/index.svelte';
+  import MailLogPage from './pages/MailLogPage/index.svelte';
   import NotFoundPage from './pages/NotFoundPage/index.svelte';
   import PopupPage from './pages/PopupPage/index.svelte';
   import PushNotificationPage from './pages/PushNotificationPage/index.svelte';
@@ -50,6 +51,7 @@
           <Link class={'menuItem'} href="/diary">강의일기장 질문</Link>
           <Link class={'menuItem'} href="/daily-class-type">Daily Class Type</Link>
           <Link class={'menuItem'} href="/user-search">유저 검색</Link>
+          <Link class={'menuItem'} href="/mail-logs">메일 발송 기록</Link>
         </nav>
         <main>
           <Route path="/"><HomePage /></Route>
@@ -62,6 +64,7 @@
           <Route path="/diary"><DiaryPage {token} /></Route>
           <Route path="/daily-class-type"><DailyClassTypePage {token} /></Route>
           <Route path="/user-search"><UserSearchPage {token} /></Route>
+          <Route path="/mail-logs"><MailLogPage {token} /></Route>
           <Route path="*"><NotFoundPage /></Route>
         </main>
       </div>

@@ -10,5 +10,6 @@ export const createUserSiSnuttBackendRepository = ({
   return {
     searchUsersByEmail: ({ email, token }) =>
       snuttBackend.http.get['/v1/admin/users/search']({ query: { email }, token }),
+    searchMailLogs: ({ query, token }) => snuttBackend.http.get['/v1/admin/mailLogs']({ query, token }),
   };
 };
