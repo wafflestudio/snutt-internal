@@ -150,6 +150,7 @@
   {#if user}
     <div
       class="social-popup"
+      role="presentation"
       class:flip={popupFlip}
       style="top:{popupTop}px;left:{popupLeft}px"
       on:click|stopPropagation
