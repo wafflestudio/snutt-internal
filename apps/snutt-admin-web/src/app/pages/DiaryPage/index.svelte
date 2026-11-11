@@ -3,11 +3,11 @@
 
   import type { Token } from '../../../entities/Auth';
   import type { DailyClassType } from '../../../entities/Diary';
+  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Paper from '../../design-system/Paper.svelte';
   import Typography from '../../design-system/Typography.svelte';
-  import ConfirmRequiredButton from '../../components/ConfirmRequiredButton.svelte';
   import CreateQuestionPopup from './CreateQuestionPopup/index.svelte';
 
   export let token: Token;
@@ -74,8 +74,8 @@
               confirmTitle="질문 삭제"
               confirmMessage="이 작업은 되돌릴 수 없습니다."
               variant="danger"
-              onConfirm={() => onClickDelete(question.id)}
-            >삭제하기</ConfirmRequiredButton>
+              onConfirm={() => onClickDelete(question.id)}>삭제하기</ConfirmRequiredButton
+            >
           </div>
         </Paper>
       {/each}

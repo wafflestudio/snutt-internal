@@ -130,6 +130,26 @@ export const implSnuttBackend = ({ baseUrl, apiKey }: { baseUrl: string; apiKey:
             path: `/v1/admin/users/search?email=${encodeURIComponent(query.email)}`,
             token,
           }),
+
+        '/v1/admin/mailLogs': ({ query, token }: { query: { email: string } | { localId: string }; token: string }) =>
+          httpCall<
+            {
+              id: string;
+              type: 'VERIFICATION' | 'PASSWORD_RESET' | 'FIND_ID';
+              status: 'PENDING' | 'SENT' | 'SUPPRESSED' | 'FAILED' | 'THROTTLED' | 'NO_ACCOUNT' | 'NO_EMAIL';
+              email: string | null;
+              requestedLocalId: string | null;
+              subject: string | null;
+              body: string | null;
+              errorMessage: string | null;
+              createdAt: number;
+              updatedAt: number;
+            }[]
+          >({
+            method: 'GET',
+            path: `/v1/admin/mailLogs?${new URLSearchParams(query)}`,
+            token,
+          }),
       },
 
       post: {
