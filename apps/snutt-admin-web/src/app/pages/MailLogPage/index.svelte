@@ -3,6 +3,7 @@
 
   import type { Token } from '../../../entities/Auth';
   import { MAIL_LOG_STATUS_LABEL, MAIL_LOG_TYPE_LABEL, type MailLogQuery } from '../../../entities/MailLog';
+  import { getEnvironmentContext } from '../../contexts/EnvironmentContext';
   import { getServiceContext } from '../../contexts/ServiceContext';
   import Button from '../../design-system/Button.svelte';
   import Input from '../../design-system/Input.svelte';
@@ -12,6 +13,7 @@
   export let token: Token;
 
   const { userService } = getServiceContext();
+  const { APP_ENV } = getEnvironmentContext();
 
   let searchBy: 'email' | 'localId' = 'email';
   let keyword = '';
@@ -45,103 +47,109 @@
     <Typography variant="subtitle">메일 발송 기록</Typography>
   </header>
 
-  <form on:submit|preventDefault={onSubmit}>
-    <div class="search-row">
-      <Select
-        label="검색 기준"
-        bind:value={searchBy}
-        values={[
-          { value: 'email', label: '이메일' },
-          { value: 'localId', label: '아이디' },
-        ]}
-      />
-      <Input
-        required
-        label={searchBy === 'email' ? '이메일' : '아이디'}
-        bind:value={keyword}
-        placeholder={searchBy === 'email' ? 'example@snu.ac.kr' : 'snuttuser'}
-      />
-      <Button type="submit" disabled={!isValid}>검색</Button>
-    </div>
-  </form>
+  {#if APP_ENV === 'prod'}
+    <Typography variant="body"
+      >운영 환경에서는 아직 지원하지 않습니다. 운영 서버에 메일 발송 기록 API가 아직 없습니다.</Typography
+    >
+  {:else}
+    <form on:submit|preventDefault={onSubmit}>
+      <div class="search-row">
+        <Select
+          label="검색 기준"
+          bind:value={searchBy}
+          values={[
+            { value: 'email', label: '이메일' },
+            { value: 'localId', label: '아이디' },
+          ]}
+        />
+        <Input
+          required
+          label={searchBy === 'email' ? '이메일' : '아이디'}
+          bind:value={keyword}
+          placeholder={searchBy === 'email' ? 'example@snu.ac.kr' : 'snuttuser'}
+        />
+        <Button type="submit" disabled={!isValid}>검색</Button>
+      </div>
+    </form>
 
-  <section class="results">
-    {#if $mutation.isPending}
-      <Typography variant="body">검색 중...</Typography>
-    {:else if $mutation.isError}
-      <Typography variant="body">검색 실패: {String($mutation.error)}</Typography>
-    {:else if $mutation.data}
-      {#if $mutation.data.length === 0}
-        <Typography variant="body">기록이 없습니다.</Typography>
-      {:else}
-        <Typography variant="body">{$mutation.data.length}건 검색됨</Typography>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>요청 시각</th>
-                <th>종류</th>
-                <th>결과</th>
-                <th>이메일</th>
-                <th>요청 아이디</th>
-                <th>제목</th>
-                <th>내용</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each $mutation.data as log (log.id)}
+    <section class="results">
+      {#if $mutation.isPending}
+        <Typography variant="body">검색 중...</Typography>
+      {:else if $mutation.isError}
+        <Typography variant="body">검색 실패: {String($mutation.error)}</Typography>
+      {:else if $mutation.data}
+        {#if $mutation.data.length === 0}
+          <Typography variant="body">기록이 없습니다.</Typography>
+        {:else}
+          <Typography variant="body">{$mutation.data.length}건 검색됨</Typography>
+          <div class="table-wrapper">
+            <table>
+              <thead>
                 <tr>
-                  <td class="nowrap">{formatDate(log.createdAt)}</td>
-                  <td class="nowrap">{MAIL_LOG_TYPE_LABEL[log.type]}</td>
-                  <td class="nowrap">
-                    <span
-                      class="badge"
-                      class:sent={log.status === 'SENT'}
-                      class:failed={log.status === 'FAILED'}
-                      class:pending={log.status === 'PENDING'}
-                    >
-                      {MAIL_LOG_STATUS_LABEL[log.status]}
-                    </span>
-                  </td>
-                  <td>{log.email ?? '-'}</td>
-                  <td class="mono">{log.requestedLocalId ?? '-'}</td>
-                  <td>{log.subject ?? '-'}</td>
-                  <td>
-                    {#if log.body || log.errorMessage}
-                      <button class="detail-toggle" type="button" on:click={() => toggleLog(log.id)}>
-                        {openLogId === log.id ? '닫기' : '보기'}
-                      </button>
-                    {:else}
-                      -
-                    {/if}
-                  </td>
+                  <th>요청 시각</th>
+                  <th>종류</th>
+                  <th>결과</th>
+                  <th>이메일</th>
+                  <th>요청 아이디</th>
+                  <th>제목</th>
+                  <th>내용</th>
                 </tr>
-                {#if openLogId === log.id}
+              </thead>
+              <tbody>
+                {#each $mutation.data as log (log.id)}
                   <tr>
-                    <td colspan="7">
-                      <div class="detail-content">
-                        {#if log.errorMessage}
-                          <pre class="error">{log.errorMessage}</pre>
-                        {/if}
-                        {#if log.body}
-                          <iframe title="메일 본문" sandbox="" srcdoc={log.body} />
-                        {/if}
-                      </div>
+                    <td class="nowrap">{formatDate(log.createdAt)}</td>
+                    <td class="nowrap">{MAIL_LOG_TYPE_LABEL[log.type]}</td>
+                    <td class="nowrap">
+                      <span
+                        class="badge"
+                        class:sent={log.status === 'SENT'}
+                        class:failed={log.status === 'FAILED'}
+                        class:pending={log.status === 'PENDING'}
+                      >
+                        {MAIL_LOG_STATUS_LABEL[log.status]}
+                      </span>
+                    </td>
+                    <td>{log.email ?? '-'}</td>
+                    <td class="mono">{log.requestedLocalId ?? '-'}</td>
+                    <td>{log.subject ?? '-'}</td>
+                    <td>
+                      {#if log.body || log.errorMessage}
+                        <button class="detail-toggle" type="button" on:click={() => toggleLog(log.id)}>
+                          {openLogId === log.id ? '닫기' : '보기'}
+                        </button>
+                      {:else}
+                        -
+                      {/if}
                     </td>
                   </tr>
-                {/if}
-              {/each}
-            </tbody>
-          </table>
-        </div>
+                  {#if openLogId === log.id}
+                    <tr>
+                      <td colspan="7">
+                        <div class="detail-content">
+                          {#if log.errorMessage}
+                            <pre class="error">{log.errorMessage}</pre>
+                          {/if}
+                          {#if log.body}
+                            <iframe title="메일 본문" sandbox="" srcdoc={log.body} />
+                          {/if}
+                        </div>
+                      </td>
+                    </tr>
+                  {/if}
+                {/each}
+              </tbody>
+            </table>
+          </div>
+        {/if}
+      {:else}
+        <Typography variant="body"
+          >이메일 또는 아이디로 최근 30일간의 이메일 인증·비밀번호 재설정·아이디 찾기 요청 기록을 검색하세요. 아이디
+          검색은 아이디로 비밀번호 재설정을 요청한 기록만 찾습니다.</Typography
+        >
       {/if}
-    {:else}
-      <Typography variant="body"
-        >이메일 또는 아이디로 최근 30일간의 이메일 인증·비밀번호 재설정·아이디 찾기 요청 기록을 검색하세요. 아이디
-        검색은 아이디로 비밀번호 재설정을 요청한 기록만 찾습니다.</Typography
-      >
-    {/if}
-  </section>
+    </section>
+  {/if}
 </div>
 
 <style>
